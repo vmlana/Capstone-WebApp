@@ -15,7 +15,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Capstone ProjectCapstone Project
+          Capstone ProjectCapstone Project!
         </a>
       </header>
     </div>
