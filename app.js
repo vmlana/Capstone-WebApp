@@ -39,5 +39,5 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 
-//const router = require('./routes/index.js');
-//app.use('/api', router);
+const router = require('./routes/index.js');
+app.use('/api', router);
