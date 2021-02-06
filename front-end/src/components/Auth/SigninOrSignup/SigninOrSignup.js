@@ -35,6 +35,7 @@ const SigninOrSignup = (props) => {
                 component={() =>
                     <Signin
                         goToSignUP={goToSignUP}
+                        history={props.history}
                     />
                 }
             />

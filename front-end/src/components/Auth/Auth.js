@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Switch, Route, useRouteMatch } from "react-router-dom";
+import { useSelector} from 'react-redux';
 import SigninOrSignup from './SigninOrSignup/SigninOrSignup';
 import CompanyConfig from './CompanyConfig/CompanyConfig';
 import InstructorConfig from './InstructorConfig/InstructorConfig';
 
 const Auth = (props) => {
-    const [token, setToken] = useState(null);
     const [tokenIsValid, setTokenIsValid] = useState(false);
-    const [userType, setUserType] = useState('guest');
-
-    // let { path, url } = useRouteMatch();
-    // console.log(props.history)
+    const userInfo = useSelector(state => state.user.userInfo);
+    const {userType, authId, token} = userInfo;
 
     useEffect(()=>{
         // tokenValidation
@@ -19,21 +16,19 @@ const Auth = (props) => {
 
     let userDirection  = <SigninOrSignup history={props.history} />;
 
-    useEffect(()=>{
-        if (userType === 'guest' || !tokenIsValid) {
-            userDirection = <SigninOrSignup history={props.history} />
-        } else if (userType === 'company' || tokenIsValid) {
-            userDirection = <CompanyConfig />
-        } else if (userType === 'instructor' || tokenIsValid) {
-            userDirection = <InstructorConfig />
-        }
-    }, [tokenIsValid, userType])
+    if (userType === 'guest' || !tokenIsValid) {
+        userDirection = <SigninOrSignup history={props.history} />
+    } else if (userType === 'company' && tokenIsValid) {
+        userDirection = <CompanyConfig />
+    } else if (userType === 'instructor' && tokenIsValid) {
+        userDirection = <InstructorConfig />
+    }
 
     return (
         <div>
             {userDirection}
         </div>
-        );
+    );
 };
 
 export default Auth;
