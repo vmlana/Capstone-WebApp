@@ -1,0 +1,12 @@
+#globalHeader {
+    ul {
+        list-style-type: none;
+        padding: 0;
+        display: flex;
+        justify-content: flex-end
+    }
+
+    li {
+        margin-right: 1rem;
+    }
+}
