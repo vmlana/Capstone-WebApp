@@ -4,25 +4,17 @@ import Signin from './Signin/Signin';
 import Signup from './Signup/Signup';
 
 const SigninOrSignup = (props) => {
-    const [ isSignin, setIsSignin ] = useState(true);
+    // const [ isSignin, setIsSignin ] = useState(true);
 
     let { url } = useRouteMatch();
 
-    useEffect(()=>{
-        if (isSignin) {
-            props.history.push(`${url}`);
-        } else {
-            props.history.push(`${url}/signup`);
-        }
-    }, [isSignin]);
-
-    const goToSignIN = () => {
-        setIsSignin(true)
-    };
-
-    const goToSignUP = () => {
-        setIsSignin(false)
-    };
+    // useEffect(()=>{
+    //     if (isSignin) {
+    //         // props.history.push(`${url}`);
+    //     } else {
+    //         props.history.push(`${url}/signup`);
+    //     }
+    // }, [isSignin]);
 
     return (
         <Switch>
@@ -30,7 +22,6 @@ const SigninOrSignup = (props) => {
                 exact path={`${url}`}
                 component={() =>
                     <Signin
-                        goToSignUP={goToSignUP}
                         history={props.history}
                     />
                 }
@@ -39,7 +30,6 @@ const SigninOrSignup = (props) => {
                 exact path={`${url}/signup`}
                 component={() =>
                     <Signup
-                        goToSignIN={goToSignIN}
                         history={props.history}
                     />
                 }
