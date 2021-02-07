@@ -1,9 +1,12 @@
 import React from 'react';
+import InstructorConfigHeader from './InstructorConfigHeader/InstructorConfigHeader';
+import InstructorNavRouter from './InstructorNavRouter';
 
 const InstructorConfig = () => {
     return (
         <div>
-            InstructorConfig
+            <InstructorConfigHeader />
+            <InstructorNavRouter />
         </div>
     );
 };

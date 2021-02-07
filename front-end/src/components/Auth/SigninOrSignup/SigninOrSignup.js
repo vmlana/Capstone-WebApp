@@ -9,12 +9,8 @@ const SigninOrSignup = (props) => {
     let { url } = useRouteMatch();
 
     useEffect(()=>{
-        props.history.push(`${url}/signin`);
-    }, []);
-
-    useEffect(()=>{
         if (isSignin) {
-            props.history.push(`${url}/signin`);
+            props.history.push(`${url}`);
         } else {
             props.history.push(`${url}/signup`);
         }
@@ -31,7 +27,7 @@ const SigninOrSignup = (props) => {
     return (
         <Switch>
             <Route
-                exact path={`${url}/signin`}
+                exact path={`${url}`}
                 component={() =>
                     <Signin
                         goToSignUP={goToSignUP}

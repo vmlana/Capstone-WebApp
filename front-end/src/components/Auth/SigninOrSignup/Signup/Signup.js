@@ -13,7 +13,22 @@ const Signup = (props) => {
 
     return (
         <div>
-            <button onClick={signupTest}>Signup</button>
+            <div onChange={(ev) => setUserType(ev.target.value)}>
+                <input
+                    type="radio"
+                    value="company"
+                    name="userType"
+                    defaultChecked
+                    onChange={(ev) => setUserType(ev.target.value)}
+                /> Company
+                <input
+                    type="radio"
+                    value="instructor"
+                    name="userType"
+                    onChange={(ev) => setUserType(ev.target.value)}
+                /> Instructor
+            </div>
+            <button style={{marginTop: "1rem"}} onClick={signupTest}>Signup</button>
             <p onClick={props.goToSignIN}>Go to Signin</p>
         </div>
     );
