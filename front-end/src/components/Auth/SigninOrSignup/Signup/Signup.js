@@ -13,7 +13,7 @@ const Signup = (props) => {
 
     return (
         <div>
-            <div onChange={(ev) => setUserType(ev.target.value)}>
+            <div>
                 <input
                     type="radio"
                     value="company"
