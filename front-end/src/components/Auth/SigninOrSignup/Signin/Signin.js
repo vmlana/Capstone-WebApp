@@ -1,5 +1,6 @@
-import React, {useState, useCallback} from 'react';
+import React, {useState} from 'react';
 import { useDispatch } from 'react-redux';
+import { Link } from "react-router-dom";
 import { userSigninSignup } from '../../../../redux/user/user.actions';
 
 const Signin = (props) => {
@@ -29,7 +30,7 @@ const Signin = (props) => {
                 /> Instructor
             </div>
             <button style={{marginTop: "1rem"}} onClick={signinTest}>Signin</button>
-            <p onClick={props.goToSignUP}>Go to Signup</p>
+            <Link to="auth/signup">Go to Signup</Link>
         </div>
     );
 };

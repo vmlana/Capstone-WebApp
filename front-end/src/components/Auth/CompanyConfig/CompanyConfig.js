@@ -2,10 +2,10 @@ import React from 'react';
 import CompanyConfigHeader from './CompanyConfigHeader/CompanyConfigHeader';
 import CompanyNavRouter from './CompanyNavRouter';
 
-const CompanyConfig = () => {
+const CompanyConfig = (props) => {
     return (
         <div>
-            <CompanyConfigHeader />
+            <CompanyConfigHeader history={props.history} />
             <CompanyNavRouter />
         </div>
     );

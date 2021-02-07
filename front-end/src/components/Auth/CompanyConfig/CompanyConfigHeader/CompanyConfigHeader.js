@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { Link, useRouteMatch } from 'react-router-dom';
 import { userLogout } from '../../../../redux/user/user.actions';
 
-const CompanyConfigHeader = () => {
+const CompanyConfigHeader = (props) => {
     const dispatch = useDispatch()
     let { url } = useRouteMatch();
 
@@ -21,7 +21,10 @@ const CompanyConfigHeader = () => {
                 </li>
                 <li>
                     <button
-                        onClick={()=>dispatch(userLogout())}>
+                        onClick={()=>{
+                            dispatch(userLogout());
+                            props.history.replace(`/auth`);
+                        }}>
                         Sign Out
                     </button>
                 </li>

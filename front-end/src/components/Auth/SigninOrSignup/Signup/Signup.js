@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import { useDispatch } from 'react-redux';
+import { Link } from "react-router-dom";
 import { userSigninSignup } from '../../../../redux/user/user.actions';
 
 const Signup = (props) => {
@@ -29,7 +30,7 @@ const Signup = (props) => {
                 /> Instructor
             </div>
             <button style={{marginTop: "1rem"}} onClick={signupTest}>Signup</button>
-            <p onClick={props.goToSignIN}>Go to Signin</p>
+            <Link to="/auth">Go to Signin</Link>
         </div>
     );
 };
