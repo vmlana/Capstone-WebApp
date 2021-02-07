@@ -30,7 +30,9 @@ const Signup = (props) => {
                 /> Instructor
             </div>
             <button style={{marginTop: "1rem"}} onClick={signupTest}>Signup</button>
-            <Link to="/auth">Go to Signin</Link>
+            <p>
+                <Link to="/auth">Go to Signin</Link>
+            </p>
         </div>
     );
 };
