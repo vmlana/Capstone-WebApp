@@ -1,9 +1,12 @@
 import React from 'react';
+import CompanyConfigHeader from './CompanyConfigHeader/CompanyConfigHeader';
+import CompanyNavRouter from './CompanyNavRouter';
 
 const CompanyConfig = () => {
     return (
         <div>
-            CompanyConfig
+            <CompanyConfigHeader />
+            <CompanyNavRouter />
         </div>
     );
 };
