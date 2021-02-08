@@ -8,14 +8,14 @@ import { Provider } from 'react-redux';
 import { store } from './redux/store'
 
 import './sass/style.scss';
-import scrollToTop from './components/Common/scroll-to-top';
+import ScrollToTop from './components/Common/scroll-to-top';
 
 ReactDOM.render(
 	<Provider store={store}>
 		<BrowserRouter>
-			<scrollToTop>
+			<ScrollToTop>
 				<App />
-			</scrollToTop>
+			</ScrollToTop>
 		</BrowserRouter>
 	</Provider>,
 	document.getElementById('root')
