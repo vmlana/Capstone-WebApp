@@ -5,7 +5,7 @@ const Header = () => {
     return (
         <div id="globalHeader">
             <div className="site-logo">
-
+                <Link to="/">Pivot Care</Link>
             </div>
             <ul>
                 <li><Link to='/'>Home</Link></li>

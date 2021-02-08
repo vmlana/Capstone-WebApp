@@ -2,9 +2,11 @@ import React from 'react';
 
 const Footer = () => {
     return (
-        <div>
-            Footer
-        </div>
+        <footer className="footer">
+            <p>
+                &copy; 2020 Pivot Care by Team Popcorn. All rights reserved.
+            </p>
+        </footer>
     );
 };
 
