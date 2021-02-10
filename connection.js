@@ -17,7 +17,7 @@ const ConnectionString = {
 // *******************************************************
 // ******** Database Connection Setup ********************
 // *******************************************************
-const savyDb = mySql.createConnection(ConnectionString);
-const savyPoolDb = promise_mysql.createPool(ConnectionString);
+const pivotDb = mySql.createConnection(ConnectionString);
+const pivotPoolDb = promise_mysql.createPool(ConnectionString);
 
-module.exports = {savyDb, savyPoolDb};
+module.exports = {pivotDb, pivotPoolDb};
