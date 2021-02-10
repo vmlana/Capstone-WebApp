@@ -1,7 +1,6 @@
 {
   "name": "Capstone-WebApp",
   "version": "1.0.0",
-  "description": "",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -29,6 +28,8 @@
     "styled-components": "^5.2.1"
   },
   "devDependencies": {
+    "nodemo": "^1.0.0",
     "nodemon": "^2.0.7"
-  }
+  },
+  "description": ""
 }

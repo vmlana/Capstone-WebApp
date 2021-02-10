@@ -1,4 +1,4 @@
-const { savyDb, savyPoolDb } = require("../connection.js");
+const { pivotDb, pivotPoolDb } = require("../connection.js");
 
 // ----------------------------------------------------------
 // Returns a list of all Categories
@@ -7,7 +7,7 @@ exports.getCategories = (req, res) => {
     let qry = `SELECT * from categories c
                   ORDER BY c.name `;
   
-    savyPoolDb.then(pool =>{
+    pivotPoolDb.then(pool =>{
       pool.query(qry)
           .then(results => {
               if (results.length == 0) {
@@ -27,3 +27,4 @@ exports.getCategories = (req, res) => {
     }); 
 
 };
+

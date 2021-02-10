@@ -19,16 +19,7 @@
 const express = require("express");
 const app     = express();
 
-// CORS ISSUE ********************************************
-// Cors plugin implemented in app.js could not work well on AWS. 
-// Therefore, header information, such as Access-Control-Allow-Origin’, have been set in server proxy setting file 
-// the path of which is /etc/nginx/conf.d/default.conf on EC2 instance of AWS instead
-//
-// const cors = require('cors');
-// app.use(cors())
-// *******************************************************
-
-const { savyDb } = require("./connection.js");
+const { pivotDb } = require("./connection.js");
 
 const server = app.listen(process.env.PORT || 3000, () => {
   console.log("listening port 3000");
