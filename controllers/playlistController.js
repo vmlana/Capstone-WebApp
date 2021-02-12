@@ -10,7 +10,7 @@ exports.getPlaylists = (req, res) => {
     let sInstructorId = pivotDb.escape(req.query.instructorId).replace(/['']+/g, '');
 
     // Set filters
-    let sWhere = " WHERE 1=1";
+    let sWhere = " WHERE p.active = 1 ";
     if (sPlaylistId != "" && sPlaylistId.toLowerCase() != "null") {
         sWhere = sWhere + ` AND p.playlistId = ${sPlaylistId} `;
     }
