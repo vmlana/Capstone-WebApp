@@ -19,6 +19,9 @@
 const express = require("express");
 const app     = express();
 
+const cors = require('cors');
+app.use(cors())
+
 const { pivotDb } = require("./connection.js");
 
 const server = app.listen(process.env.PORT || 3000, () => {
