@@ -79,6 +79,42 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "program",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/programs?userId=100350049&programId=",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"programs"
+					],
+					"query": [
+						{
+							"key": "userId",
+							"value": "100350049"
+						},
+						{
+							"key": "programId",
+							"value": ""
+						},
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
