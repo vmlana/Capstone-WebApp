@@ -1,73 +1,42 @@
 import React, { useState } from 'react';
+import { s3UploadHandler } from '../../services/s3Handler';
+
+import styled from "styled-components";
 
 const S3Test = () => {
   const [success, setSuccess] = useState(false);
-  const [url, setUrl] = useState("");
-  const [uploadInput, setUploadInput] = useState("");
+  const [urls, setUrls] = useState([]);
+  const [uploadInput, setUploadInput] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
   
   const handleChange = (ev) => {
     setSuccess(false);
-    setUrl("")    
+    setUrls([])    
   }
 
-  // Perform the upload
-  const handleUpload = (ev) => {
+  const handleUpload = async (ev) => {
     setIsUploading(true);
-
-    let file = uploadInput.files[0];
-    // Split the filename to get the name and type
-    let fileParts = uploadInput.files[0].name.split('.');
-    let fileName = fileParts[0];
-    let fileType = fileParts[1];
-    console.log("Preparing the upload");
-    fetch("http://localhost:3000/api/v1/s3storage",
-      {
-        method: "POST",
-        mode: 'cors',
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({fileName: fileName, fileType: fileType}),
-      }
-    ).then(response => {
-      return response.json();
-    }).then( response => {
-      const returnData = response.data.returnData;
-      const signedRequest = returnData.signedRequest;
-      const url = returnData.url;
-      setUrl(url)
-      console.log("Recieved a signed request " + signedRequest);
-      
-      if (fileType === "mp4" || fileType === "mov") {
-        fileType = "video/" + fileType;
-      }    
-      fetch(signedRequest, {
-        method: "PUT",
-        headers: { "Content-Type": fileType },
-        body: file
-        })
-      // fetch(signedRequest,file,options)
-      .then(result => {
-        console.log("Response from s3")
+    console.log(uploadInput);
+    try {
+        for(let i = 0; i < uploadInput.length; i++) {
+            const dataURL = await s3UploadHandler(ev, uploadInput[i]);
+            console.log(dataURL);
+            setUrls(state => [...state, dataURL])
+        }
         setSuccess(true);
-        setIsUploading(false);
-      })
-      .catch(error => {
-        alert("ERROR " + JSON.stringify(error));
-        setIsUploading(false);
-      })
-    })
-    .catch(error => {
-      alert(JSON.stringify(error));
-      setIsUploading(false);
-    })
-  }
+    } catch(err) {
+        setSuccess(false);
+    }
+    setUploadInput([]);
+    setIsUploading(false);
+  };
 
   const Success_message = () => (
     <div style={{padding:50}}>
       <h3 style={{color: 'green'}}>SUCCESSFUL UPLOAD</h3>
-      <a href={url}>Access the file here</a>
+      {urls.map(url=>
+        (<div key={url}><a href={url}>{url}</a></div>)
+      )}
       <br/>
     </div>
   )
@@ -85,12 +54,53 @@ const S3Test = () => {
         <h1>UPLOAD A FILE</h1>
         {success ? <Success_message/> : null}
         {isUploading ? <Uploading_message/> : null}
-        <input onChange={handleChange} ref={(ref) => { setUploadInput(ref) }} type="file"/>
+        <ChooseLabel>
+            <UploadInput 
+                onChange={ (ev) => {
+                    handleChange();
+                    console.log(ev.target.files[0]);
+                    setUploadInput(
+                        state => [...state, ev.target.files[0]])
+                }}
+                type="file"
+            />
+            Choose files
+        </ChooseLabel>
         <br/>
+        <div>
+            {
+                uploadInput.length === 0
+                ?
+                <p>No file is selected.</p>
+                :
+                <ul>
+                {uploadInput.map(file=>{
+                    return (<li key={file.name}>{file.name}</li>)
+                })}
+            </ul>
+            }
+        </div>
         <button onClick={handleUpload}>UPLOAD</button>
       </center>
     </div>
   );
 }
+
+const UploadInput = styled.input`
+    display: none;
+`;
+
+const ChooseLabel = styled.label`
+    display: block;
+    width: 200px;
+    border: 1px solid black;
+    margin: 2rem;
+    padding: 1rem;
+    cursor: pointer;
+    &:hover {
+        background-color: black;
+        color: white
+    }
+`;
 
 export default S3Test;
