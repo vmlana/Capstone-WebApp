@@ -1,8 +1,13 @@
 const { pivotDb, pivotPoolDb } = require("../connection.js");
 
-// ----------------------------------------------------------
-// Returns a list of all Playlists
-// ----------------------------------------------------------
+
+// ----------------------------------------------------------------
+// Returns a list of all Programs available for a especific userId
+// ----------------------------------------------------------------
+// Parameters:
+//      userId      - user identification  ( Required )
+//      programId   - program identification 
+// ----------------------------------------------------------------
 exports.getPrograms = (req, res) => {
 
     let sUserId = pivotDb.escape(req.query.userId).replace(/['']+/g, '');
