@@ -9,6 +9,10 @@ const CompanyConfigHeader = (props) => {
 
     return (
         <div id="companyConfigHeader">
+            <div className="site-logo">
+                <Link to="/">Pivot Care</Link>
+            </div>
+
             <ul>
                 <li>
                     <Link to={url}>Account</Link>
