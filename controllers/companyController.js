@@ -17,11 +17,11 @@ exports.getCompany = (req, res) => {
         let vResult = {};
 
         let qry = `SELECT c.companyId, l.userLogin, l.name as companyName, c.accountResponsible, c.contactEmail, c.phoneNumber, c.address, ct.name as cityName, 
-                      p.name as provinceName, p.provinceId as provinceCode, l.imageFile
+                      p.name as provinceName, p.provinceId as provinceCode, c.postalCode, l.imageFile
                  FROM companies c
                       INNER JOIN login l ON (c.companyId = l.loginId)
-                      INNER JOIN cities ct ON (c.cityId = ct.cityId)
-                      INNER JOIN provinces p ON (ct.provinceId = p.provinceId)
+                      LEFT OUTER JOIN cities ct ON (c.cityId = ct.cityId)
+                      LEFT OUTER JOIN provinces p ON (ct.provinceId = p.provinceId)
                 WHERE c.companyId = ${sCompanyId} `;
 
         pivotPoolDb.then(pool => {
@@ -66,6 +66,7 @@ exports.getCompany = (req, res) => {
                              cityName: vCompany.cityName,
                              provinceName: vCompany.provinceName,
                              provinceCode: vCompany.provinceCode,
+                             postalCode: vCompany.postalCode,
                              imageFile: vCompany.imageFile,
                              employees: vEmployees
                         };
