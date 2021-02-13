@@ -3,6 +3,7 @@ const router  = express.Router();
 
 const {getCategories} = require("../controllers/categoryController.js");
 const {getCompany} = require("../controllers/companyController.js");
+const {getInstructor} = require("../controllers/instructorController.js");
 const {getPlaylists} = require("../controllers/playlistController.js");
 const {getPrograms} = require("../controllers/programController.js");
 const {postS3Storage} = require("../controllers/s3StorageController");
@@ -11,8 +12,8 @@ const {postS3Storage} = require("../controllers/s3StorageController");
 router
     .get("/categories", getCategories)
     .get("/company", getCompany)  
+    .get("/instructor", getInstructor)      
     .get("/programs", getPrograms)       
-    .get("/playlists", getPlaylists)     
     .get("/playlists", getPlaylists)
     .post("/s3storage", postS3Storage);
 
