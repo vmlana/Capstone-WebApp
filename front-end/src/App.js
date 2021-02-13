@@ -22,7 +22,15 @@ function App() {
     return () => {
       unregisterHistoryListener();
     }
-  },[])
+  },[token])
+
+  useEffect(()=>{
+    if (window.performance) {
+      if (performance.navigation.type == 1) {
+        setPath(history.location.pathname);
+      }
+    }
+  }, [window.performance])
   
   return (
     <main className="App">
