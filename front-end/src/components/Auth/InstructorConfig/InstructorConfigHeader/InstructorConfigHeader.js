@@ -9,6 +9,9 @@ const InstructorConfigHeader = (props) => {
 
     return (
         <div id="instructorConfigHeader">
+            <div className="site-logo">
+                <Link to="/">Pivot Care</Link>
+            </div>
             <ul>
                 <li>
                     <Link to={url}>Profile</Link>

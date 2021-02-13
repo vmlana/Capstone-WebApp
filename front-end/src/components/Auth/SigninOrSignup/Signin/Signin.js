@@ -110,7 +110,7 @@ const mobileBreakPoint = "576px";
 
 const SigninPageContainer = styled.div`
     max-width: 800px;
-    margin: 2rem 4rem;
+    margin: 2rem auto;
     @media (max-width: ${mobileBreakPoint}) {
         margin: 2rem 3rem;
     }
