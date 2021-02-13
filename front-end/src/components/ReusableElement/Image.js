@@ -14,4 +14,5 @@ const ImageElement = styled.img`
   height: auto;
   align-self: center;
 `;
+
 export default Image;
