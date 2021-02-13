@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from "react-router-dom";
 import { userSigninSignup } from '../../../../redux/user/user.actions';
@@ -20,15 +20,15 @@ const Signin = (props) => {
     const handleOnChange = (e) => {
         e.persist();
         setUserInput((prev) => ({
-          ...prev,
-          [e.target.name]: e.target.value,
+            ...prev,
+            [e.target.name]: e.target.value,
         }));
     };
-    
+
     const signInHandler = async (e) => {
         e.preventDefault();
         // Call authentication API Here to get token
-        const response = await {success: true}
+        const response = await { success: true }
 
         if (response.success) {
             dispatch(userSigninSignup(userInput.userType, 123456, "ThisIsDummyToken"));
@@ -97,8 +97,8 @@ const Signin = (props) => {
                 <LinkToSignupText>
                     Don’t have an account?&nbsp;
                         <Link to="auth/signup">
-                            <UnderlineSpan>Sign up</UnderlineSpan>
-                        </Link>
+                        <UnderlineSpan>Sign up</UnderlineSpan>
+                    </Link>
                     &nbsp;here
                 </LinkToSignupText>
             </Form>

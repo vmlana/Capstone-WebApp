@@ -11,7 +11,7 @@ const ButtonElement = styled.button`
   background-color: grey;
   color: white;
   border: none;
-  borderradius: 3px;
+  border-radius: 3px;
   width: 40%;
   &:focus {
     outline: none;
