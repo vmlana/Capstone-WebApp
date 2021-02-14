@@ -20,11 +20,12 @@ exports.postS3Storage = (req, res) => {
     if (fileType === "mp4") {
         fileType = "video/" + fileType;
         folderName = "videos"
-    } else if (fileType === "jpg" || "jpeg" || "png") {
+    } else if (fileType === "jpg" || fileType === "jpeg" || fileType === "png") {
         folderName = "images";
     } else {
         folderName = "others";
     }
+
     // Set up the payload of what we are sending to the S3 api
     const s3Params = {
         Bucket: S3_BUCKET,

@@ -13,6 +13,8 @@ exports.s3UploadHandler = async (ev, file) => {
     let signedRequest;
     let url;
 
+    // console.log(fileType);
+
     await fetch("http://localhost:3000/api/v1/s3storage",
       {
         method: "POST",

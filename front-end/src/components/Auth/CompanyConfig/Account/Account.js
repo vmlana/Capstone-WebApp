@@ -2,9 +2,10 @@ import React, {useState, useEffect} from 'react';
 import styled from "styled-components";
 
 import InputWithLabel from '../../../ReusableElement/InputWithLabel';
-import Image from '../../../ReusableElement/Image';
 
 import dummyImg from '../../../../assets/dummy.jpg';
+
+import { readFileURL } from '../../../../services/readFileURL';
 
 const Account = () => {
     const [companyInfo, setCompanyInfo] = useState({
@@ -22,18 +23,27 @@ const Account = () => {
         employees: [],
     })
     const [windowWidth, setwindowWidth] = useState(window.innerWidth);
-    // const [emplayeeInput, setEmplayeeInput] = useState({
-    //     emplayeeName: "",
-    //     emplayeeId: "",
-    //     emplayeeDepartment: ""
-    // });
+    const [uploadImage, setUploadImage] = useState("");
+    const [uploadCSV, setUploadCSV] = useState("");
 
     const addNewEmployee = (e) => {
+        e.persist();
         if (companyInfo.employeeName === "" || companyInfo.employeeId === "" || companyInfo.employeeDepartment === "") {
             alert("Please fill in all employee infomation!!");
             return;
         }
-        e.persist();
+        const newEmployees = [
+            {
+                employeeName: companyInfo.employeeName,
+                employeeId: companyInfo.employeeId,
+                employeeDepartment: companyInfo.employeeDepartment
+            }
+        ];
+
+        if (employeesIdValidator(newEmployees)){
+            return alert("Same ID cannot be used more than once.")
+        }
+
         setCompanyInfo((prev) => ({
             ...prev,
             employeeName: "",
@@ -86,6 +96,72 @@ const Account = () => {
         };
     }, []);
 
+    function csvJSON(csv){
+        console.log(csv);
+
+        let lines=csv.split("\n");
+        let result = [];
+      
+        // let headers=lines[0].split(",");
+
+        const headers =["employeeName", "employeeId", "employeeDepartment"]
+      
+        for(let i=1;i<lines.length;i++){
+            let obj = {};
+            let currentline=lines[i].split(",");
+      
+            for(let j=0;j<headers.length;j++){
+                obj[headers[j]] = currentline[j];
+            }
+            result.push(obj);
+        }
+
+        console.log(result);
+        
+        //return result; //Array
+        return result;
+      }
+
+    const uploadCSVToList = (e) => {
+        e.persist();
+        if(uploadCSV) {
+            const reader = new FileReader();
+            reader.readAsBinaryString(uploadCSV);
+            reader.onload = (e) => {
+                const newEmployees = csvJSON(e.target.result);
+
+                if (employeesIdValidator(newEmployees)){
+                    setUploadCSV("");
+                    return alert("Same ID cannot be used more than once.")
+                }
+
+                setCompanyInfo((prev) => ({
+                    ...prev,
+                    employees: [
+                        ...newEmployees,
+                        ...prev.employees
+                    ],
+                }));
+                setUploadCSV("");
+            }
+        } else {
+            console.log("Error");
+        }
+    }
+
+    const employeesIdValidator = (newEmployees) => {
+        let findError = false;
+
+        companyInfo.employees.forEach((el_1, i) => {
+            newEmployees.forEach((el_2,i)=>{
+                if (el_1.employeeId == el_2.employeeId) {
+                    return findError = true;
+                }
+            })
+        })
+
+        return findError;
+    }
 
     return (
         <AccountPageContainer>
@@ -93,7 +169,33 @@ const Account = () => {
                 <HeaderWrapDiv>
                     <AccountPageHeader>Company account</AccountPageHeader>
                 </HeaderWrapDiv>
-                <p>Com Logo</p>
+                <UploadLogoDiv>
+                    <UploadLogoLabel>
+                        <img
+                            src={
+                                uploadImage
+                                ?
+                                readFileURL(uploadImage)
+                                :
+                                dummyImg
+                            }
+                            alt="logo" />
+                            {/* {
+                                uploadImage
+                                ?
+                                null
+                                :
+                                <small>Upload Logo</small>
+                            } */}
+                        <InvisibleInput
+                            type="file"
+                            onChange={(e)=>{
+                                setUploadImage(e.target.files[0]);
+                                e.target.value = '';
+                            }}
+                        />
+                    </UploadLogoLabel>
+                </UploadLogoDiv>
             </HeaderDiv>
             {
                 windowWidth >= 767 ?
@@ -171,17 +273,45 @@ const Account = () => {
                     </EmployeeInfoHeader>
             }
                 <EmployeeInformationDiv>
-                    <CSVHeaderAndUploadDiv>
-                        <UploadCSVHeader>Upload CSV file</UploadCSVHeader>
+                    <div>
+                        <CSVHeaderAndUploadDiv>
+                            <UploadCSVHeader>
+                                Upload CSV file
+                            </UploadCSVHeader>
+                            <DownloadCSVLink href="https://pivotcare-s3.s3-us-west-2.amazonaws.com/others/employees_list" target="_blank">
+                                Download CSV format
+                            </DownloadCSVLink>
+                        </CSVHeaderAndUploadDiv>
                         <UploadCSVDiv>
                             <UploadCSVLabel>
-                                <ChooseFilePElement>Choose File</ChooseFilePElement>
-                                <SelectedFilePElement>No file chosen</SelectedFilePElement>
-                                <InvisibleInput type="file" />
+                                <ChooseFilePElement>
+                                    Choose File
+                                </ChooseFilePElement>
+                                <SelectedFilePElement
+                                    uploadCSV={uploadCSV}
+                                >
+                                    {
+                                        uploadCSV.name ?
+                                        uploadCSV.name:
+                                        "No File chosen"
+                                    }
+                                </SelectedFilePElement>
+                                <InvisibleInput
+                                    type="file"
+                                    accept=".csv"
+                                    onChange={(e)=>{
+                                        setUploadCSV(e.target.files[0])
+                                        e.target.value = ''
+                                    }}
+                                />
                             </UploadCSVLabel>
-                            <UploadPElement>Upload</UploadPElement>
+                            <UploadPElement
+                                onClick={uploadCSVToList}
+                            >
+                                Upload
+                            </UploadPElement>
                         </UploadCSVDiv>
-                    </CSVHeaderAndUploadDiv>
+                    </div>
                     <InputEmployeesDiv>
                         <InputWithLabel
                             label="Full Name"
@@ -254,7 +384,7 @@ const AccountPageContainer = styled.div`
 
 const HeaderDiv = styled.div`
     display: grid;
-    grid-template-columns: 1fr 50px;
+    grid-template-columns: 1fr 65px;
     @media (max-width: ${mobileBreakPoint}) {
         display: block;
     }
@@ -276,20 +406,30 @@ const AccountPageHeader = styled.h2`
     font-size: 1.25rem;
     font-weight: normal;
     position: absolute;
-    top: -.5rem;
+    top: -1.75rem;
     background-color: #fff;
     padding-right: 2rem;
     text-transform: uppercase;
-    @media (max-width: ${mobileBreakPoint}) {
+    /* @media (max-width: ${mobileBreakPoint}) {
         top: -1.75rem;
-    }
-
+    } */
 `;
 
-const EmployeeInfoHeader = styled.h3`
-    text-align: center;
-    font-weight: normal;
-    margin: 0;
+const UploadLogoDiv = styled.div`
+    position: relative;
+    @media (max-width: ${mobileBreakPoint}) {
+        width: 100px;
+        height: auto;
+    }
+`;
+
+const UploadLogoLabel = styled.label`
+    position: absolute;
+    top: -1rem;
+    cursor: pointer;
+    @media (max-width: ${mobileBreakPoint}) {
+        position: initial;
+    }
 `;
 
 const Form = styled.form`
@@ -314,6 +454,16 @@ const PhoneCityPostalDiv = styled.div`
     }
 `;
 
+const EmployeeInfoHeader = styled.h3`
+    text-align: center;
+    font-weight: normal;
+    margin: 0;
+    @media (max-width: ${mobileBreakPoint}) {
+        margin-top: 3rem;
+        margin-bottom: 2rem;
+    }
+`;
+
 const EmployeeInformationDiv = styled.div`
     display: grid;
     flex-direction: column;
@@ -324,11 +474,20 @@ const EmployeeInformationDiv = styled.div`
 `;
 
 const CSVHeaderAndUploadDiv = styled.div`
-
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 `;
 
 const UploadCSVHeader = styled.p`
     margin: .5rem 0;
+`;
+
+const DownloadCSVLink = styled.a`
+    display: inline-block;
+    font-weight: lighter;
+    font-size: .8rem;
+    
 `;
 
 const UploadCSVDiv = styled.div`
@@ -375,7 +534,7 @@ const ChooseFilePElement = styled.p`
 
 const SelectedFilePElement = styled.p`
   padding: 0.5rem;
-  color: #ccc;
+  color: ${props => props.uploadCSV ? "black" : "#ccc" };
   border: solid 1px #ccc;
   border-radius: 3px;
   margin: 0 .5rem;
@@ -441,17 +600,20 @@ const EmployeesList = styled.ul`
     border-radius: 3px;
     padding: .5rem;
     overflow: scroll;
+    overflow-y: scroll;
     height: 175px;
     ::-webkit-scrollbar{
         width: 10px;
         height: 10px;
     }
     ::-webkit-scrollbar-track{
-        background: #ddd;
+        /* background: #ddd; */
         border: none;
         border-radius: 20px;
     }
     ::-webkit-scrollbar-thumb{
+        background: #ddd;
+        border-radius: 20px;
         box-shadow: none;
     }
 `;
