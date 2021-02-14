@@ -16,10 +16,14 @@ exports.postS3Storage = (req, res) => {
     const s3 = new aws.S3();  // Create a new instance of S3
     const fileName = req.body.fileName;
     let fileType = req.body.fileType;
-    let folderName = "images";
-    if (fileType === "mp4" || fileType === "mov") {
+    let folderName;
+    if (fileType === "mp4") {
         fileType = "video/" + fileType;
         folderName = "videos"
+    } else if (fileType === "jpg" || "jpeg" || "png") {
+        folderName = "images";
+    } else {
+        folderName = "others";
     }
     // Set up the payload of what we are sending to the S3 api
     const s3Params = {
