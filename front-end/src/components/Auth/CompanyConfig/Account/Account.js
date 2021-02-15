@@ -1,13 +1,16 @@
 import React, {useState, useEffect} from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import styled from "styled-components";
 
 import InputWithLabel from '../../../ReusableElement/InputWithLabel';
+import DropdownInput from './DropdownInput';
 
 import dummyImg from '../../../../assets/dummy.jpg';
 
 import { readFileURL } from '../../../../services/readFileURL';
 
 const Account = () => {
+    const dispatch = useDispatch();
     const [companyInfo, setCompanyInfo] = useState({
         companyName: "",
         accountResponsible: "",
@@ -15,20 +18,21 @@ const Account = () => {
         phoneNumber: "",
         address: "",
         cityName: "",
-        // database doesn't have postal code
         postalCode: "",
         employeeName: "",
         employeeId: "",
-        employeeDepartment: "",
+        departmentName: "",
         employees: [],
     })
     const [windowWidth, setwindowWidth] = useState(window.innerWidth);
     const [uploadImage, setUploadImage] = useState("");
     const [uploadCSV, setUploadCSV] = useState("");
+    const userInfo = useSelector(state => state.user.userInfo);
+    const {userType, authId, token} = userInfo;
 
     const addNewEmployee = (e) => {
         e.persist();
-        if (companyInfo.employeeName === "" || companyInfo.employeeId === "" || companyInfo.employeeDepartment === "") {
+        if (companyInfo.employeeName === "" || companyInfo.employeeId === "" || companyInfo.departmentName === "") {
             alert("Please fill in all employee infomation!!");
             return;
         }
@@ -36,7 +40,7 @@ const Account = () => {
             {
                 employeeName: companyInfo.employeeName,
                 employeeId: companyInfo.employeeId,
-                employeeDepartment: companyInfo.employeeDepartment
+                departmentName: companyInfo.departmentName
             }
         ];
 
@@ -48,12 +52,12 @@ const Account = () => {
             ...prev,
             employeeName: "",
             employeeId: "",
-            employeeDepartment: "",
+            // departmentName: "",
             employees: [
                 {
                     employeeName: companyInfo.employeeName,
                     employeeId: companyInfo.employeeId,
-                    employeeDepartment: companyInfo.employeeDepartment
+                    departmentName: companyInfo.departmentName
                 },
                 ...prev.employees
             ],
@@ -65,6 +69,13 @@ const Account = () => {
         setCompanyInfo((prev) => ({
           ...prev,
           [e.target.name]: e.target.value,
+        }));
+    };
+
+    const departmentUpdate = (value) => {
+        setCompanyInfo((prev) => ({
+            ...prev,
+            departmentName: value,
         }));
     };
 
@@ -87,24 +98,15 @@ const Account = () => {
         setwindowWidth(newWindowWidth);
     };
     
-    // Listen window width ********************************************
-    useEffect(() => {
-        window.addEventListener("resize", displaySizeListener);
-
-        return () => {
-        window.removeEventListener("resize", displaySizeListener);
-        };
-    }, []);
-
     function csvJSON(csv){
-        console.log(csv);
+        // console.log(csv);
 
         let lines=csv.split("\n");
         let result = [];
       
         // let headers=lines[0].split(",");
 
-        const headers =["employeeName", "employeeId", "employeeDepartment"]
+        const headers =["employeeName", "employeeId", "departmentName"]
       
         for(let i=1;i<lines.length;i++){
             let obj = {};
@@ -116,7 +118,7 @@ const Account = () => {
             result.push(obj);
         }
 
-        console.log(result);
+        // console.log(result);
         
         //return result; //Array
         return result;
@@ -162,6 +164,59 @@ const Account = () => {
 
         return findError;
     }
+
+    // Listen window width ********************************************
+    useEffect(() => {
+        window.addEventListener("resize", displaySizeListener);
+
+        return () => {
+        window.removeEventListener("resize", displaySizeListener);
+        };
+    }, []);
+
+    useEffect(async () => {
+
+        try {
+            const companyData = await fetch(`http://localhost:3000/api/v1/company?companyId=1`).then(results => {
+                return results.json();
+            }).catch(err=>{
+                throw err;
+            })
+
+            // console.log(companyData);
+
+            let { 
+                companyName,
+                accountResponsible,
+                contactEmail,
+                phoneNumber,
+                address,
+                cityName,
+                postalCode,
+                employees
+            } = companyData;
+
+            if (postalCode == null) {
+                postalCode = "";
+            }
+
+            setCompanyInfo((prev)=>({
+                ...prev,
+                companyName,
+                accountResponsible,
+                contactEmail,
+                phoneNumber,
+                address,
+                cityName,
+                postalCode,
+                employees
+            }))
+
+        } catch (err) {
+            console.log("No user data found")
+        }
+
+    }, [authId]);
 
     return (
         <AccountPageContainer>
@@ -329,14 +384,18 @@ const Account = () => {
                             value={companyInfo.employeeId}
                             onChange={handleOnChange}
                         />
-                        <InputWithLabel
+                        {/* <InputWithLabel
                             label="Department"
                             type="text"
-                            name="employeeDepartment"
+                            name="departmentName"
                             labelStyle={{width:"33%"}}
-                            value={companyInfo.employeeDepartment}
+                            value={companyInfo.departmentName}
                             onChange={handleOnChange}
-                        />
+                        /> */}
+                        <DropdownInput
+                            labelText="Department"
+                            onChange={departmentUpdate}
+                         />
                         <AddNewEmployeeElement
                             onClick={addNewEmployee}
                         >
@@ -354,7 +413,7 @@ const Account = () => {
                             <EmployeesListItem key={employee.employeeId}>
                                 <span>{employee.employeeName}</span>
                                 <span>{employee.employeeId}</span>
-                                <span>{employee.employeeDepartment}</span>
+                                <span>{employee.departmentName}</span>
                                 <span
                                     onClick={deleteEmployee}
                                     id={employee.employeeId}
