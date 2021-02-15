@@ -31,7 +31,7 @@ const Signin = (props) => {
         const response = await { success: true }
 
         if (response.success) {
-            dispatch(userSigninSignup(userInput.userType, 123456, "ThisIsDummyToken"));
+            dispatch(userSigninSignup(userInput.userType, 1, "ThisIsDummyToken"));
         } else {
             alert("Your Email or Password is wrong!!!");
         }
