@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import styled from "styled-components";
+import * as FAIcons from "react-icons/fa";
 
 // Reusable Components
 import Button from '../../../ReusableElement/Button';
 import InputWithLabel from '../../../ReusableElement/InputWithLabel';
 import CertificationModal from './CertificationModal';
+import Image from '../../../ReusableElement/Image';
 
 const Profile = () => {
 	const [instructorInfo, setInstructorInfo] = useState({
@@ -14,7 +16,27 @@ const Profile = () => {
 		city: "Vancouver",
 		postalCode: "V5X2L6",
 		resume: "Hi there",
-		profilePicture: "",
+		profilePicture: "./media/images/profilePicture.png",
+		certifications: [
+			{
+				certificationImage: '1.jpg',
+				certificationName: 'Teacher of Hatha Yoga',
+				issuingOrganization: '',
+				issueDate: '',
+				expirationdate: '',
+				credentialID: '1',
+				doesExpire: false
+			},
+			{
+				certificationImage: '2.jpg',
+				certificationName: 'Certified Personal Trainer',
+				issuingOrganization: '',
+				issueDate: '',
+				expirationdate: '',
+				credentialID: '2',
+				doesExpire: false
+			}
+		]
 	});
 
 	const handleOnChange = (e) => {
@@ -22,6 +44,16 @@ const Profile = () => {
 			...prev,
 			[e.target.name]: e.target.value,
 		}));
+	};
+
+	// File Upload
+	const handleChange = (e) => {
+		if (e.target.files.length) {
+			setInstructorInfo((prev) => ({
+				...prev,
+				profilePicture: URL.createObjectURL(e.target.files[0]),
+			}));
+		}
 	};
 
 	// Certification Modal
@@ -35,14 +67,20 @@ const Profile = () => {
 		setOpen(false);
 	};
 
+	const onSubmit = (e) => {
+		e.preventDefault()
+	}
+
+
+
 	return (
 		<ProfilePageContainer>
-			<TitleContainer>
-				<PageHeader>Profile</PageHeader>
-			</TitleContainer>
 
-			<Form>
+			<Form onSubmit={onSubmit}>
 				<div>
+					<TitleContainer>
+						<PageHeader>Profile</PageHeader>
+					</TitleContainer>
 					<InputWithLabel
 						label="First Name, Last Name"
 						type="text"
@@ -95,13 +133,59 @@ const Profile = () => {
 					</Label>
 				</div>
 				<div>
-					<Button text='save' />
-					<div>
-						<button type="button" onClick={handleOpen}>
-							Open Modal
-      					</button>
+
+					<ProfilePictureContainer>
+						<label htmlFor="fileUpload" style={{ backgroundColor: "lightgrey" }}>
+							{instructorInfo.profilePicture ? (
+								<FileUploadContainer>
+									<img src={instructorInfo.profilePicture} alt={instructorInfo.instructorName} style={{ width: "125px", height: "125px" }} />
+									<FAIcons.FaUpload style={{ margin: "0.30rem" }} />
+								</FileUploadContainer>
+							) : (
+									<>
+										<FAIcons.FaUpload />
+										<label style={{ marginLeft: "1rem" }}>Upload profile picture</label>
+									</>
+								)}
+						</label>
+						<UploadFile
+							type="file"
+							id="fileUpload"
+							onChange={handleChange}
+						/>
+					</ProfilePictureContainer>
+
+					<Certification>
+						<CertificationHeader>
+							<label>Licences & certifications</label>
+							<FAIcons.FaPlus onClick={handleOpen} style={{ cursor: 'pointer' }} size={14} />
+						</CertificationHeader>
+
+						{
+							instructorInfo.certifications.length === 0 ?
+								<CertificationContentNull>
+									Add Licences and Cerications.
+                        		</CertificationContentNull>
+								:
+								<CertificationContent>
+									{
+										instructorInfo.certifications.map(certification =>
+											<CertificationListItem key={certification.credentialID}>
+												<Image src={certification.certificationImage} alt={certification.certificationName} />
+												<span>{certification.certificationName}</span>
+												<FAIcons.FaPen style={{ cursor: 'pointer' }} />
+											</CertificationListItem>
+										)
+									}
+								</CertificationContent>
+						}
+
+
 						<CertificationModal open={open} onClose={handleClose} />
-					</div>
+					</Certification>
+					<ButtonContainer>
+						<Button text='save' />
+					</ButtonContainer>
 				</div>
 
 			</Form>
@@ -110,7 +194,7 @@ const Profile = () => {
 };
 
 const ProfilePageContainer = styled.div`
-    max-width: 1300px;
+    max-width: 1000px;
     margin: 0 auto;
     padding: 2rem;
 `;
@@ -155,12 +239,56 @@ const LabelText = styled.p`
 `;
 
 const TextArea = styled.textarea`
-  border: solid 1px #ccc;
-  border-radius: 5px;
-  font-size: 16px;
-  width: 100%;
-  padding: .25rem 0.5rem;
-  resize: none;
+	border: solid 1px #ccc;
+	border-radius: 5px;
+	font-size: 16px;
+	width: 100%;
+	padding: .25rem 0.5rem;
+	resize: none;
+`;
+
+const ButtonContainer = styled.div`
+	display: flex;
+	justify-content: flex-end;
+`;
+
+const Certification = styled.div`
+	margin-top: 2rem;
+`;
+
+const CertificationHeader = styled.div`
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 2rem;
+`;
+
+const CertificationContentNull = styled.div`
+
+`;
+
+const CertificationContent = styled.ul`
+
+`;
+
+const CertificationListItem = styled.li`
+	display: grid;
+    grid-template-columns: 70px 1fr 20px;
+	grid-gap: 1rem;
+    margin-bottom: 1rem;
+`;
+
+const ProfilePictureContainer = styled.div`
+	display: flex;
+    text-align: right;
+    justify-content: flex-end;
+`;
+
+const FileUploadContainer = styled.div`
+	width: 125px;
+`;
+
+const UploadFile = styled.input.attrs({ type: 'file' })`
+	display: none;
 `;
 
 export default Profile;
