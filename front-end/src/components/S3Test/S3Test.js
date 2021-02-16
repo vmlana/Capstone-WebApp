@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { s3UploadHandler } from '../../services/s3Handler';
+import { s3UploadHandler, s3DeleteHandler } from '../../services/s3Handler';
 
 import styled from "styled-components";
 
@@ -8,6 +8,7 @@ const S3Test = () => {
   const [urls, setUrls] = useState([]);
   const [uploadInput, setUploadInput] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
+  const [deleteFilePath, setDeleteFilePath] = useState("")
   
   const handleChange = (ev) => {
     setSuccess(false);
@@ -15,11 +16,13 @@ const S3Test = () => {
   }
 
   const handleUpload = async (ev) => {
+    ev.preventDefault();
+
     setIsUploading(true);
     console.log(uploadInput);
     try {
         for(let i = 0; i < uploadInput.length; i++) {
-            const dataURL = await s3UploadHandler(ev, uploadInput[i]);
+            const dataURL = await s3UploadHandler(uploadInput[i]);
             console.log(dataURL);
             setUrls(state => [...state, dataURL])
         }
@@ -30,6 +33,22 @@ const S3Test = () => {
     setUploadInput([]);
     setIsUploading(false);
   };
+
+  const deleteBtnHandler = async (ev) => {
+    ev.preventDefault();
+
+    try {
+      const result = await s3DeleteHandler(deleteFilePath);
+
+      console.log(result);
+
+      setDeleteFilePath("");
+
+    } catch(err) {
+      console.log(err)
+    }
+
+  }
 
   const Success_message = () => (
     <div style={{padding:50}}>
@@ -55,14 +74,15 @@ const S3Test = () => {
         {success ? <Success_message/> : null}
         {isUploading ? <Uploading_message/> : null}
         <ChooseLabel>
-            <UploadInput 
+            <UploadInput
+                type="file"
+                accept=".jpg,.jpeg,.png,.mp4,.csv"
                 onChange={ (ev) => {
                     handleChange();
                     console.log(ev.target.files[0]);
                     setUploadInput(
                         state => [...state, ev.target.files[0]])
                 }}
-                type="file"
             />
             Choose files
         </ChooseLabel>
@@ -82,6 +102,21 @@ const S3Test = () => {
         </div>
         <button onClick={handleUpload}>UPLOAD</button>
       </center>
+      <DeleteTestDiv>
+        <p>File delete test</p>
+        <label>Please type the path of the file you want to delete:
+          <input
+            type="test"
+            value={deleteFilePath}
+            onChange={(e)=>{
+              setDeleteFilePath(e.target.value)
+            }} />
+        </label>
+        <p>For example: folderName/fileName</p>
+        <button onClick={deleteBtnHandler}>
+          Delete the File: {deleteFilePath}
+        </button>
+      </DeleteTestDiv>
     </div>
   );
 }
@@ -101,6 +136,11 @@ const ChooseLabel = styled.label`
         background-color: black;
         color: white
     }
+`;
+
+const DeleteTestDiv = styled.div`
+  margin: 3rem auto;
+  /* text-align: center; */
 `;
 
 export default S3Test;
