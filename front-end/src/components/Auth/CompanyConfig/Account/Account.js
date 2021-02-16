@@ -244,6 +244,7 @@ const Account = () => {
                             } */}
                         <InvisibleInput
                             type="file"
+                            accept=".jpg,.jpeg,.png"
                             onChange={(e)=>{
                                 setUploadImage(e.target.files[0]);
                                 e.target.value = '';
