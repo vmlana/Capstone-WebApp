@@ -54,7 +54,7 @@ const S3Test = () => {
     <div style={{padding:50}}>
       <h3 style={{color: 'green'}}>SUCCESSFUL UPLOAD</h3>
       {urls.map(url=>
-        (<div key={url}><a href={url}>{url}</a></div>)
+        (<div key={url}><a href={url} target="_blank">{url}</a></div>)
       )}
       <br/>
     </div>
