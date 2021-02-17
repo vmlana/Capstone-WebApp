@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { s3UploadHandler, s3DeleteHandler } from '../../services/s3Handler';
+import { s3UploadHandler, s3UploadHandlerListeningProgress, s3DeleteHandler } from '../../services/s3Handler';
 
 import styled from "styled-components";
 
@@ -8,7 +8,8 @@ const S3Test = () => {
   const [urls, setUrls] = useState([]);
   const [uploadInput, setUploadInput] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
-  const [deleteFilePath, setDeleteFilePath] = useState("")
+  const [deleteFilePath, setDeleteFilePath] = useState("");
+  const [uploadingProgress, setUploadingProgress] = useState(0);
   
   const handleChange = (ev) => {
     setSuccess(false);
@@ -34,6 +35,34 @@ const S3Test = () => {
     setIsUploading(false);
   };
 
+  const handleUploadListeningProgress = async (ev) => {
+    ev.preventDefault();
+
+    const uploadTracker = async (percent) => {
+      console.log(percent);
+      setUploadingProgress(Math.floor(percent));
+      if(percent === 100) {
+        setSuccess(true);
+        setUploadInput([]);
+        setIsUploading(false);
+        setUploadingProgress(0);
+      }
+    }
+
+    setIsUploading(true);
+    console.log(uploadInput);
+    try {
+        for(let i = 0; i < uploadInput.length; i++) {
+            const dataURL = await s3UploadHandlerListeningProgress(uploadInput[i], "dummyToken", uploadTracker);
+            console.log(dataURL);
+            setUrls(state => [...state, dataURL])
+        }
+        // setSuccess(true);
+    } catch(err) {
+        setSuccess(false);
+    }
+  };
+
   const deleteBtnHandler = async (ev) => {
     ev.preventDefault();
 
@@ -51,7 +80,7 @@ const S3Test = () => {
   }
 
   const Success_message = () => (
-    <div style={{padding:50}}>
+    <div style={{padding:15}}>
       <h3 style={{color: 'green'}}>SUCCESSFUL UPLOAD</h3>
       {urls.map(url=>
         (<div key={url}><a href={url} target="_blank">{url}</a></div>)
@@ -61,8 +90,26 @@ const S3Test = () => {
   )
 
   const Uploading_message = () => (
-    <div style={{padding:50}}>
-      <h3 style={{color: 'red'}}>UPLOADING NOW...</h3>
+    <div style={{padding:15}}>
+        <h3 style={{color: 'red'}}>UPLOADING NOW...</h3>
+        {uploadingProgress && isUploading ? 
+          (
+            <div>
+              <h3 style={{color: 'red'}}>{uploadingProgress}%</h3>
+              <div style={{backgroundColor: '#ccc', width: "500px", height: "2rem", textAlign: "center", margin: "0 auto"}}>
+                <div style={
+                  {
+                    backgroundColor: 'red',
+                    height: "2rem",
+                    width: uploadingProgress / 100 * 100 + '%'
+                  }
+                }></div>
+              </div>
+            </div>
+          )
+          :
+          null
+        }
       <br/>
     </div>
   )
@@ -72,20 +119,26 @@ const S3Test = () => {
       <center>
         <h1>UPLOAD A FILE</h1>
         {success ? <Success_message/> : null}
-        {isUploading ? <Uploading_message/> : null}
-        <ChooseLabel>
-            <UploadInput
-                type="file"
-                accept=".jpg,.jpeg,.png,.mp4,.csv"
-                onChange={ (ev) => {
-                    handleChange();
-                    console.log(ev.target.files[0]);
-                    setUploadInput(
-                        state => [...state, ev.target.files[0]])
-                }}
-            />
-            Choose files
-        </ChooseLabel>
+        {isUploading ?
+          <Uploading_message/>
+          :
+          <ChooseLabel>
+              <UploadInput
+                  type="file"
+                  accept=".jpg,.jpeg,.png,.mp4,.csv"
+                  onChange={ (ev) => {
+                      handleChange();
+                      console.log(ev.target.files[0]);
+                      if (!ev.target.files[0]) {
+                        return;
+                      }
+                      setUploadInput(
+                          state => [...state, ev.target.files[0]]);
+                  }}
+              />
+              Choose files
+          </ChooseLabel>
+        }
         <br/>
         <div>
             {
@@ -101,10 +154,12 @@ const S3Test = () => {
             }
         </div>
         <button onClick={handleUpload}>UPLOAD</button>
+        <br /><br />
+        <button onClick={handleUploadListeningProgress}>UPLOAD with Progress Listener</button>
       </center>
       <DeleteTestDiv>
-        <p>File delete test</p>
-        <label>Please type the path of the file you want to delete:
+        <h2 style={{textAlign: "center"}}>Delete File</h2>
+        <label>Please type the path of the file you want to delete: 
           <input
             type="test"
             value={deleteFilePath}
@@ -113,9 +168,11 @@ const S3Test = () => {
             }} />
         </label>
         <p>For example: folderName/fileName</p>
-        <button onClick={deleteBtnHandler}>
-          Delete the File: {deleteFilePath}
-        </button>
+        <div style={{textAlign: "center"}}>
+          <button onClick={deleteBtnHandler}>
+            Delete the File: {deleteFilePath}
+          </button>
+        </div>
       </DeleteTestDiv>
     </div>
   );
