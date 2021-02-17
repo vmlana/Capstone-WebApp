@@ -22,7 +22,7 @@ const S3Test = () => {
     console.log(uploadInput);
     try {
         for(let i = 0; i < uploadInput.length; i++) {
-            const dataURL = await s3UploadHandler(uploadInput[i]);
+            const dataURL = await s3UploadHandler(uploadInput[i], "dummyToken");
             console.log(dataURL);
             setUrls(state => [...state, dataURL])
         }
@@ -38,7 +38,7 @@ const S3Test = () => {
     ev.preventDefault();
 
     try {
-      const result = await s3DeleteHandler(deleteFilePath);
+      const result = await s3DeleteHandler(deleteFilePath, "dummyToken");
 
       console.log(result);
 
