@@ -38,8 +38,9 @@ const S3Test = () => {
   const handleUploadListeningProgress = async (ev) => {
     ev.preventDefault();
 
-    const uploadTracker = async (percent) => {
+    const uploadTracker = async (percent, fileName) => {
       console.log(percent);
+      console.log(fileName);
       setUploadingProgress(Math.floor(percent));
       if(percent === 100) {
         setSuccess(true);

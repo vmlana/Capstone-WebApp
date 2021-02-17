@@ -107,7 +107,7 @@ exports.s3UploadHandlerListeningProgress = async (file, token, progressCallback)
           xhr.upload.onprogress = (e) => {
             if (e.lengthComputable) {
               let percentComplete = (e.loaded / file.size) * 100;
-              progressCallback(percentComplete);
+              progressCallback(percentComplete, fileName);
             }
           };
         }
