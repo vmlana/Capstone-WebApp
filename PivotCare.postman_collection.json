@@ -27,6 +27,27 @@
 			"response": []
 		},
 		{
+			"name": "companies",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/companies",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"companies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "company",
 			"request": {
 				"method": "GET",
@@ -55,6 +76,33 @@
 		},
 		{
 			"name": "instructor",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/instructor?instructorId=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"instructor"
+					],
+					"query": [
+						{
+							"key": "instructorId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user",
 			"request": {
 				"method": "GET",
 				"header": [],

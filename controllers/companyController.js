@@ -90,3 +90,38 @@ exports.getCompany = (req, res) => {
 };
 
 
+// ----------------------------------------------------------
+// Returns a list of all Companies
+// ----------------------------------------------------------
+exports.getCompanies = (req, res) => {
+    let qry = `SELECT c.companyId, l.name as companyName
+                 FROM companies c
+                      INNER JOIN login l ON (c.companyId = l.loginId) 
+                ORDER BY companyName`;
+  
+    pivotPoolDb.then(pool =>{
+      pool.query(qry)
+          .then(results => {
+              if (results.length == 0) {
+                res.status(404).send("No Record Found");
+              } else {
+                res.status(200).send(results);
+              }
+          })
+          .catch(error => {
+            console.log(error);
+            res.status(500).send(error);
+          })
+    })
+    .catch(error => {
+      console.log(error);
+      res.status(500).send(error);
+    }); 
+
+};
+
+
+
+
+
+
