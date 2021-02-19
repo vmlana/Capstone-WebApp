@@ -190,6 +190,36 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "updInstructor",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\r\n        \"instructorId\": 20,\r\n        \"userLogin\": \"bob@instructor.ca\",\r\n        \"instructorName\": \"Bob Dylan\",\r\n        \"resume\": \"A great teacher with a lot of experience in the field - CHANGED BY VINI again\",\r\n        \"specializationArea\": \"Physiotherapy\",\r\n        \"phoneNumber\": \"788719417\",\r\n        \"address\": \"458, 49th Str.\",\r\n        \"cityName\": \"Vancouver\",\r\n        \"provinceName\": \"British Columbia\",\r\n        \"provinceCode\": \"BC\",\r\n        \"postalCode\": \"V6B 1B4\",\r\n        \"imageFile\": null\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/v1/updinstructor",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"updinstructor"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
