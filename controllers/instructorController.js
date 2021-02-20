@@ -52,10 +52,10 @@ exports.getInstructor = (req, res) => {
 // ----------------------------------------------------------
 exports.updInstructor = (req, res) => {
 
-    let instructorSearch = async (req) => {
+    let instructorUpdate = async (req) => {
 
         const valError = validationResult(req).array();
-        console.log(valError);
+        //console.log(valError);
 
         if (valError.length > 0) {
             res.status(500).send(valError);
@@ -88,9 +88,6 @@ exports.updInstructor = (req, res) => {
                 if (objInstructor.postalCode != undefined) {
                     sSet = sSet + `postalCode = "${objInstructor.postalCode}", `;
                 }                
-                if (objInstructor.imageFile != undefined) {
-                    sSet = sSet + `imageFile = "${objInstructor.imageFile}", `;
-                } 
                 if (objInstructor.cityName != '' && objInstructor.cityName != undefined && 
                     objInstructor.provinceCode != '' && objInstructor.provinceCode != undefined) {
                     sSet = sSet + `cityId = ( SELECT cityId FROM cities 
@@ -108,7 +105,10 @@ exports.updInstructor = (req, res) => {
             if (sMessageInfo == '') {
                 if (objInstructor.instructorName != '' && objInstructor.instructorName != undefined) {
                     sSetUser = sSetUser + ` name = "${objInstructor.instructorName}", `;
-                }      
+                } 
+                if (objInstructor.imageFile != '' && objInstructor.imageFile != undefined) {
+                    sSetUser = sSetUser + ` imageFile = "${objInstructor.imageFile}", `;
+                }       
                 let ultComma = sSetUser.lastIndexOf(",");
                 if (ultComma > 0) {
                     sSetUser = sSetUser.substring(0,ultComma);  
@@ -177,7 +177,7 @@ exports.updInstructor = (req, res) => {
         }
     };
 
-    instructorSearch(req);
+    instructorUpdate(req);
 }    
 
 
@@ -234,10 +234,9 @@ exports.instructorValidation = [
     check("phoneNumber")
     .escape()
     .trim()
-    .isNumeric().withMessage("Phone number must be numeric values")
-    .isLength({min:1, max:100}).withMessage("Specialization Area must be between 1 and 100 characters"),    
+    .isNumeric().withMessage("Phone number must be numeric values"),    
     
-    // phone number validation
+    // address validation
     check("address")
     .escape()
     .trim()
