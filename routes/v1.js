@@ -2,6 +2,7 @@ const express = require("express");
 const router  = express.Router();
 
 const {getCategories} = require("../controllers/categoryController.js");
+const {getDepartments} = require("../controllers/departmentController.js");
 const {getCompany, getCompanies, updCompany, companyValidation} = require("../controllers/companyController.js");
 const {getInstructor, updInstructor, instructorValidation} = require("../controllers/instructorController.js");
 const {getUser} = require("../controllers/userController.js");
@@ -13,6 +14,7 @@ const {postS3Storage, deleteS3Storage} = require("../controllers/s3StorageContro
 // Routes to capstone api - Version 1
 router
     .get("/categories", getCategories)
+    .get("/departments", getDepartments)
     .get("/companies", getCompanies)     
     .get("/company", getCompany)  
     .get("/instructor", getInstructor)      
