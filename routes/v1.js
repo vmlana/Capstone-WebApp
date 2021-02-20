@@ -2,7 +2,7 @@ const express = require("express");
 const router  = express.Router();
 
 const {getCategories} = require("../controllers/categoryController.js");
-const {getCompany, getCompanies} = require("../controllers/companyController.js");
+const {getCompany, getCompanies, updCompany, companyValidation} = require("../controllers/companyController.js");
 const {getInstructor, updInstructor, instructorValidation} = require("../controllers/instructorController.js");
 const {getUser} = require("../controllers/userController.js");
 const {getPlaylists} = require("../controllers/playlistController.js");
@@ -20,6 +20,7 @@ router
     .get("/programs", getPrograms)       
     .get("/playlists", getPlaylists)
     .post("/updinstructor", instructorValidation, updInstructor)    
+    .post("/updcompany", companyValidation, updCompany)  
     .post("/s3storage", postS3Storage)
     .delete("/s3storage", deleteS3Storage);
 
