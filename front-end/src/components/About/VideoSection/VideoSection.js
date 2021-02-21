@@ -17,4 +17,7 @@ const VideoSection = () => {
     );
 };
 
+// https://pivotcare-s3.s3-us-west-2.amazonaws.com/exercise01.mp4
+
+
 export default VideoSection;

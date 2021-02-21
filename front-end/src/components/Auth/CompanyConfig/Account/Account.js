@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 import InputWithLabel from '../../../ReusableElement/InputWithLabel';
 import DropdownInput from './DropdownInput';
+import DropdownInputCityName from './DropdownInputCityName';
 
 import dummyImg from '../../../../assets/dummy.jpg';
 
@@ -18,6 +19,7 @@ const Account = () => {
         phoneNumber: "",
         address: "",
         cityName: "",
+        cityId: "",
         postalCode: "",
         employeeName: "",
         employeeId: "",
@@ -76,6 +78,13 @@ const Account = () => {
         setCompanyInfo((prev) => ({
             ...prev,
             departmentName: value,
+        }));
+    };
+
+    const cityIdUpdate = (value) => {
+        setCompanyInfo((prev) => ({
+            ...prev,
+            cityId: value,
         }));
     };
 
@@ -163,6 +172,50 @@ const Account = () => {
         })
 
         return findError;
+    }
+
+    const updateCompanyInfo = async() => {
+
+        console.log({
+            companyId: authId,
+            companyName: companyInfo.companyName,
+            accountResponsible: companyInfo.accountResponsible,
+            contactEmail: companyInfo.contactEmail,
+            phoneNumber: companyInfo.phoneNumber,
+            address: companyInfo.address,
+            cityName: companyInfo.cityName,
+            postalCode: companyInfo.postalCode,
+            employees: companyInfo.employees,
+        });
+
+        try {
+            const resultData = await fetch("http://localhost:3000/api/v1/updcompany",
+            {
+              method: "POST",
+              headers: {
+                  "Content-Type": "application/json",
+              },
+              body: JSON.stringify(
+                  {
+                    companyId: authId,
+                    companyName: companyInfo.companyName,
+                    accountResponsible: companyInfo.accountResponsible,
+                    contactEmail: companyInfo.contactEmail,
+                    phoneNumber: companyInfo.phoneNumber,
+                    address: companyInfo.address,
+                    // cityName: companyInfo.cityName,
+                    cityId: companyInfo.cityId,
+                    postalCode: companyInfo.postalCode,
+                    employees: companyInfo.employees,
+                }
+                ),
+            }).then(response => {
+                return response.json();
+            });
+            console.log(resultData);
+        } catch(error) {
+            console.log(error);
+        }
     }
 
     // Listen window width ********************************************
@@ -268,6 +321,7 @@ const Account = () => {
                         name="companyName"
                         required
                         value={companyInfo.companyName}
+                        // value={undefined}
                         onChange={handleOnChange}
                     />
                     <InputWithLabel
@@ -303,13 +357,18 @@ const Account = () => {
                         value={companyInfo.phoneNumber}
                         onChange={handleOnChange}
                     />
-                    <InputWithLabel
+                    {/* <InputWithLabel
                         label="City"
                         type="text"
                         name="cityName"
                         required
                         value={companyInfo.cityName}
                         onChange={handleOnChange}
+                    /> */}
+                    <DropdownInputCityName
+                        labelText="city"
+                        onChange={cityIdUpdate}
+                        currentCityName={companyInfo.cityName}
                     />
                     <InputWithLabel
                         label="Postal Code"
@@ -425,7 +484,12 @@ const Account = () => {
                     }
                 </EmployeeInformationDiv>
                 <SaveBtnDiv>
-                    <button>Save</button>
+                    <button
+                        onClick={e=> {
+                            e.preventDefault();
+                            updateCompanyInfo();
+                        }}
+                        >Save</button>
                 </SaveBtnDiv>
             </Form>
         </AccountPageContainer>
