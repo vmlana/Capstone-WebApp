@@ -11,6 +11,8 @@ const {getPlaylists} = require("../controllers/playlistController.js");
 const {getPrograms} = require("../controllers/programController.js");
 const {postS3Storage, deleteS3Storage} = require("../controllers/s3StorageController");
 
+// Import validator
+const {s3FileTypeValidator} = require("../validators/s3Validator");
 
 // Routes to capstone api - Version 1
 router
@@ -25,7 +27,7 @@ router
     .get("/playlists", getPlaylists)
     .post("/updinstructor", instructorValidation, updInstructor)    
     .post("/updcompany", companyValidation, updCompany)  
-    .post("/s3storage", postS3Storage)
+    .post("/s3storage", s3FileTypeValidator, postS3Storage)
     .delete("/s3storage", deleteS3Storage);
 
 module.exports = router;
