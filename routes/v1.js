@@ -7,7 +7,7 @@ const {getTags} = require("../controllers/tagController.js");
 const {getCities} = require("../controllers/cityController.js");
 const {getCompany, getCompanies, updCompany, companyValidation} = require("../controllers/companyController.js");
 const {getInstructor, updInstructor, instructorValidation} = require("../controllers/instructorController.js");
-const {getUser} = require("../controllers/userController.js");
+const {getUser, updUser, userValidation} = require("../controllers/userController.js");
 const {getPlaylists} = require("../controllers/playlistController.js");
 const {getPrograms} = require("../controllers/programController.js");
 const {postS3Storage, deleteS3Storage} = require("../controllers/s3StorageController");
@@ -27,6 +27,7 @@ router
     .get("/playlists", getPlaylists)
     .post("/updinstructor", instructorValidation, updInstructor)    
     .post("/updcompany", companyValidation, updCompany)  
+    .post("/upduser", userValidation, updUser)      
     .post("/s3storage", postS3Storage)
     .delete("/s3storage", deleteS3Storage);
 
