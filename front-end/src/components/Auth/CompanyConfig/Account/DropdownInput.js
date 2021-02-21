@@ -32,10 +32,21 @@ const useStyles = makeStyles((theme) => ({
 export default function DropdownInput(props) {
   const classes = useStyles();
   const [departmentName, setDepartmentName] = React.useState('');
+  const [departmentNameList, setDepartmentNameList] = useState([]);
 
   const handleChange = (event) => {
     setDepartmentName(event.target.value);
   };
+
+  useEffect( async()=>{
+    const departments = await fetch(`http://localhost:3000/api/v1/departments`).then(results => {
+      return results.json();
+    }).catch(error=> {
+      console.log(error);
+    })
+    // console.log(departments);
+    setDepartmentNameList(departments);
+  },[])
 
   useEffect(()=>{
     props.onChange(departmentName);
@@ -55,11 +66,17 @@ export default function DropdownInput(props) {
           <MenuItem value="" disabled>
             Choose Departments
           </MenuItem>
-          <MenuItem value="Warehouse">Warehouse</MenuItem>
+          {
+            departmentNameList.map(department=>{
+              return (
+              <MenuItem key={department.workDepartmentId} value={department.name}>{department.name}</MenuItem>)
+            })
+          }
+          {/* <MenuItem value="Warehouse">Warehouse</MenuItem>
           <MenuItem value="IT/typing">IT/typing</MenuItem>
           <MenuItem value="Adm/desk">Adm/desk</MenuItem>
           <MenuItem value="Transportation">Transportation</MenuItem>
-          <MenuItem value="Sales/standing">Sales/standing</MenuItem>
+          <MenuItem value="Sales/standing">Sales/standing</MenuItem> */}
         </Select>
       </FormControl>
     </Label>
