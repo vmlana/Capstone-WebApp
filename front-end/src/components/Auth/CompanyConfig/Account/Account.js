@@ -165,6 +165,49 @@ const Account = () => {
         return findError;
     }
 
+    const updateCompanyInfo = async() => {
+
+        console.log({
+            companyId: authId,
+            companyName: companyInfo.companyName,
+            accountResponsible: companyInfo.accountResponsible,
+            contactEmail: companyInfo.contactEmail,
+            phoneNumber: companyInfo.phoneNumber,
+            address: companyInfo.address,
+            cityName: companyInfo.cityName,
+            postalCode: companyInfo.postalCode,
+            employees: companyInfo.employees,
+        });
+
+        try {
+            const resultData = await fetch("http://localhost:3000/api/v1/updcompany",
+            {
+              method: "POST",
+              headers: {
+                  "Content-Type": "application/json",
+              },
+              body: JSON.stringify(
+                  {
+                    companyId: authId,
+                    companyName: companyInfo.companyName,
+                    accountResponsible: companyInfo.accountResponsible,
+                    contactEmail: companyInfo.contactEmail,
+                    phoneNumber: companyInfo.phoneNumber,
+                    address: companyInfo.address,
+                    cityName: companyInfo.cityName,
+                    postalCode: companyInfo.postalCode,
+                    employees: companyInfo.employees,
+                }
+                ),
+            }).then(response => {
+                return response.json();
+            });
+            console.log(resultData);
+        } catch(error) {
+            console.log(error);
+        }
+    }
+
     // Listen window width ********************************************
     useEffect(() => {
         window.addEventListener("resize", displaySizeListener);
@@ -268,6 +311,7 @@ const Account = () => {
                         name="companyName"
                         required
                         value={companyInfo.companyName}
+                        // value={undefined}
                         onChange={handleOnChange}
                     />
                     <InputWithLabel
@@ -425,7 +469,12 @@ const Account = () => {
                     }
                 </EmployeeInformationDiv>
                 <SaveBtnDiv>
-                    <button>Save</button>
+                    <button
+                        onClick={e=> {
+                            e.preventDefault();
+                            updateCompanyInfo();
+                        }}
+                        >Save</button>
                 </SaveBtnDiv>
             </Form>
         </AccountPageContainer>
