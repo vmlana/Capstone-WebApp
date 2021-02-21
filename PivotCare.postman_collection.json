@@ -69,6 +69,27 @@
 			"response": []
 		},
 		{
+			"name": "cities",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/cities",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"cities"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "companies",
 			"request": {
 				"method": "GET",
@@ -122,7 +143,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/api/v1/instructor?instructorId=1",
+					"raw": "http://localhost:3000/api/v1/instructor?instructorId=2",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -136,7 +157,7 @@
 					"query": [
 						{
 							"key": "instructorId",
-							"value": "1"
+							"value": "2"
 						}
 					]
 				}
@@ -203,7 +224,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/api/v1/programs?userId=100350049&programId=",
+					"raw": "http://localhost:3000/api/v1/programs?userId=100346354&programId=",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -217,7 +238,7 @@
 					"query": [
 						{
 							"key": "userId",
-							"value": "100350049"
+							"value": "100346354"
 						},
 						{
 							"key": "programId",
@@ -240,7 +261,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "    {\r\n        \"instructorId\": 20,\r\n        \"userLogin\": \"bob@instructor.ca\",\r\n        \"instructorName\": \"Bob Dylan\",\r\n        \"resume\": \"A great teacher with a lot of experience in the field - CHANGED BY VINI again\",\r\n        \"specializationArea\": \"Physiotherapy\",\r\n        \"phoneNumber\": \"788719417\",\r\n        \"address\": \"458, 49th Str.\",\r\n        \"cityName\": \"Vancouver\",\r\n        \"provinceName\": \"British Columbia\",\r\n        \"provinceCode\": \"BC\",\r\n        \"postalCode\": \"V6B 1B4\",\r\n        \"imageFile\": null\r\n    }",
+					"raw": "    {\r\n        \"instructorId\": \"2\",\r\n        \"userLogin\": \"bob@instructor.ca\",\r\n        \"instructorName\": \"Bob Dylan 2\",\r\n        \"resume\": \"A great teacher with a lot of experience in the field\",\r\n        \"specializationArea\": \"Physiotherapy\",\r\n        \"phoneNumber\": \"788719417\",\r\n        \"address\": \"458, 49th Str.\",\r\n        \"cityName\": \"Vancouver\",\r\n        \"provinceName\": \"British Columbia\",\r\n        \"provinceCode\": \"BC\",\r\n        \"postalCode\": \"V6B 1B4\",\r\n        \"imageFile\": null\r\n    }",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -270,7 +291,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"companyId\": 1,\r\n    \"userLogin\": \"hr@walmart.ca\",\r\n    \"companyName\": \"Bob Dylan 2\",\r\n    \"accountResponsible\": \"Mary Popins\",\r\n    \"contactEmail\": \"mpopings@walmart.ca\",\r\n    \"phoneNumber\": \"8877849854\",\r\n    \"address\": \"19, 1st Ave\",\r\n    \"cityName\": \"Vancouver\",\r\n    \"provinceName\": \"British Columbia\",\r\n    \"provinceCode\": \"BC\",\r\n    \"postalCode\": null,\r\n    \"imageFile\": null,\r\n    \"employees\": [\r\n        {\r\n            \"employeeName\": \"Hardikkumar Vasoya\",\r\n            \"employeeId\": \"100348170\",\r\n            \"departmentName\": \"Warehouse\"\r\n        },\r\n        {\r\n            \"employeeName\": \"Ken Tauchi\",\r\n            \"employeeId\": \"100346354\",\r\n            \"departmentName\": \"Warehouse\"\r\n        },\r\n        {\r\n            \"employeeName\": \"Tomohiro Yoshida\",\r\n            \"employeeId\": \"100346604\",\r\n            \"departmentName\": \"Office\"\r\n        },\r\n        {\r\n            \"employeeName\": \"Vinicius Meyer Lana\",\r\n            \"employeeId\": \"100350049\",\r\n            \"departmentName\": \"Office\"\r\n        }\r\n    ]\r\n}",
+					"raw": "{\r\n    \"companyId\": 1,\r\n    \"userLogin\": \"hr@walmart.ca\",\r\n    \"companyName\": \"Bob Dylan 2\",\r\n    \"accountResponsible\": \"Mary Popins\",\r\n    \"contactEmail\": \"mpopings@walmart.ca\",\r\n    \"phoneNumber\": \"8877849854\",\r\n    \"address\": \"19, 1st Ave\",\r\n    \"cityId\": 3, \r\n    \"postalCode\": null,\r\n    \"imageFile\": null,\r\n    \"employees\": [\r\n        {\r\n            \"employeeName\": \"Hardikkumar Vasoya\",\r\n            \"employeeId\": \"100348170\",\r\n            \"departmentName\": \"Warehouse\"\r\n        },\r\n        {\r\n            \"employeeName\": \"Ken Tauchi\",\r\n            \"employeeId\": \"100346354\",\r\n            \"departmentName\": \"Warehouse\"\r\n        },\r\n        {\r\n            \"employeeName\": \"Tomohiro Yoshida\",\r\n            \"employeeId\": \"100346604\",\r\n            \"departmentName\": \"Office\"\r\n        },\r\n        {\r\n            \"employeeName\": \"Vinicius Meyer Lana\",\r\n            \"employeeId\": \"100350049\",\r\n            \"departmentName\": \"Office\"\r\n        }\r\n    ]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
