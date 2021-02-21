@@ -234,12 +234,19 @@ exports.updCompany = (req, res) => {
                 if (objCompany.postalCode != undefined) {
                     sSet = sSet + `postalCode = "${objCompany.postalCode}", `;
                 }
-                if (objCompany.cityName != '' && objCompany.cityName != undefined &&
-                    objCompany.provinceCode != '' && objCompany.provinceCode != undefined) {
-                    sSet = sSet + `cityId = ( SELECT cityId FROM cities 
-                                               WHERE provinceId = "${objCompany.provinceCode}" 
-                                                 AND name = "${objCompany.cityName.toLowerCase()}" ) , `;
+                if (objCompany.cityId != undefined) {
+                    sSet = sSet + `cityId = "${objCompany.cityId}", `;
                 }
+
+                // if (objCompany.cityName != '' && objCompany.cityName != undefined &&
+                //     objCompany.provinceCode != '' && objCompany.provinceCode != undefined) {
+                //     sSet = sSet + `cityId = ( SELECT cityId FROM cities 
+                //                                WHERE provinceId = "${objCompany.provinceCode}" 
+                //                                  AND name = "${objCompany.cityName.toLowerCase()}" ) , `;
+                // }
+
+
+
                 sSet = removeLastComma(sSet);
             }
 

@@ -4,6 +4,7 @@ const router  = express.Router();
 const {getCategories} = require("../controllers/categoryController.js");
 const {getDepartments} = require("../controllers/departmentController.js");
 const {getTags} = require("../controllers/tagController.js");
+const {getCities} = require("../controllers/cityController.js");
 const {getCompany, getCompanies, updCompany, companyValidation} = require("../controllers/companyController.js");
 const {getInstructor, updInstructor, instructorValidation} = require("../controllers/instructorController.js");
 const {getUser} = require("../controllers/userController.js");
@@ -19,6 +20,7 @@ router
     .get("/categories", getCategories)
     .get("/departments", getDepartments)
     .get("/tags", getTags)    
+    .get("/cities", getCities)        
     .get("/companies", getCompanies)     
     .get("/company", getCompany)  
     .get("/instructor", getInstructor)      
