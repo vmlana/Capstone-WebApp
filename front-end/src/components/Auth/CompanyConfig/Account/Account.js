@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 import InputWithLabel from '../../../ReusableElement/InputWithLabel';
 import DropdownInput from './DropdownInput';
+import DropdownInputCityName from './DropdownInputCityName';
 
 import dummyImg from '../../../../assets/dummy.jpg';
 
@@ -18,6 +19,7 @@ const Account = () => {
         phoneNumber: "",
         address: "",
         cityName: "",
+        cityId: "",
         postalCode: "",
         employeeName: "",
         employeeId: "",
@@ -76,6 +78,13 @@ const Account = () => {
         setCompanyInfo((prev) => ({
             ...prev,
             departmentName: value,
+        }));
+    };
+
+    const cityIdUpdate = (value) => {
+        setCompanyInfo((prev) => ({
+            ...prev,
+            cityId: value,
         }));
     };
 
@@ -194,7 +203,8 @@ const Account = () => {
                     contactEmail: companyInfo.contactEmail,
                     phoneNumber: companyInfo.phoneNumber,
                     address: companyInfo.address,
-                    cityName: companyInfo.cityName,
+                    // cityName: companyInfo.cityName,
+                    cityId: companyInfo.cityId,
                     postalCode: companyInfo.postalCode,
                     employees: companyInfo.employees,
                 }
@@ -347,13 +357,18 @@ const Account = () => {
                         value={companyInfo.phoneNumber}
                         onChange={handleOnChange}
                     />
-                    <InputWithLabel
+                    {/* <InputWithLabel
                         label="City"
                         type="text"
                         name="cityName"
                         required
                         value={companyInfo.cityName}
                         onChange={handleOnChange}
+                    /> */}
+                    <DropdownInputCityName
+                        labelText="city"
+                        onChange={cityIdUpdate}
+                        currentCityName={companyInfo.cityName}
                     />
                     <InputWithLabel
                         label="Postal Code"

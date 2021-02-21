@@ -11,6 +11,7 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 120,
     width: "100%",
     margin: 0,
+    marginBottom: ".5rem",
   },
   selectEmpty: {
     marginTop: theme.spacing(2),
@@ -31,45 +32,53 @@ const useStyles = makeStyles((theme) => ({
 
 export default function DropdownInput(props) {
   const classes = useStyles();
-  const [departmentName, setDepartmentName] = React.useState('');
-  const [departmentNameList, setDepartmentNameList] = useState([]);
+  const [cityName, setCityName] = useState('');
+  const [cityNameList, setCityNameList] = useState([]);
 
   const handleChange = (event) => {
-    setDepartmentName(event.target.value);
+    setCityName(event.target.value);
   };
 
   useEffect( async()=>{
-    const departments = await fetch(`http://localhost:3000/api/v1/departments`).then(results => {
+    const cities = await fetch(`http://localhost:3000/api/v1/cities`).then(results => {
       return results.json();
     }).catch(error=> {
       console.log(error);
     })
-    // console.log(departments);
-    setDepartmentNameList(departments);
-  },[])
+    // console.log(cities);
+    // console.log(props.currentCityName);
+    const currentCity = cities.filter(city=>{
+      return city.cityName === props.currentCityName;
+    })
+    // console.log(currentCity);
+    if(currentCity.length > 0) {
+      setCityName(currentCity[0].cityId);
+    }
+    setCityNameList(cities);
+  },[props.currentCityName])
 
   useEffect(()=>{
-    props.onChange(departmentName);
-  }, [departmentName])
+    props.onChange(cityName);
+  }, [cityName])
 
   return (
     <Label>
       <LabelText>{props.labelText}</LabelText>
       <FormControl className={classes.formControl}>
         <Select
-          value={departmentName}
+          value={cityName}
           onChange={handleChange}
           displayEmpty
           className={classes.selectEmpty}
           inputProps={{ 'aria-label': 'Without label' }}
         >
           <MenuItem value="" disabled>
-            Choose Departments
+            Choose city
           </MenuItem>
           {
-            departmentNameList.map(department=>{
+            cityNameList.map(city=>{
               return (
-              <MenuItem key={department.workDepartmentId} value={department.name}>{department.name}</MenuItem>)
+              <MenuItem key={city.cityId} value={city.cityId}>{city.cityName}</MenuItem>)
             })
           }
         </Select>
