@@ -1,11 +1,13 @@
-import React from 'react';
+import React from "react";
+
+import CreateContentList from "../../../ReusableComponents/CreateContentList";
 
 const Playlists = () => {
-    return (
-        <div>
-            Playlists
-        </div>
-    );
+  return (
+    <div>
+      <CreateContentList type={"playlist"} />
+    </div>
+  );
 };
 
 export default Playlists;

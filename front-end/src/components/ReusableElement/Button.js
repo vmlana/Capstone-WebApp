@@ -1,9 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 
-function Button({ text }) {
-  return <ButtonElement>{text}</ButtonElement>;
-}
+const Button = ({ text, onClick, type }) =>
+  type === "modal" ? (
+    <ButtonElement onClick={onClick}>{text}</ButtonElement>
+  ) : (
+    <ButtonElement>{text}</ButtonElement>
+  );
 
 const ButtonElement = styled.button`
   padding: 0.5rem 3rem;
