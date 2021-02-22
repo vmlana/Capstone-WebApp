@@ -1,0 +1,43 @@
+.previewContainer {
+    margin-bottom: 2rem;
+}
+
+.dzu-dropzone {
+    height: 300px;
+    width: 300px;
+    overflow: unset;
+    margin: 0 auto;
+    margin-bottom: 2rem;
+    border: 2px dashed #d9d9d9;
+}
+
+.dzu-inputLabel {
+    padding: 1rem;
+    text-align: center;
+}
+
+.previewContainer {
+    height: 300px;
+    width: 300px;
+    margin: 0 auto;
+    margin-bottom: 2rem;
+    border: 2px dashed #d9d9d9;
+}
+
+.dzu-previewContainer {
+    display: flex;
+    flex-direction: column;
+    border-bottom: none;
+}
+
+.dzu-previewImage {
+    width: 200px;
+    height: 200px;
+    max-width: none;
+    max-height: none;
+    object-fit: cover;
+}
+
+.dzu-previewStatusContainer {
+    margin-top: 0.5rem;
+}

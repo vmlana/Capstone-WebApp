@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import styled from "styled-components";
 import * as FAIcons from "react-icons/fa";
 
@@ -9,14 +10,20 @@ import CertificationModal from './CertificationModal';
 import Image from '../../../ReusableElement/Image';
 
 const Profile = () => {
+	const dispatch = useDispatch();
 	const [instructorInfo, setInstructorInfo] = useState({
-		instructorName: "John Doe",
-		contactNumber: "0123456789",
-		address: "Knight Street",
-		city: "Vancouver",
-		postalCode: "V5X2L6",
-		resume: "Hi there",
-		profilePicture: "./media/images/profilePicture.png",
+		instructorId: "",
+		instructorName: "",
+		phoneNumber: "",
+		address: "",
+		cityName: "",
+		postalCode: "",
+		provinceCode: "",
+		provinceName: "",
+		resume: "",
+		specializationArea: "",
+		imageFile: "./media/images/profilePicture.png",
+		userLogin: "",
 		certifications: [
 			{
 				certificationImage: '1.jpg',
@@ -39,6 +46,9 @@ const Profile = () => {
 		]
 	});
 
+	const userInfo = useSelector(state => state.user.userInfo);
+	const { userType, authId, token } = userInfo;
+
 	const handleOnChange = (e) => {
 		setInstructorInfo((prev) => ({
 			...prev,
@@ -51,7 +61,7 @@ const Profile = () => {
 		if (e.target.files.length) {
 			setInstructorInfo((prev) => ({
 				...prev,
-				profilePicture: URL.createObjectURL(e.target.files[0]),
+				imageFile: URL.createObjectURL(e.target.files[0]),
 			}));
 		}
 	};
@@ -71,10 +81,64 @@ const Profile = () => {
 		e.preventDefault()
 	}
 
+	useEffect(async () => {
 
+		try {
+			const instructorData = await fetch(`http://localhost:3000/api/v1/instructor?instructorId=2`).then(results => {
+				return results.json();
+			}).catch(err => {
+				throw err;
+			})
+			console.log(instructorData);
+			let {
+				instructorId,
+				instructorName,
+				phoneNumber,
+				address,
+				cityName,
+				postalCode,
+				provinceCode,
+				provinceName,
+				resume,
+				specializationArea,
+				imageFile,
+				userLogin
+			} = instructorData[0];
+
+			if (postalCode == null) {
+				postalCode = "";
+			}
+
+			if (imageFile == null) {
+				imageFile = "./media/images/profilePicture.png"
+			}
+
+			setInstructorInfo((prev) => ({
+				...prev,
+				instructorId,
+				instructorName,
+				phoneNumber,
+				address,
+				cityName,
+				postalCode,
+				provinceCode,
+				provinceName,
+				resume,
+				specializationArea,
+				imageFile,
+				userLogin
+			}))
+
+			// console.log(instructorInfo);
+
+		} catch (err) {
+			console.log("No user data found")
+		}
+
+	}, [authId]);
 
 	return (
-		<ProfilePageContainer>
+		<PageContainer>
 
 			<Form onSubmit={onSubmit}>
 				<div>
@@ -93,8 +157,8 @@ const Profile = () => {
 					<InputWithLabel
 						label="Contact Number"
 						type="number"
-						name="contactNumber"
-						value={instructorInfo.contactNumber}
+						name="phoneNumber"
+						value={instructorInfo.phoneNumber}
 						required
 						onChange={handleOnChange}
 					/>
@@ -112,8 +176,8 @@ const Profile = () => {
 						<InputWithLabel
 							label="City"
 							type="text"
-							name="city"
-							value={instructorInfo.city}
+							name="cityName"
+							value={instructorInfo.cityName}
 							required
 							onChange={handleOnChange}
 						/>
@@ -136,9 +200,9 @@ const Profile = () => {
 
 					<ProfilePictureContainer>
 						<label htmlFor="fileUpload" style={{ backgroundColor: "lightgrey" }}>
-							{instructorInfo.profilePicture ? (
+							{instructorInfo.imageFile ? (
 								<FileUploadContainer>
-									<img src={instructorInfo.profilePicture} alt={instructorInfo.instructorName} style={{ width: "125px", height: "125px" }} />
+									<img src={instructorInfo.imageFile} alt={instructorInfo.instructorName} style={{ width: "125px", height: "125px" }} />
 									<FAIcons.FaUpload style={{ margin: "0.30rem" }} />
 								</FileUploadContainer>
 							) : (
@@ -189,11 +253,11 @@ const Profile = () => {
 				</div>
 
 			</Form>
-		</ProfilePageContainer>
+		</PageContainer>
 	);
 };
 
-const ProfilePageContainer = styled.div`
+const PageContainer = styled.div`
     max-width: 1000px;
     margin: 0 auto;
     padding: 2rem;
