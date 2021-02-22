@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from "styled-components";
 
@@ -30,7 +30,7 @@ const Account = () => {
     const [uploadImage, setUploadImage] = useState("");
     const [uploadCSV, setUploadCSV] = useState("");
     const userInfo = useSelector(state => state.user.userInfo);
-    const {userType, authId, token} = userInfo;
+    const { userType, authId, token } = userInfo;
 
     const addNewEmployee = (e) => {
         e.persist();
@@ -46,7 +46,7 @@ const Account = () => {
             }
         ];
 
-        if (employeesIdValidator(newEmployees)){
+        if (employeesIdValidator(newEmployees)) {
             return alert("Same ID cannot be used more than once.")
         }
 
@@ -64,13 +64,13 @@ const Account = () => {
                 ...prev.employees
             ],
         }));
-      };
+    };
 
     const handleOnChange = (e) => {
         e.persist();
         setCompanyInfo((prev) => ({
-          ...prev,
-          [e.target.name]: e.target.value,
+            ...prev,
+            [e.target.name]: e.target.value,
         }));
     };
 
@@ -94,7 +94,7 @@ const Account = () => {
         setCompanyInfo((prev) => ({
             ...prev,
             employees: [
-                ...prev.employees.filter(em=>{
+                ...prev.employees.filter(em => {
                     return em.employeeId !== employeeId
                 })
             ],
@@ -106,42 +106,42 @@ const Account = () => {
         // console.log(newWindowWidth);
         setwindowWidth(newWindowWidth);
     };
-    
-    function csvJSON(csv){
+
+    function csvJSON(csv) {
         // console.log(csv);
 
-        let lines=csv.split("\n");
+        let lines = csv.split("\n");
         let result = [];
-      
+
         // let headers=lines[0].split(",");
 
-        const headers =["employeeName", "employeeId", "departmentName"]
-      
-        for(let i=1;i<lines.length;i++){
+        const headers = ["employeeName", "employeeId", "departmentName"]
+
+        for (let i = 1; i < lines.length; i++) {
             let obj = {};
-            let currentline=lines[i].split(",");
-      
-            for(let j=0;j<headers.length;j++){
+            let currentline = lines[i].split(",");
+
+            for (let j = 0; j < headers.length; j++) {
                 obj[headers[j]] = currentline[j];
             }
             result.push(obj);
         }
 
         // console.log(result);
-        
+
         //return result; //Array
         return result;
-      }
+    }
 
     const uploadCSVToList = (e) => {
         e.persist();
-        if(uploadCSV) {
+        if (uploadCSV) {
             const reader = new FileReader();
             reader.readAsBinaryString(uploadCSV);
             reader.onload = (e) => {
                 const newEmployees = csvJSON(e.target.result);
 
-                if (employeesIdValidator(newEmployees)){
+                if (employeesIdValidator(newEmployees)) {
                     setUploadCSV("");
                     return alert("Same ID cannot be used more than once.")
                 }
@@ -164,7 +164,7 @@ const Account = () => {
         let findError = false;
 
         companyInfo.employees.forEach((el_1, i) => {
-            newEmployees.forEach((el_2,i)=>{
+            newEmployees.forEach((el_2, i) => {
                 if (el_1.employeeId == el_2.employeeId) {
                     return findError = true;
                 }
@@ -174,7 +174,7 @@ const Account = () => {
         return findError;
     }
 
-    const updateCompanyInfo = async() => {
+    const updateCompanyInfo = async () => {
 
         console.log({
             companyId: authId,
@@ -190,30 +190,30 @@ const Account = () => {
 
         try {
             const resultData = await fetch("http://localhost:3000/api/v1/updcompany",
-            {
-              method: "POST",
-              headers: {
-                  "Content-Type": "application/json",
-              },
-              body: JSON.stringify(
-                  {
-                    companyId: authId,
-                    companyName: companyInfo.companyName,
-                    accountResponsible: companyInfo.accountResponsible,
-                    contactEmail: companyInfo.contactEmail,
-                    phoneNumber: companyInfo.phoneNumber,
-                    address: companyInfo.address,
-                    // cityName: companyInfo.cityName,
-                    cityId: companyInfo.cityId,
-                    postalCode: companyInfo.postalCode,
-                    employees: companyInfo.employees,
-                }
-                ),
-            }).then(response => {
-                return response.json();
-            });
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(
+                        {
+                            companyId: authId,
+                            companyName: companyInfo.companyName,
+                            accountResponsible: companyInfo.accountResponsible,
+                            contactEmail: companyInfo.contactEmail,
+                            phoneNumber: companyInfo.phoneNumber,
+                            address: companyInfo.address,
+                            // cityName: companyInfo.cityName,
+                            cityId: companyInfo.cityId,
+                            postalCode: companyInfo.postalCode,
+                            employees: companyInfo.employees,
+                        }
+                    ),
+                }).then(response => {
+                    return response.json();
+                });
             console.log(resultData);
-        } catch(error) {
+        } catch (error) {
             console.log(error);
         }
     }
@@ -223,7 +223,7 @@ const Account = () => {
         window.addEventListener("resize", displaySizeListener);
 
         return () => {
-        window.removeEventListener("resize", displaySizeListener);
+            window.removeEventListener("resize", displaySizeListener);
         };
     }, []);
 
@@ -232,13 +232,13 @@ const Account = () => {
         try {
             const companyData = await fetch(`http://localhost:3000/api/v1/company?companyId=1`).then(results => {
                 return results.json();
-            }).catch(err=>{
+            }).catch(err => {
                 throw err;
             })
 
             // console.log(companyData);
 
-            let { 
+            let {
                 companyName,
                 accountResponsible,
                 contactEmail,
@@ -253,7 +253,7 @@ const Account = () => {
                 postalCode = "";
             }
 
-            setCompanyInfo((prev)=>({
+            setCompanyInfo((prev) => ({
                 ...prev,
                 companyName,
                 accountResponsible,
@@ -282,13 +282,13 @@ const Account = () => {
                         <img
                             src={
                                 uploadImage
-                                ?
-                                readFileURL(uploadImage)
-                                :
-                                dummyImg
+                                    ?
+                                    readFileURL(uploadImage)
+                                    :
+                                    dummyImg
                             }
                             alt="logo" />
-                            {/* {
+                        {/* {
                                 uploadImage
                                 ?
                                 null
@@ -298,7 +298,7 @@ const Account = () => {
                         <InvisibleInput
                             type="file"
                             accept=".jpg,.jpeg,.png"
-                            onChange={(e)=>{
+                            onChange={(e) => {
                                 setUploadImage(e.target.files[0]);
                                 e.target.value = '';
                             }}
@@ -308,10 +308,10 @@ const Account = () => {
             </HeaderDiv>
             {
                 windowWidth >= 767 ?
-                <EmployeeInfoHeader>
-                    Employees Information
+                    <EmployeeInfoHeader>
+                        Employees Information
                 </EmployeeInfoHeader>
-                : null
+                    : null
             }
             <Form>
                 <div>
@@ -349,15 +349,15 @@ const Account = () => {
                         onChange={handleOnChange}
                     />
                     <PhoneCityPostalDiv>
-                    <InputWithLabel
-                        label="Phone Number"
-                        type="tel"
-                        name="phoneNumber"
-                        required
-                        value={companyInfo.phoneNumber}
-                        onChange={handleOnChange}
-                    />
-                    {/* <InputWithLabel
+                        <InputWithLabel
+                            label="Phone Number"
+                            type="tel"
+                            name="phoneNumber"
+                            required
+                            value={companyInfo.phoneNumber}
+                            onChange={handleOnChange}
+                        />
+                        {/* <InputWithLabel
                         label="City"
                         type="text"
                         name="cityName"
@@ -365,28 +365,28 @@ const Account = () => {
                         value={companyInfo.cityName}
                         onChange={handleOnChange}
                     /> */}
-                    <DropdownInputCityName
-                        labelText="city"
-                        onChange={cityIdUpdate}
-                        currentCityName={companyInfo.cityName}
-                    />
-                    <InputWithLabel
-                        label="Postal Code"
-                        type="text"
-                        name="postalCode"
-                        required
-                        value={companyInfo.postalCode}
-                        onChange={handleOnChange}
-                    />
+                        <DropdownInputCityName
+                            labelText="city"
+                            onChange={cityIdUpdate}
+                            currentCityName={companyInfo.cityName}
+                        />
+                        <InputWithLabel
+                            label="Postal Code"
+                            type="text"
+                            name="postalCode"
+                            required
+                            value={companyInfo.postalCode}
+                            onChange={handleOnChange}
+                        />
                     </PhoneCityPostalDiv>
                 </div>
                 {
                     windowWidth >= 767 ?
-                    null:
-                    <EmployeeInfoHeader>
-                        Employees Information
+                        null :
+                        <EmployeeInfoHeader>
+                            Employees Information
                     </EmployeeInfoHeader>
-            }
+                }
                 <EmployeeInformationDiv>
                     <div>
                         <CSVHeaderAndUploadDiv>
@@ -407,14 +407,14 @@ const Account = () => {
                                 >
                                     {
                                         uploadCSV.name ?
-                                        uploadCSV.name:
-                                        "No File chosen"
+                                            uploadCSV.name :
+                                            "No File chosen"
                                     }
                                 </SelectedFilePElement>
                                 <InvisibleInput
                                     type="file"
                                     accept=".csv"
-                                    onChange={(e)=>{
+                                    onChange={(e) => {
                                         setUploadCSV(e.target.files[0])
                                         e.target.value = ''
                                     }}
@@ -432,7 +432,7 @@ const Account = () => {
                             label="Full Name"
                             type="text"
                             name="employeeName"
-                            labelStyle={{width:"33%"}}
+                            labelStyle={{ width: "33%" }}
                             value={companyInfo.employeeName}
                             onChange={handleOnChange}
                         />
@@ -440,7 +440,7 @@ const Account = () => {
                             label="ID"
                             type="text"
                             name="employeeId"
-                            labelStyle={{width:"18%"}}
+                            labelStyle={{ width: "18%" }}
                             value={companyInfo.employeeId}
                             onChange={handleOnChange}
                         />
@@ -455,7 +455,7 @@ const Account = () => {
                         <DropdownInput
                             labelText="Department"
                             onChange={departmentUpdate}
-                         />
+                        />
                         <AddNewEmployeeElement
                             onClick={addNewEmployee}
                         >
@@ -464,32 +464,32 @@ const Account = () => {
                     </InputEmployeesDiv>
                     {
                         companyInfo.employees.length === 0 ?
-                        <EmployeesList>
-                            No employees added
+                            <EmployeesList>
+                                No employees added
                         </EmployeesList>
-                        :
-                        <EmployeesList>
-                        {companyInfo.employees.map(employee => 
-                            <EmployeesListItem key={employee.employeeId}>
-                                <span>{employee.employeeName}</span>
-                                <span>{employee.employeeId}</span>
-                                <span>{employee.departmentName}</span>
-                                <span
-                                    onClick={deleteEmployee}
-                                    id={employee.employeeId}
-                                >x</span>
-                            </EmployeesListItem>
-                        )}
-                    </EmployeesList>
+                            :
+                            <EmployeesList>
+                                {companyInfo.employees.map(employee =>
+                                    <EmployeesListItem key={employee.employeeId}>
+                                        <span>{employee.employeeName}</span>
+                                        <span>{employee.employeeId}</span>
+                                        <span>{employee.departmentName}</span>
+                                        <span
+                                            onClick={deleteEmployee}
+                                            id={employee.employeeId}
+                                        >x</span>
+                                    </EmployeesListItem>
+                                )}
+                            </EmployeesList>
                     }
                 </EmployeeInformationDiv>
                 <SaveBtnDiv>
                     <button
-                        onClick={e=> {
+                        onClick={e => {
                             e.preventDefault();
                             updateCompanyInfo();
                         }}
-                        >Save</button>
+                    >Save</button>
                 </SaveBtnDiv>
             </Form>
         </AccountPageContainer>
@@ -658,7 +658,7 @@ const ChooseFilePElement = styled.p`
 
 const SelectedFilePElement = styled.p`
   padding: 0.5rem;
-  color: ${props => props.uploadCSV ? "black" : "#ccc" };
+  color: ${props => props.uploadCSV ? "black" : "#ccc"};
   border: solid 1px #ccc;
   border-radius: 3px;
   margin: 0 .5rem;

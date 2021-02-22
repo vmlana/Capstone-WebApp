@@ -13,6 +13,7 @@ const ButtonElement = styled.button`
   border: none;
   border-radius: 3px;
   width: 40%;
+  text-transform: uppercase;
   &:focus {
     outline: none;
     box-shadow: none;
