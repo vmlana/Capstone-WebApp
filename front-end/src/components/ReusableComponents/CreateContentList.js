@@ -11,6 +11,8 @@ import { levels, categories } from "../../demoData";
 const CreateContentList = ({ type }) => {
   const [open, setOpen] = useState(false);
   const [selectedData, setSelectedData] = useState([]);
+  const [listName, setListName] = useState("");
+  const [listDescription, setListDescription] = useState("");
 
   const handleOpen = () => {
     setOpen(true);
@@ -29,7 +31,13 @@ const CreateContentList = ({ type }) => {
     setSelectedData(newArr);
   };
 
-  console.log(levels);
+  const listNameChange = (e) => {
+    setListName(e.target.value);
+  };
+
+  const listDescChange = (e) => {
+    setListDescription(e.target.value);
+  };
 
   return (
     <div>
@@ -44,37 +52,58 @@ const CreateContentList = ({ type }) => {
       ) : (
         <h1>PROGRAMS</h1>
       )}
-      <div>
-        {type === "playlist" ? (
-          <InputWithLabel label={"Playlist Name"} />
-        ) : (
-          <InputWithLabel label={"Program Name"} />
-        )}
-        <Picker label={"Category"} option={categories} />
-        <Picker label={"Level"} option={levels} />
-        <Button
-          text={"See available Lessons"}
-          type={"modal"}
-          onClick={handleOpen}
-        />
-        <ContentListModal
-          open={open}
-          close={handleClose}
-          type={"playlist"}
-          renewData={renewDataArray}
-        />
+      <div style={styles.biggerContainer}>
         <div>
-          <p>Playlists</p>
-          <div>
-            {selectedData.map((data) => (
-              <div style={styles.contentList}>
-                <div>
-                  <img src={data.img} alt={data.title} />
-                </div>
-                <span>{data.title}</span>
-              </div>
-            ))}
+          {type === "playlist" ? (
+            <InputWithLabel
+              label={"Playlist Name"}
+              onChange={listNameChange}
+              value={listName}
+            />
+          ) : (
+            <InputWithLabel
+              label={"Program Name"}
+              onChange={listNameChange}
+              value={listName}
+            />
+          )}
+          <div style={styles.picker}>
+            <Picker label={"Category"} option={categories} />
+            <Picker label={"Level"} option={levels} />
+            <Button
+              text={"See available Lessons"}
+              type={"modal"}
+              onClick={handleOpen}
+            />
           </div>
+          <ContentListModal
+            open={open}
+            close={handleClose}
+            type={"playlist"}
+            renewData={renewDataArray}
+          />
+          <div>
+            <p>Playlists</p>
+            <div style={styles.contentList}>
+              {selectedData.map((data) => (
+                <div style={styles.addedContentList}>
+                  <div>
+                    <img src={data.img} alt={data.title} />
+                  </div>
+                  <span>{data.title}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div style={styles.descContainer}>
+          <p>Insert Your Description for the playlist</p>
+          <textarea
+            value={listDescription}
+            onChange={listDescChange}
+            rows={20}
+            cols={60}
+          />
         </div>
       </div>
     </div>
@@ -82,9 +111,29 @@ const CreateContentList = ({ type }) => {
 };
 
 const styles = {
+  biggerContainer: {
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gap: "3rem",
+  },
   contentList: {
     display: "grid",
-    gridTemplateColumns: "1fr 1fr 1fr",
+    gridTemplateColumns: "repeat(3, 1fr)",
+    gap: "1rem",
+    border: "1px solid black",
+    minHeight: "300px",
+    padding: "1rem",
+  },
+  addedContentList: {
+    // margin: "1rem",
+  },
+  picker: {
+    display: "flex",
+    justifyContent: "flex-start",
+    alignItems: "center",
+  },
+  descContainer: {
+    justifySelf: "center",
   },
 };
 
