@@ -5,19 +5,26 @@ import * as Icon from "react-icons/ai";
 const ContentImageTitle = ({ img, title, onClick, checked, index }) => {
   const [isChecked, setIsChecked] = useState(false);
 
-  useEffect(() => {}, [checked]);
+  const switcher = (e) => {
+    setIsChecked(!isChecked);
+    onClick(e, !isChecked);
+  };
 
-  console.log(checked);
+  useEffect(() => {
+    setIsChecked(checked);
+    console.log("smaller useEffect rendered");
+  }, []);
+
   return (
-    <div style={styles.container} key={checked}>
-      {checked ? <Icon.AiOutlineCheck size={20} style={styles.icon} /> : null}
+    <div style={styles.container}>
+      {isChecked ? <Icon.AiOutlineCheck size={20} style={styles.icon} /> : null}
       <div>
         <img
           style={styles.img}
           src={img}
           alt={title}
           id={index + 1}
-          onClick={onClick}
+          onClick={switcher}
         />
       </div>
       <span style={styles.title}>{title}</span>

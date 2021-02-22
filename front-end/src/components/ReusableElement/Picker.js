@@ -15,12 +15,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Picker = ({ label }) => {
+const Picker = ({ label, option }) => {
   const classes = useStyles();
-  const [age, setAge] = useState("");
+  const [value, setValue] = useState("");
 
   const handleChange = (event) => {
-    setAge(event.target.value);
+    setValue(event.target.value);
   };
   return (
     <FormControl className={classes.formControl}>
@@ -30,17 +30,20 @@ const Picker = ({ label }) => {
       <Select
         labelId="demo-simple-select-placeholder-label-label"
         id="demo-simple-select-placeholder-label"
-        value={age}
+        value={value}
         onChange={handleChange}
         displayEmpty
         className={classes.selectEmpty}
       >
-        <MenuItem value="">
-          <em>None</em>
-        </MenuItem>
-        <MenuItem value={10}>Ten</MenuItem>
-        <MenuItem value={20}>Twenty</MenuItem>
-        <MenuItem value={30}>Thirty</MenuItem>
+        {option
+          ? option.map((item) =>
+              label === "Level" ? (
+                <MenuItem value={item.level}>{item.level}</MenuItem>
+              ) : label === "Category" ? (
+                <MenuItem value={item.name}>{item.name}</MenuItem>
+              ) : null
+            )
+          : null}
       </Select>
     </FormControl>
   );

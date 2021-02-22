@@ -18,32 +18,35 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ContentListModal = ({ open, close, type }) => {
+const ContentListModal = ({ open, close, type, renewData }) => {
   const classes = useStyles();
 
-  const [checked, setChecked] = useState(false);
+  //   const [checked, setChecked] = useState(false);
   const [newLessonArr, setNewLessonArr] = useState([]);
 
-  const handleCheckedElement = (e) => {
+  const handleCheckedElement = (e, checked) => {
     let checkedList = newLessonArr;
     checkedList.forEach((lesson) =>
-      lesson.title === e.target.alt
-        ? (lesson.isChecked = !lesson.isChecked)
-        : lesson
+      lesson.title === e.target.alt ? (lesson.isChecked = checked) : lesson
     );
 
     console.log("inside handleCheckedElem", newLessonArr);
     setNewLessonArr(checkedList);
+    renewData(checkedList);
   };
 
   useEffect(() => {
-    lessons.map((lesson) => (lesson.isChecked = false));
-    setNewLessonArr(lessons);
-
-    console.log("useEffect rendered");
+    const newArr = lessons.map((lesson) => {
+      return {
+        ...lesson,
+        isChecked: false,
+      };
+    });
+    setNewLessonArr(newArr);
   }, []);
 
-  console.log(lessons);
+  console.log("outside", newLessonArr);
+
   return (
     <div>
       <Modal
@@ -64,15 +67,15 @@ const ContentListModal = ({ open, close, type }) => {
               <FAIcons.FaTimesCircle
                 onClick={close}
                 style={{ cursor: "pointer" }}
-                size={20}
+                size={40}
               />
             </ReactIcon>
 
             {type === "playlist" ? <h1>VIDEOS</h1> : <h1>PLAYLISTS</h1>}
 
             <ContentList>
-              {lessons
-                ? lessons.map((video, index) => (
+              {newLessonArr
+                ? newLessonArr.map((video, index) => (
                     <ContentImageTitle
                       img={video.img}
                       title={video.title}

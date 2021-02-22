@@ -9,3 +9,15 @@ export const lessons = [
   { id: 8, img: "https://dummyimage.com/150x150/aaa", title: "dmeo8" },
   { id: 9, img: "https://dummyimage.com/150x150/aaa", title: "dmeo9" },
 ];
+
+export const levels = [
+  { levelId: 1, level: "Biginner" },
+  { levelId: 2, level: "Intermediate" },
+  { levelId: 3, level: "Advanced" },
+];
+
+export const categories = [
+  { categoryId: 2, name: "Meditation" },
+  { categoryId: 3, name: "Stretch Breaks" },
+  { categoryId: 1, name: "Yoga" },
+];

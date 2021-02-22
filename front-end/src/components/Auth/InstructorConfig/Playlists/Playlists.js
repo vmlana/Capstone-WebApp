@@ -5,7 +5,7 @@ import CreateContentList from "../../../ReusableComponents/CreateContentList";
 const Playlists = () => {
   return (
     <div>
-      <CreateContentList />
+      <CreateContentList type={"playlist"} />
     </div>
   );
 };
