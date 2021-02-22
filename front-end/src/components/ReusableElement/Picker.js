@@ -36,11 +36,15 @@ const Picker = ({ label, option }) => {
         className={classes.selectEmpty}
       >
         {option
-          ? option.map((item) =>
+          ? option.map((item, key) =>
               label === "Level" ? (
-                <MenuItem value={item.level}>{item.level}</MenuItem>
+                <MenuItem key={key} value={item.level}>
+                  {item.level}
+                </MenuItem>
               ) : label === "Category" ? (
-                <MenuItem value={item.name}>{item.name}</MenuItem>
+                <MenuItem key={key} value={item.name}>
+                  {item.name}
+                </MenuItem>
               ) : null
             )
           : null}
