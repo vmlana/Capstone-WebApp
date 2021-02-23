@@ -170,7 +170,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/api/v1/instructor?instructorId=1",
+					"raw": "http://localhost:3000/api/v1/user?userId=1",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -179,11 +179,11 @@
 					"path": [
 						"api",
 						"v1",
-						"instructor"
+						"user"
 					],
 					"query": [
 						{
-							"key": "instructorId",
+							"key": "userId",
 							"value": "1"
 						}
 					]
@@ -197,7 +197,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/api/v1/playlists?companyId=1",
+					"raw": "http://localhost:3000/api/v1/playlists?instructorId=2&categoryId=3&playlistId=2&mostViewed=true",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -210,8 +210,20 @@
 					],
 					"query": [
 						{
-							"key": "companyId",
-							"value": "1"
+							"key": "instructorId",
+							"value": "2"
+						},
+						{
+							"key": "categoryId",
+							"value": "3"
+						},
+						{
+							"key": "playlistId",
+							"value": "2"
+						},
+						{
+							"key": "mostViewed",
+							"value": "true"
 						}
 					]
 				}
@@ -279,6 +291,36 @@
 						"api",
 						"v1",
 						"updinstructor"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updUser",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\r\n        \"userId\": 3,\r\n        \"userName\": \"Vinicius Meyer Lana upd\",\r\n        \"imageFile\": \"my file\"\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/v1/upduser",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"upduser"
 					]
 				}
 			},
