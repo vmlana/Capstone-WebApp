@@ -197,7 +197,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/api/v1/playlists?companyId=1",
+					"raw": "http://localhost:3000/api/v1/playlists?instructorId=2&categoryId=3&playlistId=2&mostViewed=true",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -210,8 +210,20 @@
 					],
 					"query": [
 						{
-							"key": "companyId",
-							"value": "1"
+							"key": "instructorId",
+							"value": "2"
+						},
+						{
+							"key": "categoryId",
+							"value": "3"
+						},
+						{
+							"key": "playlistId",
+							"value": "2"
+						},
+						{
+							"key": "mostViewed",
+							"value": "true"
 						}
 					]
 				}

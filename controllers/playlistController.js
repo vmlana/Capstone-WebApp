@@ -8,6 +8,7 @@ exports.getPlaylists = (req, res) => {
     let sPlaylistId = pivotDb.escape(req.query.playlistId).replace(/['']+/g, '');
     let sCategoryId = pivotDb.escape(req.query.categoryId).replace(/['']+/g, '');
     let sInstructorId = pivotDb.escape(req.query.instructorId).replace(/['']+/g, '');
+    let sMostViewed = pivotDb.escape(req.query.mostViewed).replace(/['']+/g, '');    
 
     // Set filters
     let sWhere = " WHERE p.active = 1 ";
@@ -21,7 +22,13 @@ exports.getPlaylists = (req, res) => {
         sWhere = sWhere + ` AND p.instructorId = ${sInstructorId} `;
     }
 
-    let qry = `SELECT p.playlistId, p.name as playlistName, p.description as playlistDescription,
+    let sOrderBy = 'ORDER BY playlistName, playlistId, lessonOrder';  
+    if (sMostViewed != "" && sMostViewed.toLowerCase() == "true") {
+        sOrderBy = 'ORDER BY playlistViews DESC, playlistId, lessonOrder';
+    }
+    
+
+    let qry = `SELECT p.playlistId, p.name as playlistName, p.description as playlistDescription, log.qtd as playlistViews,
                       c.categoryId, c.name as categoryName, lg.name as instructorName, i.instructorId as instructorID,
                       l.lessonId, l.name as lessonName, pl.order as lessonOrder, l.imageFile, l.videoFile, l.description as lessonDescription,
                       CASE WHEN p.level = "B" THEN "Begginer"
@@ -34,8 +41,13 @@ exports.getPlaylists = (req, res) => {
                       INNER JOIN instructors i ON (p.instructorId = i.instructorId)
                       INNER JOIN categories c ON (p.categoryId = c.categoryId)
                       INNER JOIN login lg ON (i.instructorId = lg.loginId)
+                      LEFT JOIN ( SELECT playlistId, count(*) as qtd
+                                    FROM (SELECT DISTINCT userId, DATE(logDate) as logDate, playlistId
+                                            FROM activityLog ) a
+                                   GROUP BY playlistId 
+                                 ) log ON ( p.playlistId = log.playlistId )                      
                 ${sWhere}                           
-                ORDER BY playlistId, lessonOrder `;
+                ${sOrderBy} `;
 
     pivotPoolDb.then(pool => {
         pool.query(qry)
@@ -72,6 +84,8 @@ exports.getPlaylists = (req, res) => {
                             playlistName: results[iPlaylistBase].playlistName,
                             playlistDescription: results[iPlaylistBase].playlistDescription,
                             playlistLevel: results[iPlaylistBase].playlistLevel,
+                            playlistViews: results[iPlaylistBase].playlistViews,
+                            categoryId: results[iPlaylistBase].categoryId,                            
                             categoryName: results[iPlaylistBase].categoryName,
                             instructorName: results[iPlaylistBase].instructorName,
                             instructorID: results[iPlaylistBase].instructorID,
