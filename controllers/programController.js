@@ -12,16 +12,18 @@ exports.getPrograms = (req, res) => {
 
     let sUserId = pivotDb.escape(req.query.userId).replace(/['']+/g, '');
     let sProgramId = pivotDb.escape(req.query.programId).replace(/['']+/g, '');
+    let sCompanyId = pivotDb.escape(req.query.companyId).replace(/['']+/g, '');    
 
     // Set filters
     let sWhere = " WHERE p.active = 1 ";
     if (sUserId != "" && sUserId.toLowerCase() != "null") {
-        sWhere = sWhere + ` AND e.employeeId = '${sUserId}' `;       //    AND e.employeeId = '100350049' AND e.employeeId = '100346354'
-    } else {
-        sWhere = sWhere + ` AND e.employeeId = '-1' `;
-    }
+        sWhere = sWhere + ` AND u.userId = '${sUserId}' `;      
+    }    
     if (sProgramId != "" && sProgramId.toLowerCase() != "null") {
         sWhere = sWhere + ` AND cp.groupBaseId = ${sProgramId} `;
+    }
+    if (sCompanyId != "" && sCompanyId.toLowerCase() != "null") {
+        sWhere = sWhere + ` AND cp.companyId = ${sCompanyId} `;
     }
 
 
@@ -40,10 +42,11 @@ exports.getPrograms = (req, res) => {
                       INNER JOIN playlists p ON (gp.playlistId = p.playlistId)
                       INNER JOIN playlistLessons pl ON (p.playlistId = pl.playlistId)
                       INNER JOIN lessons l ON (pl.lessonId = l.lessonId)
+                      INNER JOIN categories c ON (p.categoryId = c.categoryId)                      
                       INNER JOIN instructors i ON (p.instructorId = i.instructorId)
-                      INNER JOIN categories c ON (p.categoryId = c.categoryId)
-                      INNER JOIN login lg ON (i.instructorId = lg.loginId)
+                      INNER JOIN login lg ON (i.instructorId = lg.loginId)                      
                       INNER JOIN employees e ON (cp.companyId = e.companyId)
+                      INNER JOIN users u ON (e.companyId = u.companyId AND e.employeeId = u.employeeId)
                       INNER JOIN workDepartments w ON (e.workDepartmentId = w.workDepartmentId)
                       INNER JOIN companyProgramXworkDepartment pw ON (pw.groupBaseId = gb.groupBaseId AND pw.workDepartmentId = e.workDepartmentId)
                       ${sWhere}   
@@ -64,9 +67,10 @@ exports.getPrograms = (req, res) => {
 
                     while (i < results.length) {
 
-                        let vProgram     = {};
-                        let vPlaylists   = [];  
-                        let iProgramBase = i;
+                        let vProgram      = {};
+                        let vPlaylists    = [];  
+                        let iProgramBase  = i;
+                        let sdefaultProgramImage = "";                        
                         iProgramId  = results[iProgramBase].programId;  
 
                         // Creates array of all the playlists for the program
@@ -74,11 +78,18 @@ exports.getPrograms = (req, res) => {
 
                             let vPlaylist = {};
                             let vLessons  = [];
+                            let sdefaultPlaylistImage = "";   
                             let iPlaylistBase = i;
                             iPlaylistId = results[iPlaylistBase].playlistId;
 
                             // Creates array of all the lessons for the playlist
                             while (i < results.length && iProgramId == results[i].programId && iPlaylistId == results[i].playlistId) {
+                                if (sdefaultProgramImage == "") {
+                                    sdefaultProgramImage = results[i].imageFile;   
+                                }
+                                if (sdefaultPlaylistImage == "") {
+                                    sdefaultPlaylistImage = results[i].imageFile;   
+                                }                                
                                 vLessons.push({
                                     lessonId: results[i].lessonId,
                                     lessonName: results[i].lessonName,
@@ -95,6 +106,7 @@ exports.getPrograms = (req, res) => {
                                 playlistName: results[iPlaylistBase].playlistName,
                                 playlistDescription: results[iPlaylistBase].playlistDescription,
                                 playlistLevel: results[iPlaylistBase].playlistLevel,
+                                playlistImageFile: sdefaultPlaylistImage,
                                 categoryName: results[iPlaylistBase].categoryName,
                                 instructorName: results[iPlaylistBase].instructorName,
                                 lessons: vLessons
@@ -106,6 +118,7 @@ exports.getPrograms = (req, res) => {
                         vProgram = {
                             programId: results[iProgramBase].programId,
                             programName: results[iProgramBase].programName,
+                            programImageFile: sdefaultProgramImage,
                             initialDate: results[iProgramBase].initialDate,
                             endDate: results[iProgramBase].endDate,
                             dayOfWeek: results[iProgramBase].dayOfWeek,
