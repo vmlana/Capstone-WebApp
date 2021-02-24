@@ -24,10 +24,10 @@ exports.getSearch = (req, res) => {
                           INNER JOIN instructors i  ON (p.instructorId = i.instructorId)
                           INNER JOIN login l ON (i.instructorId = l.loginId)  
                           INNER JOIN ( SELECT pl.playlistId, l.imageFile
-                            FROM playlistLessons pl 
-                                 INNER JOIN lessons l ON (pl.lessonId = l.lessonId)
-                           ORDER BY pl.order
-                           LIMIT 1  ) pi ON (p.playlistId = pi.playlistId)                              
+                                         FROM playlistLessons pl 
+                                              INNER JOIN lessons l ON (pl.lessonId = l.lessonId)
+                                        ORDER BY pl.order
+                                        LIMIT 1  ) pi ON (p.playlistId = pi.playlistId)                              
                     WHERE LOWER(p.name) LIKE "%${skeyWord}%" 
                        OR LOWER(description) LIKE "%${skeyWord}%"
                        OR LOWER(l.name) LIKE "%${skeyWord}%"     
