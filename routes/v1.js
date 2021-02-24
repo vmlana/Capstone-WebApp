@@ -5,6 +5,7 @@ const {getCategories} = require("../controllers/categoryController.js");
 const {getDepartments} = require("../controllers/departmentController.js");
 const {getTags} = require("../controllers/tagController.js");
 const {getCities} = require("../controllers/cityController.js");
+const {getSearch} = require("../controllers/searchController.js");
 const {getCompany, getCompanies, updCompany, companyValidation} = require("../controllers/companyController.js");
 const {getInstructor, updInstructor, instructorValidation} = require("../controllers/instructorController.js");
 const {getUser, updUser, userValidation} = require("../controllers/userController.js");
@@ -27,6 +28,7 @@ router
     .get("/user", getUser)          
     .get("/programs", getPrograms)       
     .get("/playlists", getPlaylists)
+    .get("/search", getSearch)    
     .post("/updinstructor", instructorValidation, updInstructor)    
     .post("/updcompany", companyValidation, updCompany)  
     .post("/upduser", userValidation, updUser)      

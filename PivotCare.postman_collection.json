@@ -231,7 +231,7 @@
 			"response": []
 		},
 		{
-			"name": "program",
+			"name": "programs",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -260,6 +260,37 @@
 							"key": "",
 							"value": "",
 							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "search",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/search?userId=3&keyword=",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"search"
+					],
+					"query": [
+						{
+							"key": "userId",
+							"value": "3"
+						},
+						{
+							"key": "keyword",
+							"value": ""
 						}
 					]
 				}
