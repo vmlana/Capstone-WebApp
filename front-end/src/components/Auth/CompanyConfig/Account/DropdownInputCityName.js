@@ -89,7 +89,7 @@ export default function DropdownInput(props) {
 
 const Label = styled.label`
     margin: 0rem 0rem .25rem 0;
-    width: 33%;
+    /* width: 33%; */
 `;
 
 const LabelText = styled.p`
