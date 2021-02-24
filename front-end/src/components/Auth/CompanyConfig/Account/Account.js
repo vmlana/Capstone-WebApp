@@ -227,48 +227,48 @@ const Account = () => {
         };
     }, []);
 
-    useEffect(async () => {
+    useEffect(() => {
+        (async () => {
+            try {
+                const companyData = await fetch(`http://localhost:3000/api/v1/company?companyId=1`).then(results => {
+                    return results.json();
+                }).catch(err => {
+                    throw err;
+                })
 
-        try {
-            const companyData = await fetch(`http://localhost:3000/api/v1/company?companyId=1`).then(results => {
-                return results.json();
-            }).catch(err => {
-                throw err;
-            })
+                // console.log(companyData);
 
-            // console.log(companyData);
+                let {
+                    companyName,
+                    accountResponsible,
+                    contactEmail,
+                    phoneNumber,
+                    address,
+                    cityName,
+                    postalCode,
+                    employees
+                } = companyData;
 
-            let {
-                companyName,
-                accountResponsible,
-                contactEmail,
-                phoneNumber,
-                address,
-                cityName,
-                postalCode,
-                employees
-            } = companyData;
+                if (postalCode == null) {
+                    postalCode = "";
+                }
 
-            if (postalCode == null) {
-                postalCode = "";
+                setCompanyInfo((prev) => ({
+                    ...prev,
+                    companyName,
+                    accountResponsible,
+                    contactEmail,
+                    phoneNumber,
+                    address,
+                    cityName,
+                    postalCode,
+                    employees
+                }))
+
+            } catch (err) {
+                console.log("No user data found")
             }
-
-            setCompanyInfo((prev) => ({
-                ...prev,
-                companyName,
-                accountResponsible,
-                contactEmail,
-                phoneNumber,
-                address,
-                cityName,
-                postalCode,
-                employees
-            }))
-
-        } catch (err) {
-            console.log("No user data found")
-        }
-
+        })();
     }, [authId]);
 
     return (
