@@ -9,6 +9,7 @@ const {getSearch} = require("../controllers/searchController.js");
 const {getCompany, getCompanies, updCompany} = require("../controllers/companyController.js");
 const {getInstructor, updInstructor } = require("../controllers/instructorController.js");
 const {getUser, updUser} = require("../controllers/userController.js");
+const {getLessons} = require("../controllers/lessonController.js");
 const {getPlaylists} = require("../controllers/playlistController.js");
 const {getPrograms} = require("../controllers/programController.js");
 const {postS3Storage, deleteS3Storage} = require("../controllers/s3StorageController");
@@ -31,6 +32,7 @@ router
     .get("/user", getUser)          
     .get("/programs", getPrograms)       
     .get("/playlists", getPlaylists)
+    .get("/lessons", getLessons)    
     .get("/search", getSearch)    
     .post("/updinstructor", instructorValidation, updInstructor)    
     .post("/updcompany", companyValidation, updCompany)  
