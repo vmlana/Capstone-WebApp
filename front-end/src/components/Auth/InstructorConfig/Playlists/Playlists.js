@@ -1,20 +1,13 @@
 import React from "react";
-
-import CreateContentList from "../../../ReusableComponents/CreateContentList";
+import { useHistory } from 'react-router-dom';
 
 const Playlists = () => {
-  return (
-    <div style={styles.container}>
-      <CreateContentList type={"playlist"} />
-    </div>
-  );
-};
-
-const styles = {
-  container: {
-    width: "80%",
-    margin: "0 auto",
-  },
+	const history = useHistory();
+	return (
+		<div>
+			<button onClick={() => history.push("/auth/add-playlist")}>Add New Playlist</button>
+		</div>
+	);
 };
 
 export default Playlists;

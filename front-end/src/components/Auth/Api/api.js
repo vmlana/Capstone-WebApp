@@ -6,4 +6,12 @@ export const getCategories = async () => {
     ).then((response) => response.json())
         .catch((error) => console.error(error));
     return categories;
-}; 
+};
+
+export const getLessonsByInstructorId = async (instructorId) => {
+    const playlists = await fetch(
+        `${API_URL}/playlists?instructorId=${instructorId}`
+    ).then((response) => response.json())
+        .catch((error) => console.error(error));
+    return playlists;
+};

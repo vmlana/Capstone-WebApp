@@ -16,3 +16,11 @@
     width: 100%;
     height: 100%;
 }
+
+video {
+    cursor: pointer;
+}
+
+// video::-webkit-media-controls-start-playback-button {
+//     display: none;
+// }
