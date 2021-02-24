@@ -231,6 +231,41 @@
 			"response": []
 		},
 		{
+			"name": "lessons",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/lessons?lessonId=&categoryId=3&instructorId=2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"lessons"
+					],
+					"query": [
+						{
+							"key": "lessonId",
+							"value": ""
+						},
+						{
+							"key": "categoryId",
+							"value": "3"
+						},
+						{
+							"key": "instructorId",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "programs",
 			"request": {
 				"method": "GET",
