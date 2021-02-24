@@ -271,7 +271,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/api/v1/programs?userId=100346354&programId=",
+					"raw": "http://localhost:3000/api/v1/programs?companyId=1&programId=1&userId=3",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -284,17 +284,16 @@
 					],
 					"query": [
 						{
-							"key": "userId",
-							"value": "100346354"
+							"key": "companyId",
+							"value": "1"
 						},
 						{
 							"key": "programId",
-							"value": ""
+							"value": "1"
 						},
 						{
-							"key": "",
-							"value": "",
-							"disabled": true
+							"key": "userId",
+							"value": "3"
 						}
 					]
 				}
