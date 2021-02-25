@@ -1,11 +1,31 @@
-import React from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { getProgramsByCompanyId } from '../../Api/api'
+
+// Reusable Components
+import ViewContainer from '../../../ReusableComponents/ViewContainer';
 
 const Programs = () => {
-    const history = useHistory();
+    let viewData = {
+        userType: 'Company',
+        companyId: '1',
+        pageName: 'Program',
+        header: 'Programs',
+        subHeader: 'Click to see details or edit',
+        redirectRoute: 'add-program',
+    }
+
+    const [programs, setPrograms] = useState([]);
+    useEffect(() => {
+        getProgramsByCompanyId(1).then(
+            programList => {
+                setPrograms(programList)
+            }
+        )
+    }, [])
+
     return (
         <div>
-            <button onClick={() => history.push("/auth/add-program")}>Add New Program</button>
+            <ViewContainer viewData={viewData} data={programs} />
         </div>
     );
 };

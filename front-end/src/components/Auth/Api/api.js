@@ -9,9 +9,25 @@ export const getCategories = async () => {
 };
 
 export const getLessonsByInstructorId = async (instructorId) => {
+    const lessons = await fetch(
+        `${API_URL}/lessons?instructorId=${instructorId}`
+    ).then((response) => response.json())
+        .catch((error) => console.error(error));
+    return lessons;
+};
+
+export const getPlaylistsByInstructorId = async (instructorId) => {
     const playlists = await fetch(
         `${API_URL}/playlists?instructorId=${instructorId}`
     ).then((response) => response.json())
         .catch((error) => console.error(error));
     return playlists;
+};
+
+export const getProgramsByCompanyId = async (companyId) => {
+    const programs = await fetch(
+        `${API_URL}/programs?companyId=${companyId}`
+    ).then((response) => response.json())
+        .catch((error) => console.error(error));
+    return programs;
 };
