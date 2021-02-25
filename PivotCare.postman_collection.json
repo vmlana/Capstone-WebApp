@@ -362,6 +362,36 @@
 			"response": []
 		},
 		{
+			"name": "updLesson",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\r\n        \"action\" : \"add\",\r\n        \"lessonId\": 1,\r\n        \"lessonName\": \"VINICIUS 2\",\r\n        \"description\": \"turn your neck 2 times to the left\",\r\n        \"imageFile\": \"xxx\",\r\n        \"videoFile\": \"https://pivotcare-s3.s3-us-west-2.amazonaws.com/exercise01.mp4\",\r\n        \"categoryId\": 1,\r\n        \"instructorId\": 2\r\n    }\r\n\r\n    ",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/v1/updlesson",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"updlesson"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "updUser",
 			"request": {
 				"method": "POST",
