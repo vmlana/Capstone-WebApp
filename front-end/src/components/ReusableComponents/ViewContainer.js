@@ -14,7 +14,6 @@ const ViewContainer = ({ viewData, data }) => {
             </TitleContainer>
             <PageSubHeader>{viewData.subHeader}</PageSubHeader>
             <MainContent>
-                {console.log(data)}
                 {
                     viewData.pageName == 'Lesson' ?
                         data.map((result) => {
@@ -28,6 +27,15 @@ const ViewContainer = ({ viewData, data }) => {
                     viewData.pageName == 'Playlist' ?
                         data.map((result) => {
                             return <ContentBox src="../media/images/dummy.jpg" title={result.playlistName} key={result.playlistId} />
+                        })
+                        :
+                        null
+                }
+
+                {
+                    viewData.pageName == 'Program' ?
+                        data.map((result) => {
+                            return <ContentBox src="../media/images/dummy.jpg" title={result.programName} key={result.programId} redirectURI={`edit-program/${viewData.companyId}/${result.programId}`} programData={result} />
                         })
                         :
                         null

@@ -1,12 +1,15 @@
 import React from 'react'
 import styled from 'styled-components'
+import { useHistory } from 'react-router-dom';
 
 const ContentBox = (props) => {
+    const history = useHistory();
+
     return (
-        <ContentContainer>
+        <ContentContainer onClick={() => history.push({ pathname: props.redirectURI, state: { programData: props.programData } })} >
             <ContentImage src={props.src} alt={props.title} />
             <ContentHeading>{props.title}</ContentHeading>
-        </ContentContainer>
+        </ContentContainer >
     )
 }
 
