@@ -14,10 +14,11 @@ const ViewContainer = ({ viewData, data }) => {
             </TitleContainer>
             <PageSubHeader>{viewData.subHeader}</PageSubHeader>
             <MainContent>
+
                 {
-                    viewData.pageName == 'Lesson' ?
+                    viewData.pageName == 'Program' ?
                         data.map((result) => {
-                            return <ContentBox src="../media/images/dummy.jpg" title={result.lessonName} key={result.lessonId} />
+                            return <ContentBox /* src="../media/images/dummy.jpg" */ src={result.playlists[0].lessons[0].videoFile} title={result.programName} key={result.programId} redirectURI={`edit-program/${viewData.companyId}/${result.programId}`} DataContent={result} />
                         })
                         :
                         null
@@ -26,16 +27,16 @@ const ViewContainer = ({ viewData, data }) => {
                 {
                     viewData.pageName == 'Playlist' ?
                         data.map((result) => {
-                            return <ContentBox src="../media/images/dummy.jpg" title={result.playlistName} key={result.playlistId} />
+                            return <ContentBox src={result.lessons[0].videoFile} title={result.playlistName} key={result.playlistId} redirectURI={`edit-playlist/${viewData.instructorId}/${result.playlistId}`} DataContent={result} />
                         })
                         :
                         null
                 }
 
                 {
-                    viewData.pageName == 'Program' ?
+                    viewData.pageName == 'Lesson' ?
                         data.map((result) => {
-                            return <ContentBox src="../media/images/dummy.jpg" title={result.programName} key={result.programId} redirectURI={`edit-program/${viewData.companyId}/${result.programId}`} programData={result} />
+                            return <ContentBox src={result.videoFile} title={result.lessonName} key={result.lessonId} redirectURI={`edit-lesson/${viewData.instructorId}/${result.lessonId}`} DataContent={result} />
                         })
                         :
                         null
