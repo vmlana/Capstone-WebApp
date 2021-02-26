@@ -45,8 +45,6 @@ const ContentListModal = ({ open, close, type, renewData }) => {
     setNewLessonArr(newArr);
   }, []);
 
-  console.log("outside", newLessonArr);
-
   return (
     <div>
       <Modal
@@ -100,6 +98,9 @@ const ModalContent = styled.div`
   border-radius: 1rem;
   padding: 3rem;
   box-shadow: none;
+  width: 80%;
+  height: 60%;
+  overflow: scroll;
 
   :focus {
     outline: none;
@@ -107,10 +108,12 @@ const ModalContent = styled.div`
 `;
 
 const ContentList = styled.div`
-  display: flex;
+  /* display: flex;
   justify-content: "space-between";
-  flex-wrap: wrap;
-  margin: 1rem 7rem;
+  flex-wrap: wrap; */
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  /* margin: 1rem 7rem; */
 `;
 
 const ReactIcon = styled.div`

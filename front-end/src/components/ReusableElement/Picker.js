@@ -15,12 +15,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Picker = ({ label, option }) => {
+const Picker = ({ label, option, onChange }) => {
   const classes = useStyles();
   const [value, setValue] = useState("");
 
   const handleChange = (event) => {
     setValue(event.target.value);
+    onChange(event.target.value);
   };
   return (
     <FormControl className={classes.formControl}>
@@ -36,16 +37,21 @@ const Picker = ({ label, option }) => {
         className={classes.selectEmpty}
       >
         {option
-          ? option.map((item, key) =>
-              label === "Level" ? (
-                <MenuItem key={key} value={item.level}>
-                  {item.level}
-                </MenuItem>
-              ) : label === "Category" ? (
-                <MenuItem key={key} value={item.name}>
-                  {item.name}
-                </MenuItem>
-              ) : null
+          ? option.map(
+              ((item, key) =>
+                label === "Level" ? (
+                  <MenuItem key={key} value={item.level}>
+                    {item.level}
+                  </MenuItem>
+                ) : label === "Category" ? (
+                  <MenuItem key={key} value={item.name}>
+                    {item.name}
+                  </MenuItem>
+                ) : (
+                  <MenuItem key={key} value={item.name}>
+                    {item.name}
+                  </MenuItem>
+                ): null)
             )
           : null}
       </Select>

@@ -1,19 +1,28 @@
-import React from 'react'
+import React from "react";
+import CreateContentList from "../../../ReusableComponents/CreateContentList";
 
 const EditProgram = (props) => {
-    console.log(props)
-    // To access parameters paased: companyId and programId
-    const companyId = props.match.params.companyId
-    const programId = props.match.params.programId
+  console.log(props);
+  // To access parameters paased: companyId and programId
+  const companyId = props.match.params.companyId;
+  const programId = props.match.params.programId;
 
-    // Program Data passed with history.push
-    const programData = props.location.state.DataContent
+  // Program Data passed with history.push
+  const programData = props.location.state.DataContent;
 
-    return (
-        <div>
-            Edit Program: {programData.programName}
-        </div>
-    )
-}
+  return (
+    <div style={styles.container}>
+      Edit Program: {programData.programName}
+      <CreateContentList type={"edit"} contentType={"program"} />
+    </div>
+  );
+};
 
-export default EditProgram
+const styles = {
+  container: {
+    width: "80%",
+    margin: "0 auto",
+  },
+};
+
+export default EditProgram;

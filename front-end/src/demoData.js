@@ -21,3 +21,9 @@ export const categories = [
   { categoryId: 3, name: "Stretch Breaks" },
   { categoryId: 1, name: "Yoga" },
 ];
+
+export const depts = [
+  { deptId: 1, name: "Warehouse" },
+  { deptId: 2, name: "Adm(Desk)" },
+  { deptId: 3, name: "IT(Typing)" },
+];

@@ -1,18 +1,27 @@
-import React from 'react'
+import React from "react";
+import CreateContentList from "../../../ReusableComponents/CreateContentList";
 
 const EditPlaylist = (props) => {
-    // To access parameters paased: instructorId and playlistId
-    const instructorId = props.match.params.instructorId
-    const playlistId = props.match.params.playlistId
+  // To access parameters paased: instructorId and playlistId
+  const instructorId = props.match.params.instructorId;
+  const playlistId = props.match.params.playlistId;
 
-    // Playlist Data passed with history.push
-    const playlistData = props.location.state.DataContent
+  // Playlist Data passed with history.push
+  const playlistData = props.location.state.DataContent;
 
-    return (
-        <div>
-            Edit Playlist: {playlistData.playlistName}
-        </div>
-    )
-}
+  return (
+    <div style={styles.container}>
+      Edit Playlist: {playlistData.playlistName}
+      <CreateContentList type={"edit"} contentType={"playlist"} />
+    </div>
+  );
+};
 
-export default EditPlaylist
+const styles = {
+  container: {
+    width: "80%",
+    margin: "0 auto",
+  },
+};
+
+export default EditPlaylist;

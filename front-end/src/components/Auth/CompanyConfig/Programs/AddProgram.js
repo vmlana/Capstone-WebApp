@@ -1,11 +1,20 @@
-import React from 'react'
+import React from "react";
+
+import CreateContentList from "../../../ReusableComponents/CreateContentList";
 
 const AddProgram = () => {
-    return (
-        <div>
-            Create New Program
-        </div>
-    )
-}
+  return (
+    <div style={styles.container}>
+      <CreateContentList type={"add"} contentType={"program"} />
+    </div>
+  );
+};
 
-export default AddProgram
+const styles = {
+  container: {
+    width: "80%",
+    margin: "0 auto",
+  },
+};
+
+export default AddProgram;
