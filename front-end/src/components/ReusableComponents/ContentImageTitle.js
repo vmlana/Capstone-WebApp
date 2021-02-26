@@ -25,7 +25,6 @@ const ContentImageTitle = ({ img, title, onClick, checked, index }) => {
   useEffect(() => {
     setIsChecked(checked);
     setSelectedTitle(title);
-    console.log("smaller useEffect rendered");
   }, []);
 
   return (
@@ -52,7 +51,6 @@ const ContentImageTitle = ({ img, title, onClick, checked, index }) => {
 
 const styles = {
   container: {
-    width: "30%",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",

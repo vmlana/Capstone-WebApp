@@ -1,19 +1,19 @@
-import React from 'react'
+import React from "react";
 import CreateContentList from "../../../ReusableComponents/CreateContentList";
 
 const AddPlaylist = () => {
-    return (
-        <div style={styles.container}>
-            <CreateContentList type={"playlist"} />
-        </div>
-    )
-}
-
-const styles = {
-    container: {
-        width: "80%",
-        margin: "0 auto",
-    },
+  return (
+    <div style={styles.container}>
+      <CreateContentList contentType={"playlist"} type={"add"} />
+    </div>
+  );
 };
 
-export default AddPlaylist
+const styles = {
+  container: {
+    width: "80%",
+    margin: "0 auto",
+  },
+};
+
+export default AddPlaylist;

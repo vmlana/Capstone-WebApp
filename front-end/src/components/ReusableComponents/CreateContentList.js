@@ -1,18 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import ContentListModal from "./ContentListModal";
 import ContentImageTitle from "./ContentImageTitle";
 import InputWithLabel from "../ReusableElement/InputWithLabel";
 import Picker from "../ReusableElement/Picker";
+import DatePicker from "../ReusableElement/DatePicker";
+import DateList from "../ReusableElement/DateList";
 import Button from "../ReusableElement/Button";
 
-import { levels, categories } from "../../demoData";
+import TextField from "@material-ui/core/TextField";
 
-const CreateContentList = ({ type }) => {
+import { levels, categories, depts } from "../../demoData";
+
+const CreateContentList = ({ contentType, type }) => {
   const [open, setOpen] = useState(false);
   const [selectedData, setSelectedData] = useState([]);
   const [listName, setListName] = useState("");
   const [listDescription, setListDescription] = useState("");
+  const [freq, setFreq] = useState("");
+  const [deptArr, setDeptArr] = useState([]);
+  const [deptSwitch, setDeptSwitch] = useState(false);
 
   const handleOpen = () => {
     setOpen(true);
@@ -31,6 +38,16 @@ const CreateContentList = ({ type }) => {
     setSelectedData(newArr);
   };
 
+  const addDeptData = (deptName) => {
+    setDeptArr((olArr) => [...olArr, deptName]);
+    setDeptSwitch(!deptSwitch);
+  };
+  const deleteDeptData = (deptName) => {
+    const filteredArr = deptArr.filter((dept) => dept !== deptName);
+    setDeptArr(filteredArr);
+    setDeptSwitch(!deptSwitch);
+  };
+
   const listNameChange = (e) => {
     setListName(e.target.value);
   };
@@ -38,19 +55,48 @@ const CreateContentList = ({ type }) => {
   const listDescChange = (e) => {
     setListDescription(e.target.value);
   };
+  const freqChange = (e) => {
+    setFreq(e.target.value);
+  };
+
+  console.log("dept arr", deptArr);
+  useEffect(() => {}, [deptSwitch]);
+
+  const filteredDeptArr =
+    deptArr.length > 0
+      ? deptArr.filter((item, index) => deptArr.indexOf(item) === index)
+      : null;
 
   return (
     <div>
-      {type === "playlist" ? (
+      {contentType === "playlist" ? (
+        type === "add" ? (
+          <div>
+            <h1>ADD PLAYLIST</h1>
+            <p>
+              Get started adding videos to your list. We will post after
+              reviewing the content.
+            </p>
+          </div>
+        ) : (
+          <div>
+            <h1>EDIT PLAYLIST </h1>
+            <p>Click to see details or edit.</p>
+          </div>
+        )
+      ) : type === "add" ? (
         <div>
-          <h1>EDIT PLAYLIST </h1>
+          <h1>ADD PROGRAM</h1>
           <p>
             Get started adding videos to your list. We will post after reviewing
             the content.
           </p>
         </div>
       ) : (
-        <h1>PROGRAMS</h1>
+        <div>
+          <h1>EDIT PROGRAM </h1>
+          <p>Click to see details or edit.</p>
+        </div>
       )}
       <div style={styles.biggerContainer}>
         <div>
@@ -96,15 +142,62 @@ const CreateContentList = ({ type }) => {
             </div>
           </div>
         </div>
-        <div style={styles.descContainer}>
-          <p>Insert Your Description for the playlist</p>
-          <textarea
-            value={listDescription}
-            onChange={listDescChange}
-            rows={20}
-            cols={60}
-          />
-        </div>
+        {contentType === "playlist" ? (
+          <div style={styles.descContainer}>
+            <p>Insert Your Description for the playlist</p>
+            <textarea
+              value={listDescription}
+              onChange={listDescChange}
+              rows={20}
+              cols={60}
+            />
+          </div>
+        ) : (
+          <div>
+            <p>Program Plan </p>
+            <div style={styles.dateNumberPickerContainer}>
+              <DatePicker
+                id={"avialable-from"}
+                label={"Period Availble from"}
+              />
+              <DatePicker id={"avialable-to"} label={"to"} />
+              <div>
+                <TextField
+                  style={styles.freq}
+                  label="Frequency"
+                  type="number"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  variant="outlined"
+                  onChange={freqChange}
+                  value={freq}
+                />
+              </div>
+            </div>
+            <p>Days Of Week</p>
+            <div style={styles.datePickerContainer}>
+              <DateList />
+            </div>
+            <p>Target Departments</p>
+            <Picker label={""} option={depts} onChange={addDeptData} />
+            <div>
+              {filteredDeptArr !== null
+                ? filteredDeptArr.map((dept, index) => (
+                    <div key={index}>
+                      <span style={{ marginRight: "1rem" }}>{dept}</span>
+                      <span
+                        style={{ cursor: "pointer" }}
+                        onClick={() => deleteDeptData(dept)}
+                      >
+                        x
+                      </span>
+                    </div>
+                  ))
+                : null}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -127,6 +220,10 @@ const styles = {
   addedContentList: {
     // margin: "1rem",
   },
+  datePickerContainer: {
+    border: "1px solid gray",
+    borderRadius: "6px",
+  },
   picker: {
     display: "flex",
     justifyContent: "flex-start",
@@ -134,6 +231,16 @@ const styles = {
   },
   descContainer: {
     justifySelf: "center",
+  },
+  dateNumberPickerContainer: {
+    // display: "flex",
+    // justifyContent: "flex-start",
+    // alignItems: "center",
+    // flexWrap: "wrap",
+    display: "grid",
+    gridTemplateColumns: "repeat(3, 1fr)",
+    alignItems: "center",
+    gridGap: "1rem",
   },
 };
 
