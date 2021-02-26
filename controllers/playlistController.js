@@ -1,4 +1,5 @@
 const { pivotDb, pivotPoolDb } = require("../connection.js");
+const { validationResult } = require("express-validator");
 
 // ----------------------------------------------------------
 // Returns a list of all Playlists
@@ -8,7 +9,7 @@ exports.getPlaylists = (req, res) => {
     let sPlaylistId = pivotDb.escape(req.query.playlistId).replace(/['']+/g, '');
     let sCategoryId = pivotDb.escape(req.query.categoryId).replace(/['']+/g, '');
     let sInstructorId = pivotDb.escape(req.query.instructorId).replace(/['']+/g, '');
-    let sMostViewed = pivotDb.escape(req.query.mostViewed).replace(/['']+/g, '');    
+    let sMostViewed = pivotDb.escape(req.query.mostViewed).replace(/['']+/g, '');
 
     // Set filters
     let sWhere = " WHERE p.active = 1 ";
@@ -22,11 +23,11 @@ exports.getPlaylists = (req, res) => {
         sWhere = sWhere + ` AND p.instructorId = ${sInstructorId} `;
     }
 
-    let sOrderBy = 'ORDER BY playlistName, playlistId, lessonOrder';  
+    let sOrderBy = 'ORDER BY playlistName, playlistId, lessonOrder';
     if (sMostViewed != "" && sMostViewed.toLowerCase() == "true") {
         sOrderBy = 'ORDER BY playlistViews DESC, playlistId, lessonOrder';
     }
-    
+
 
     let qry = `SELECT p.playlistId, p.name as playlistName, p.description as playlistDescription, log.qtd as playlistViews,
                       c.categoryId, c.name as categoryName, lg.name as instructorName, i.instructorId as instructorID,
@@ -85,7 +86,7 @@ exports.getPlaylists = (req, res) => {
                             playlistDescription: results[iPlaylistBase].playlistDescription,
                             playlistLevel: results[iPlaylistBase].playlistLevel,
                             playlistViews: results[iPlaylistBase].playlistViews,
-                            categoryId: results[iPlaylistBase].categoryId,                            
+                            categoryId: results[iPlaylistBase].categoryId,
                             categoryName: results[iPlaylistBase].categoryName,
                             instructorName: results[iPlaylistBase].instructorName,
                             instructorID: results[iPlaylistBase].instructorID,
@@ -109,3 +110,177 @@ exports.getPlaylists = (req, res) => {
         });
 
 };
+
+
+
+
+
+// ----------------------------------------------------------
+// Updates the Playlist data
+// ----------------------------------------------------------
+exports.updPlaylist = (req, res) => {
+
+    let playlistUpdate = async (req) => {
+
+        const valError = validationResult(req).array();
+
+        if (valError.length > 0) {
+            res.status(500).send(valError);
+        } else {
+
+            let sMessageInfo = '';
+            let qry = '';
+            let objPlaylist = req.body;
+
+            let sPlaylistId = pivotDb.escape(objPlaylist.playlistId).replace(/['']+/g, '');
+            let sAction = pivotDb.escape(objPlaylist.action).replace(/['']+/g, '');
+
+            if (sAction.toLowerCase() == 'add') {
+                qry = `INSERT INTO playlists (name, description, categoryId, instructorId, level, active) 
+                            VALUES ("${objPlaylist.playlistName}", "${objPlaylist.playlistDescription}", ${objPlaylist.categoryId},
+                                     ${objPlaylist.instructorId}, "${objPlaylist.playlistLevel}", ${objPlaylist.active} ) `;
+            } else if (sAction.toLowerCase() == 'del') {
+                qry = `DELETE FROM playlistLessons WHERE playlistId = ${sPlaylistId} `;
+            } else {
+
+                if (sPlaylistId == "" || sPlaylistId.toLowerCase() == "null") {
+                    sPlaylistId = '-1';
+                    sMessageInfo = 'Valid playlistId not found'
+                }
+
+                let sSet = 'SET ';
+                if (sMessageInfo == '') {
+                    if (objPlaylist.playlistName != undefined) {
+                        sSet = sSet + ` name = "${objPlaylist.playlistName}", `;
+                    }
+                    if (objPlaylist.description != undefined) {
+                        sSet = sSet + `description = "${objPlaylist.playlistDescription}", `;
+                    }
+                    if (objPlaylist.playlistLevel != undefined) {
+                        sSet = sSet + `level = "${objPlaylist.playlistLevel}", `;
+                    }
+                    if (objPlaylist.active != undefined) {
+                        sSet = sSet + `active = "${objPlaylist.active}", `;
+                    }
+                    if (objPlaylist.categoryId != undefined) {
+                        sSet = sSet + `categoryId = "${objPlaylist.categoryId}", `;
+                    }
+                    if (objPlaylist.instructorId != undefined) {
+                        sSet = sSet + `instructorId = "${objPlaylist.instructorId}", `;
+                    }
+                }
+
+                if (sPlaylistId != '-1' && sSet == 'SET ') {
+                    sMessageInfo = 'No content to update';
+                }
+
+                sSet = removeLastComma(sSet);
+                qry = `UPDATE playlists ${sSet} 
+                        WHERE playlistId = ${sPlaylistId}  `;
+            }
+
+
+            if (sMessageInfo != '') {
+                let myResult = {
+                    messageInfo: sMessageInfo,
+                    object: objPlaylist
+                };
+                res.status(500).send(myResult);
+            } else {
+                let mainResult = [];
+                pivotPoolDb.then(pool => {
+                    pool.query(qry)
+                        .then(results => {
+
+                            if (results.affectedRows == 0) {
+                                sMessageInfo = 'No Records found'
+                            } else {
+                                if (sAction.toLowerCase() == 'add') {
+                                    sMessageInfo = 'Record Inserted';
+                                    sPlaylistId = results.insertId;
+                                } else if (sAction.toLowerCase() == 'del') {
+                                    sMessageInfo = 'Record Deleted';
+                                } else {
+                                    sMessageInfo = 'Record Updated';
+                                }
+                            }
+                            mainResult = results;
+                            return results;
+
+                        })
+                        .then(results => {
+                            if (sAction.toLowerCase() == 'del') {
+                                let qry = `DELETE FROM playlists WHERE playlistId = ${sPlaylistId}  `;
+                                return pool.query(qry);
+                            } else {
+                                return playlistLessonUpdate(sPlaylistId, objPlaylist.lessons);
+                            }
+                        })
+                        .then(results => {
+                            let myResult = {
+                                messageInfo: sMessageInfo,
+                                mainResult: mainResult,
+                                detailResult: results
+                            };
+                            res.status(200).send(myResult);
+                        })
+                        .catch(error => {
+                            console.log(error);
+                            res.status(500).send(error);
+                        })
+                })
+                .catch(error => {
+                    console.log(error);
+                    res.status(500).send(error);
+                });
+            }
+        }
+    };
+
+    playlistUpdate(req);
+};
+
+
+
+
+
+// -------------------------------------------------------------
+// Updates the list of company employees on the company profile
+// -------------------------------------------------------------
+let playlistLessonUpdate = async (playlistId, lessons) => {
+
+    let qry = `DELETE FROM playlistLessons WHERE playlistId = ${playlistId} `;
+    pivotPoolDb.then(pool => {
+        pool.query(qry)
+            .then(results => {
+                lessons.forEach(element => {
+                    let qry = `INSERT INTO playlistLessons (playlistId, lessonId) 
+                                    VALUES (${playlistId}, ${element.lessonId})  `;
+                    pool.query(qry);                    
+               });
+                return `${lessons.length}  updated`;
+            })
+            .catch(error => {
+                console.log(error);
+                return error;
+            })
+    })
+    .catch(error => {
+        console.log(error);
+        return error;
+    });
+}
+
+
+
+//---------------------------------------------------------
+// Internal function to remove the last comma from a string
+//---------------------------------------------------------
+function removeLastComma(myString) {
+    let ultComma = myString.lastIndexOf(",");
+    if (ultComma > 0) {
+        myString = myString.substring(0, ultComma);
+    }
+    return myString;
+}
+

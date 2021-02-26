@@ -236,7 +236,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/api/v1/lessons?lessonId=&categoryId=3&instructorId=2",
+					"raw": "http://localhost:3000/api/v1/lessons?lessonId=5",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -250,15 +250,17 @@
 					"query": [
 						{
 							"key": "lessonId",
-							"value": ""
+							"value": "5"
 						},
 						{
 							"key": "categoryId",
-							"value": "3"
+							"value": "3",
+							"disabled": true
 						},
 						{
 							"key": "instructorId",
-							"value": "2"
+							"value": "2",
+							"disabled": true
 						}
 					]
 				}
@@ -338,7 +340,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "    {\r\n        \"instructorId\": \"2\",\r\n        \"userLogin\": \"bob@instructor.ca\",\r\n        \"instructorName\": \"Bob Dylan 2\",\r\n        \"resume\": \"A great teacher with a lot of experience in the field\",\r\n        \"specializationArea\": \"Physiotherapy\",\r\n        \"phoneNumber\": \"788719417\",\r\n        \"address\": \"458, 49th Str.\",\r\n        \"cityName\": \"Vancouver\",\r\n        \"provinceName\": \"British Columbia\",\r\n        \"provinceCode\": \"BC\",\r\n        \"postalCode\": \"V6B 1B4\",\r\n        \"imageFile\": null\r\n    }",
+					"raw": "    {\r\n        \"instructorId\": \"2\",\r\n        \"userLogin\": \"bob@instructor.ca\",\r\n        \"instructorName\": \"q\",\r\n        \"resume\": \"A great teacher with a lot of experience in the field\",\r\n        \"specializationArea\": \"Physiotherapy\",\r\n        \"phoneNumber\": \"788719417\",\r\n        \"address\": \"458, 49th Str.\",\r\n        \"cityName\": \"Vancouver\",\r\n        \"provinceName\": \"British Columbia\",\r\n        \"provinceCode\": \"BC\",\r\n        \"postalCode\": \"V6B 1B4\",\r\n        \"imageFile\": null\r\n    }",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -392,13 +394,43 @@
 			"response": []
 		},
 		{
+			"name": "updPlaylist",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"action\" : \"upd\",        \r\n    \"playlistId\": 2,\r\n    \"playlistName\": \"Stretch for Beginners\",\r\n    \"playlistDescription\": \"This is another daily sequences for intermediate level\",\r\n    \"playlistLevel\": \"B\",\r\n    \"categoryId\": 3,\r\n    \"instructorId\": 2,\r\n    \"active\": 1,\r\n    \"lessons\": [\r\n        {\r\n            \"lessonId\": 1\r\n        },\r\n        {\r\n            \"lessonId\": 2\r\n        },        \r\n        {\r\n            \"lessonId\": 3\r\n        }\r\n    ]\r\n}\r\n\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/v1/updplaylist",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"updplaylist"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "updUser",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "    {\r\n        \"userId\": 3,\r\n        \"userName\": \"Vinicius Meyer Lana upd\",\r\n        \"imageFile\": \"my file\"\r\n    }",
+					"raw": "    {\r\n        \"userId\": 3,\r\n        \"userName\": \"V\",\r\n        \"imageFile\": \"my image file name\"\r\n    }",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -428,7 +460,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"companyId\": 1,\r\n    \"userLogin\": \"hr@walmart.ca\",\r\n    \"companyName\": \"Bob Dylan 2\",\r\n    \"accountResponsible\": \"Mary Popins\",\r\n    \"contactEmail\": \"mpopings@walmart.ca\",\r\n    \"phoneNumber\": \"8877849854\",\r\n    \"address\": \"19, 1st Ave\",\r\n    \"cityId\": 3, \r\n    \"postalCode\": null,\r\n    \"imageFile\": null,\r\n    \"employees\": [\r\n        {\r\n            \"employeeName\": \"Hardikkumar Vasoya\",\r\n            \"employeeId\": \"100348170\",\r\n            \"departmentName\": \"Warehouse\"\r\n        },\r\n        {\r\n            \"employeeName\": \"Ken Tauchi\",\r\n            \"employeeId\": \"100346354\",\r\n            \"departmentName\": \"Warehouse\"\r\n        },\r\n        {\r\n            \"employeeName\": \"Tomohiro Yoshida\",\r\n            \"employeeId\": \"100346604\",\r\n            \"departmentName\": \"Office\"\r\n        },\r\n        {\r\n            \"employeeName\": \"Vinicius Meyer Lana\",\r\n            \"employeeId\": \"100350049\",\r\n            \"departmentName\": \"Office\"\r\n        }\r\n    ]\r\n}",
+					"raw": "{\r\n    \"companyId\": 1,\r\n    \"userLogin\": \"hr@walmart.ca\",\r\n    \"companyName\": \"B\",\r\n    \"accountResponsible\": \"Mary Popins\",\r\n    \"contactEmail\": \"mpopings@walmart.ca\",\r\n    \"phoneNumber\": \"8877849854\",\r\n    \"address\": \"19, 1st Ave\",\r\n    \"cityId\": 3, \r\n    \"postalCode\": null,\r\n    \"imageFile\": null,\r\n    \"employees\": [\r\n        {\r\n            \"employeeName\": \"Hardikkumar Vasoya\",\r\n            \"employeeId\": \"100348170\",\r\n            \"departmentName\": \"Warehouse\"\r\n        },\r\n        {\r\n            \"employeeName\": \"Ken Tauchi\",\r\n            \"employeeId\": \"100346354\",\r\n            \"departmentName\": \"Warehouse\"\r\n        },\r\n        {\r\n            \"employeeName\": \"Tomohiro Yoshida\",\r\n            \"employeeId\": \"100346604\",\r\n            \"departmentName\": \"Office\"\r\n        },\r\n        {\r\n            \"employeeName\": \"Vinicius Meyer Lana\",\r\n            \"employeeId\": \"100350049\",\r\n            \"departmentName\": \"Office\"\r\n        }\r\n    ]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"

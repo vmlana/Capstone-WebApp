@@ -10,7 +10,7 @@ const {getCompany, getCompanies, updCompany} = require("../controllers/companyCo
 const {getInstructor, updInstructor } = require("../controllers/instructorController.js");
 const {getUser, updUser} = require("../controllers/userController.js");
 const {getLessons, updLesson} = require("../controllers/lessonController.js");
-const {getPlaylists} = require("../controllers/playlistController.js");
+const {getPlaylists, updPlaylist} = require("../controllers/playlistController.js");
 const {getPrograms} = require("../controllers/programController.js");
 const {postS3Storage, deleteS3Storage} = require("../controllers/s3StorageController");
 
@@ -20,6 +20,7 @@ const {companyValidation} = require("../validators/companyValidator");
 const {instructorValidation} = require("../validators/instructorValidator");
 const {userValidation} = require("../validators/userValidator");
 const {lessonValidation} = require("../validators/lessonValidator");
+const {playlistValidation} = require("../validators/playlistValidator");
 
 // Routes to capstone api - Version 1
 router
@@ -36,6 +37,7 @@ router
     .get("/lessons", getLessons)    
     .get("/search", getSearch)    
     .post("/updlesson", lessonValidation, updLesson)        
+    .post("/updplaylist", playlistValidation, updPlaylist)            
     .post("/updinstructor", instructorValidation, updInstructor)    
     .post("/updcompany", companyValidation, updCompany)  
     .post("/upduser", userValidation, updUser)      
