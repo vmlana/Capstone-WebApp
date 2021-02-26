@@ -42,6 +42,11 @@ const CreateContentList = ({ contentType, type }) => {
     setDeptArr((olArr) => [...olArr, deptName]);
     setDeptSwitch(!deptSwitch);
   };
+  const deleteDeptData = (deptName) => {
+    const filteredArr = deptArr.filter((dept) => dept !== deptName);
+    setDeptArr(filteredArr);
+    setDeptSwitch(!deptSwitch);
+  };
 
   const listNameChange = (e) => {
     setListName(e.target.value);
@@ -178,7 +183,17 @@ const CreateContentList = ({ contentType, type }) => {
             <Picker label={""} option={depts} onChange={addDeptData} />
             <div>
               {filteredDeptArr !== null
-                ? filteredDeptArr.map((dept) => <p>{dept}</p>)
+                ? filteredDeptArr.map((dept, index) => (
+                    <div key={index}>
+                      <span style={{ marginRight: "1rem" }}>{dept}</span>
+                      <span
+                        style={{ cursor: "pointer" }}
+                        onClick={() => deleteDeptData(dept)}
+                      >
+                        x
+                      </span>
+                    </div>
+                  ))
                 : null}
             </div>
           </div>

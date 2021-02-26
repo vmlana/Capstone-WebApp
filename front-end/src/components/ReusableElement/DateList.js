@@ -12,6 +12,7 @@ const useStyles = makeStyles((theme) => ({
     flexFlow: "column wrap",
     maxHeight: "200px",
     margin: "0.5rem",
+    cursor: "pointer",
   },
 }));
 
