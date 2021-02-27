@@ -31,3 +31,18 @@ export const getProgramsByCompanyId = async (companyId) => {
         .catch((error) => console.error(error));
     return programs;
 };
+
+export const createLesson = async (lessonData) => {
+    // return JSON.stringify(lessonData)
+    const newLesson = await fetch(
+        `${API_URL}/updlesson`, {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(lessonData)
+    })
+        .then((response) => response.json())
+        .catch((error) => console.error(error));
+    return newLesson;
+};
