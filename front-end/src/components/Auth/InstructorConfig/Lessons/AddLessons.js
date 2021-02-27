@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import styled from "styled-components";
 import Dropzone, { defaultClassNames } from 'react-dropzone-uploader'
 import { s3UploadHandlerListeningProgress } from '../../../../services/s3Handler';
-import { getCategories } from '../../Api/api'
+import { getCategories, createLesson } from '../../Api/api'
 
 // Reusable Components
 import Button from '../../../ReusableElement/Button';
@@ -29,31 +29,31 @@ const Layout = ({ input, previews, submitButton, dropzoneProps, files, extra: { 
 const AddLessons = () => {
     const [categories, setCategories] = useState([]);
     const [lesson, setLesson] = useState({
+        action: 'add',
         lessonName: '',
-        lessonCategory: '',
-        lessonDescription: '',
-        imageFile: null,
-        videoFile: null
+        categoryId: '',
+        description: '',
+        imageFile: '',
+        videoFile: '',
+        instructorId: 2
     });
 
     // File Upload
     const [success, setSuccess] = useState(false);
-    const [urls, setUrls] = useState([]);
+    const [urls, setUrls] = useState('');
     const [uploadInput, setUploadInput] = useState([]);
     const [isUploading, setIsUploading] = useState(false);
     const [uploadingProgress, setUploadingProgress] = useState(0);
 
     const handleChange = (ev) => {
         setSuccess(false);
-        setUrls([])
+        setUrls('')
     }
 
     const Success_message = () => (
         <div style={{ padding: 15 }}>
             <h3 style={{ color: 'green' }}>SUCCESSFUL UPLOAD</h3>
-            {urls.map(url =>
-                (<div key={url}><a href={url} target="_blank">{url}</a></div>)
-            )}
+            <div><a href={urls} target="_blank">{urls}</a></div>
             <br />
         </div>
     )
@@ -101,13 +101,6 @@ const AddLessons = () => {
             if (percent === 100) {
                 setSuccess(true);
                 setUploadInput([]);
-                setLesson({
-                    lessonName: '',
-                    lessonCategory: '',
-                    lessonDescription: '',
-                    imageFile: null,
-                    videoFile: null
-                })
                 setIsUploading(false);
                 setUploadingProgress(0);
             }
@@ -116,15 +109,40 @@ const AddLessons = () => {
         setIsUploading(true);
 
         try {
-            for (let i = 0; i < uploadInput.length; i++) {
+            for (let i = 0; i < 1; i++) {
                 const dataURL = await s3UploadHandlerListeningProgress(uploadInput[i], "dummyToken", uploadTracker);
-                console.log(dataURL);
-                setUrls(state => [...state, dataURL])
+                // console.log(dataURL);
+                // setUrls(dataURL)
+                // console.log(urls);
+
+                setLesson(lesson => ({
+                    ...lesson,
+                    videoFile: dataURL
+                }));
+
             }
-            // setSuccess(true);
+            setSuccess(true);
+
+            // console.log(lesson)
         } catch (err) {
             setSuccess(false);
         }
+
+        createLesson(lesson).then(
+            result => {
+                // console.log(result)
+                // return null
+                setLesson({
+                    action: 'add',
+                    lessonName: '',
+                    categoryId: '',
+                    description: '',
+                    imageFile: '',
+                    videoFile: '',
+                    instructorId: 2
+                })
+            }
+        )
     }
 
     // DropZOne Uploader
@@ -157,23 +175,16 @@ const AddLessons = () => {
         )
     }, [])
 
+
+    useEffect(() => {
+        console.log(lesson)
+    }, [lesson])
+
     return (
         <PageContainer>
             {success ? <Success_message /> : null}
             {isUploading ? <Uploading_message /> : null}
-            <div>
-                {
-                    uploadInput.length === 1
-                        ?
-                        <ul>
-                            {uploadInput.map(file => {
-                                return (<li key={file.name}>{file.name}</li>)
-                            })}
-                        </ul>
-                        :
-                        null
-                }
-            </div>
+
             <TitleContainer>
                 <PageHeader>create lessons</PageHeader>
             </TitleContainer>
@@ -192,7 +203,7 @@ const AddLessons = () => {
                     <Label>
                         <LabelText>Category</LabelText>
                         <SelectOption
-                            name="lessonCategory"
+                            name="categoryId"
                             required
                             onChange={handleOnChange}
                         >
@@ -208,10 +219,10 @@ const AddLessons = () => {
                     <Label>
                         <LabelText>Lesson description</LabelText>
                         <TextArea
-                            name="lessonDescription"
+                            name="description"
                             rows="10"
                             required
-                            value={lesson.lessonDescription}
+                            value={lesson.description}
                             onChange={handleOnChange}
                             placeholder="Start typing the description"
                         />
