@@ -11,8 +11,13 @@ import Button from "../ReusableElement/Button";
 import TextField from "@material-ui/core/TextField";
 
 import { levels, categories, depts } from "../../demoData";
+import {
+  getCategories,
+  getPlaylistsByCategoryId,
+  getLessonsByCategoryId,
+} from "../Auth/Api/api";
 
-const CreateContentList = ({ contentType, type }) => {
+const CreateContentList = ({ contentType, type, playlistData }) => {
   const [open, setOpen] = useState(false);
   const [selectedData, setSelectedData] = useState([]);
   const [listName, setListName] = useState("");
@@ -20,6 +25,13 @@ const CreateContentList = ({ contentType, type }) => {
   const [freq, setFreq] = useState("");
   const [deptArr, setDeptArr] = useState([]);
   const [deptSwitch, setDeptSwitch] = useState(false);
+  const [cat, setCat] = useState("");
+  const [catLists, setCatLists] = useState([]);
+  const [level, setLevel] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [deletedItem, setDeletedItem] = useState("");
+  const [filteredData, setFilteredData] = useState([]);
+  const [finalData, setFinalData] = useState([]);
 
   const handleOpen = () => {
     setOpen(true);
@@ -33,9 +45,23 @@ const CreateContentList = ({ contentType, type }) => {
     e.preventDefault();
   };
 
-  const renewDataArray = (dataArr) => {
+  const renewDataArray = (dataArr, deletedItem) => {
     let newArr = dataArr.filter((data) => data.isChecked === true);
-    setSelectedData(newArr);
+    let concatArr = selectedData.concat(newArr);
+    const uniqueLessons = [
+      ...concatArr
+        .reduce((map, obj) => map.set(obj.lessonId, obj), new Map())
+        .values(),
+    ];
+
+    const finalFilteredData = uniqueLessons.filter(
+      (item) => item.lessonId != deletedItem
+    );
+    console.log("dataArr", dataArr);
+    // console.log("filteredConcatArr", filteredConcatArr);
+    // console.log("finalFilteredData", finalFilteredData);
+    // console.log(deletedItem);
+    setSelectedData(finalFilteredData);
   };
 
   const addDeptData = (deptName) => {
@@ -59,13 +85,41 @@ const CreateContentList = ({ contentType, type }) => {
     setFreq(e.target.value);
   };
 
-  console.log("dept arr", deptArr);
-  useEffect(() => {}, [deptSwitch]);
+  const onCatClick = (val) => {
+    setCat(val);
+  };
+  const onLevelClick = (val) => {
+    setLevel(val);
+  };
+
+  const getDeletedItem = (itemId) => {
+    setDeletedItem(itemId);
+  };
+
+  useEffect(() => {
+    type === "edit"
+      ? setSelectedData(playlistData.lessons)
+      : setSelectedData([]);
+    getCategories().then((result) => setCatLists(result));
+  }, []);
+
+  useEffect(() => {
+    getLessonsByCategoryId(cat).then((result) => setSearchResults(result));
+  }, [cat]);
 
   const filteredDeptArr =
     deptArr.length > 0
       ? deptArr.filter((item, index) => deptArr.indexOf(item) === index)
       : null;
+
+  console.log("selectedData to return", selectedData);
+  const updateFinalArray = () => {
+    const finalFilteredData = selectedData.filter(
+      (item) => item.lessonId != deletedItem
+    );
+
+    setSelectedData(finalFilteredData);
+  };
 
   return (
     <div>
@@ -114,31 +168,48 @@ const CreateContentList = ({ contentType, type }) => {
             />
           )}
           <div style={styles.picker}>
-            <Picker label={"Category"} option={categories} />
-            <Picker label={"Level"} option={levels} />
+            {catLists.length > 0 ? (
+              <Picker
+                label={"Category"}
+                option={catLists}
+                onChange={onCatClick}
+              />
+            ) : null}
+
+            <Picker label={"Level"} option={levels} onChange={onLevelClick} />
             <Button
               text={"See available Lessons"}
               type={"modal"}
               onClick={handleOpen}
             />
           </div>
-          <ContentListModal
-            open={open}
-            close={handleClose}
-            type={"playlist"}
-            renewData={renewDataArray}
-          />
+
+          {searchResults.length !== 0 ? (
+            <ContentListModal
+              open={open}
+              close={handleClose}
+              type={"playlist"}
+              renewData={renewDataArray}
+              results={searchResults}
+              exData={selectedData}
+              getDeletedItem={getDeletedItem}
+            />
+          ) : null}
+
           <div>
             <p>Playlists</p>
+            {/* {console.log("fileteredConcatArr", filteredConcattArr)} */}
             <div style={styles.contentList}>
-              {selectedData.map((data) => (
-                <div style={styles.addedContentList}>
-                  <div>
-                    <img src={data.img} alt={data.title} />
-                  </div>
-                  <span>{data.title}</span>
-                </div>
-              ))}
+              {selectedData.length === 0
+                ? null
+                : selectedData.map((data) => (
+                    <div style={styles.addedContentList}>
+                      <div>
+                        <img src={data.videoFile} alt={data.lessonName} />
+                      </div>
+                      <span>{data.lessonName}</span>
+                    </div>
+                  ))}
             </div>
           </div>
         </div>
@@ -216,6 +287,7 @@ const styles = {
     border: "1px solid black",
     minHeight: "300px",
     padding: "1rem",
+    overFlow: "hidden",
   },
   addedContentList: {
     // margin: "1rem",

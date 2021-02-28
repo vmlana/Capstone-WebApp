@@ -18,32 +18,53 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ContentListModal = ({ open, close, type, renewData }) => {
+const ContentListModal = ({
+  open,
+  close,
+  type,
+  renewData,
+  results,
+  exData,
+  getDeletedItem,
+}) => {
   const classes = useStyles();
 
-  //   const [checked, setChecked] = useState(false);
   const [newLessonArr, setNewLessonArr] = useState([]);
+  const [deletedItem, setDeletedItem] = useState("");
 
   const handleCheckedElement = (e, checked) => {
     let checkedList = newLessonArr;
-    checkedList.forEach((lesson) =>
-      lesson.title === e.target.alt ? (lesson.isChecked = checked) : lesson
+    checkedList.map((lesson) =>
+      lesson.lessonId == e.target.alt ? (lesson.isChecked = checked) : lesson
     );
 
-    console.log("inside handleCheckedElem", newLessonArr);
+    if (checked === false) {
+      //   return setDeletedItem(e.target.alt);
+      return renewData(checkedList, e.target.alt);
+    } else {
+      //   setDeletedItem(null);
+      return renewData(checkedList, null);
+    }
+
     setNewLessonArr(checkedList);
-    renewData(checkedList);
+    // renewData(checkedList);
   };
 
+  console.log("deletedItem", deletedItem);
   useEffect(() => {
-    const newArr = lessons.map((lesson) => {
-      return {
-        ...lesson,
-        isChecked: false,
-      };
+    const exLessons = exData.lessons;
+    let sortedArr = results.map((result) => {
+      let check = exData.some((lesson) => result.lessonId === lesson.lessonId);
+
+      if (check) {
+        return { ...result, isChecked: true };
+      } else {
+        return { ...result, isChecked: false };
+      }
     });
-    setNewLessonArr(newArr);
-  }, []);
+
+    setNewLessonArr(sortedArr);
+  }, [results]);
 
   return (
     <div>
@@ -75,8 +96,9 @@ const ContentListModal = ({ open, close, type, renewData }) => {
               {newLessonArr
                 ? newLessonArr.map((video, index) => (
                     <ContentImageTitle
-                      img={video.img}
-                      title={video.title}
+                      img={video.imageFile}
+                      title={video.lessonName}
+                      lessonId={video.lessonId}
                       onClick={handleCheckedElement}
                       checked={video.isChecked}
                       key={index}
