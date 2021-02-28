@@ -25,46 +25,75 @@ const ContentListModal = ({
   renewData,
   results,
   exData,
-  getDeletedItem,
 }) => {
   const classes = useStyles();
 
   const [newLessonArr, setNewLessonArr] = useState([]);
+  const [newPlaylistArr, setNewPlaylistArr] = useState([]);
   const [deletedItem, setDeletedItem] = useState("");
 
   const handleCheckedElement = (e, checked) => {
+    // if (type === "playlist") {
     let checkedList = newLessonArr;
-    checkedList.map((lesson) =>
-      lesson.lessonId == e.target.alt ? (lesson.isChecked = checked) : lesson
-    );
+
+    console.log(checked, e.target.alt);
+
+    type === "playlist"
+      ? checkedList.map((lesson) =>
+          lesson.lessonId == e.target.alt
+            ? (lesson.isChecked = checked)
+            : lesson
+        )
+      : checkedList.map((playlist) =>
+          playlist.playlistId == e.target.alt
+            ? (playlist.isChecked = checked)
+            : playlist
+        );
 
     if (checked === false) {
-      //   return setDeletedItem(e.target.alt);
-      return renewData(checkedList, e.target.alt);
+      renewData(checkedList, e.target.alt);
     } else {
-      //   setDeletedItem(null);
-      return renewData(checkedList, null);
+      renewData(checkedList, null);
     }
 
     setNewLessonArr(checkedList);
-    // renewData(checkedList);
   };
 
-  console.log("deletedItem", deletedItem);
   useEffect(() => {
-    const exLessons = exData.lessons;
-    let sortedArr = results.map((result) => {
-      let check = exData.some((lesson) => result.lessonId === lesson.lessonId);
+    if (type === "playlist") {
+      console.log("playlist results", results);
+      let sortedLessonArr = results.map((result) => {
+        let check = exData.some(
+          (lesson) => result.lessonId === lesson.lessonId
+        );
 
-      if (check) {
-        return { ...result, isChecked: true };
-      } else {
-        return { ...result, isChecked: false };
-      }
-    });
+        if (check) {
+          return { ...result, isChecked: true };
+        } else {
+          return { ...result, isChecked: false };
+        }
+      });
 
-    setNewLessonArr(sortedArr);
-  }, [results]);
+      setNewLessonArr(sortedLessonArr);
+    } else {
+      console.log("exData", exData);
+      let sortedPlaylistArr = results.map((result) => {
+        let check = exData.some(
+          (playlist) => result.playlistId === playlist.playlistId
+        );
+
+        if (check) {
+          return { ...result, isChecked: true };
+        } else {
+          return { ...result, isChecked: false };
+        }
+      });
+
+      console.log("sortedPalylist", sortedPlaylistArr);
+      //   setNewPlaylistArr(sortedPlaylistArr);
+      setNewLessonArr(sortedPlaylistArr);
+    }
+  }, [results, exData]);
 
   return (
     <div>
@@ -94,17 +123,29 @@ const ContentListModal = ({
 
             <ContentList>
               {newLessonArr
-                ? newLessonArr.map((video, index) => (
-                    <ContentImageTitle
-                      img={video.imageFile}
-                      title={video.lessonName}
-                      lessonId={video.lessonId}
-                      onClick={handleCheckedElement}
-                      checked={video.isChecked}
-                      key={index}
-                      index={index}
-                    />
-                  ))
+                ? type === "playlist"
+                  ? newLessonArr.map((video, index) => (
+                      <ContentImageTitle
+                        img={video.imageFile}
+                        title={video.lessonName}
+                        id={video.lessonId}
+                        onClick={handleCheckedElement}
+                        checked={video.isChecked}
+                        key={index}
+                        index={index}
+                      />
+                    ))
+                  : newLessonArr.map((playlist, index) => (
+                      <ContentImageTitle
+                        img={playlist.playlistImageFile}
+                        title={playlist.playlistName}
+                        id={playlist.playlistId}
+                        onClick={handleCheckedElement}
+                        checked={playlist.isChecked}
+                        key={index}
+                        index={index}
+                      />
+                    ))
                 : null}
             </ContentList>
           </ModalContent>

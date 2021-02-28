@@ -14,8 +14,8 @@ const EditPlaylist = (props) => {
       Edit Playlist: {playlistData.playlistName}
       <CreateContentList
         type={"edit"}
-        contentType={"playlist"}
-        playlistData={playlistData}
+        contentsType={"playlist"}
+        data={playlistData}
       />
     </div>
   );

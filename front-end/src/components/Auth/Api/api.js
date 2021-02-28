@@ -30,7 +30,7 @@ export const getPlaylistsByInstructorId = async (instructorId) => {
 };
 
 export const getPlaylistsByCategoryId = async (categoryId) => {
-  const playlists = await fetch(`${API_URL}/playlists?CategoryId=${categoryId}`)
+  const playlists = await fetch(`${API_URL}/playlists?categoryId=${categoryId}`)
     .then((response) => response.json())
     .catch((error) => console.error(error));
   return playlists;

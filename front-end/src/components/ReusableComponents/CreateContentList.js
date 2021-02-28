@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 
 import ContentListModal from "./ContentListModal";
-import ContentImageTitle from "./ContentImageTitle";
 import InputWithLabel from "../ReusableElement/InputWithLabel";
 import Picker from "../ReusableElement/Picker";
 import DatePicker from "../ReusableElement/DatePicker";
@@ -17,7 +16,7 @@ import {
   getLessonsByCategoryId,
 } from "../Auth/Api/api";
 
-const CreateContentList = ({ contentType, type, playlistData }) => {
+const CreateContentList = ({ contentsType, type, data }) => {
   const [open, setOpen] = useState(false);
   const [selectedData, setSelectedData] = useState([]);
   const [listName, setListName] = useState("");
@@ -29,9 +28,9 @@ const CreateContentList = ({ contentType, type, playlistData }) => {
   const [catLists, setCatLists] = useState([]);
   const [level, setLevel] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  const [deletedItem, setDeletedItem] = useState("");
   const [filteredData, setFilteredData] = useState([]);
   const [finalData, setFinalData] = useState([]);
+  const [contentType, setContentType] = useState("");
 
   const handleOpen = () => {
     setOpen(true);
@@ -45,22 +44,32 @@ const CreateContentList = ({ contentType, type, playlistData }) => {
     e.preventDefault();
   };
 
-  const renewDataArray = (dataArr, deletedItem) => {
+  const renewDataArray = (dataArr, deletedId) => {
     let newArr = dataArr.filter((data) => data.isChecked === true);
     let concatArr = selectedData.concat(newArr);
-    const uniqueLessons = [
-      ...concatArr
-        .reduce((map, obj) => map.set(obj.lessonId, obj), new Map())
-        .values(),
-    ];
-
-    const finalFilteredData = uniqueLessons.filter(
-      (item) => item.lessonId != deletedItem
-    );
     console.log("dataArr", dataArr);
-    // console.log("filteredConcatArr", filteredConcatArr);
-    // console.log("finalFilteredData", finalFilteredData);
-    // console.log(deletedItem);
+    console.log("new", newArr);
+    console.log("concat", concatArr);
+    const uniqueLessons =
+      contentType === "playlist"
+        ? [
+            ...concatArr
+              .reduce((map, obj) => map.set(obj.lessonId, obj), new Map())
+              .values(),
+          ]
+        : [
+            ...concatArr
+              .reduce((map, obj) => map.set(obj.playlistId, obj), new Map())
+              .values(),
+          ];
+
+    const finalFilteredData =
+      contentType === "playlist"
+        ? uniqueLessons.filter((item) => item.lessonId != deletedId)
+        : uniqueLessons.filter((item) => item.playlistId != deletedId);
+
+    console.log("final", finalFilteredData);
+
     setSelectedData(finalFilteredData);
   };
 
@@ -92,19 +101,38 @@ const CreateContentList = ({ contentType, type, playlistData }) => {
     setLevel(val);
   };
 
-  const getDeletedItem = (itemId) => {
-    setDeletedItem(itemId);
-  };
+  //   const getDeletedItem = (itemId) => {
+  //     setDeletedItem(itemId);
+  //   };
 
   useEffect(() => {
-    type === "edit"
-      ? setSelectedData(playlistData.lessons)
-      : setSelectedData([]);
+    if (contentsType === "playlist") {
+      if (type === "edit") {
+        setSelectedData(data.lessons);
+        setContentType("playlist");
+      } else {
+        setSelectedData([]);
+        setContentType("playlist");
+      }
+    } else {
+      if (type === "edit") {
+        setSelectedData(data.playlists);
+        setContentType("program");
+      } else {
+        setSelectedData([]);
+        setContentType("program");
+      }
+    }
+
     getCategories().then((result) => setCatLists(result));
   }, []);
 
   useEffect(() => {
-    getLessonsByCategoryId(cat).then((result) => setSearchResults(result));
+    contentsType === "playlist"
+      ? getLessonsByCategoryId(cat).then((result) => setSearchResults(result))
+      : getPlaylistsByCategoryId(cat).then((result) =>
+          setSearchResults(result)
+        );
   }, [cat]);
 
   const filteredDeptArr =
@@ -113,13 +141,6 @@ const CreateContentList = ({ contentType, type, playlistData }) => {
       : null;
 
   console.log("selectedData to return", selectedData);
-  const updateFinalArray = () => {
-    const finalFilteredData = selectedData.filter(
-      (item) => item.lessonId != deletedItem
-    );
-
-    setSelectedData(finalFilteredData);
-  };
 
   return (
     <div>
@@ -184,30 +205,42 @@ const CreateContentList = ({ contentType, type, playlistData }) => {
             />
           </div>
 
-          {searchResults.length !== 0 ? (
+          {searchResults !== undefined ? (
             <ContentListModal
               open={open}
               close={handleClose}
-              type={"playlist"}
+              type={contentType}
               renewData={renewDataArray}
               results={searchResults}
               exData={selectedData}
-              getDeletedItem={getDeletedItem}
             />
-          ) : null}
+          ) : (
+            <p>No match </p>
+          )}
 
           <div>
             <p>Playlists</p>
-            {/* {console.log("fileteredConcatArr", filteredConcattArr)} */}
             <div style={styles.contentList}>
               {selectedData.length === 0
                 ? null
-                : selectedData.map((data) => (
+                : contentType === "playlist"
+                ? selectedData.map((data) => (
                     <div style={styles.addedContentList}>
                       <div>
                         <img src={data.videoFile} alt={data.lessonName} />
                       </div>
                       <span>{data.lessonName}</span>
+                    </div>
+                  ))
+                : selectedData.map((data) => (
+                    <div style={styles.addedContentList}>
+                      <div>
+                        <img
+                          src={data.playlistImageFile}
+                          alt={data.playlistName}
+                        />
+                      </div>
+                      <span>{data.playlistName}</span>
                     </div>
                   ))}
             </div>
