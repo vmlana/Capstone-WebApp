@@ -97,7 +97,9 @@ const CreateContentList = ({ contentType, type, playlistData }) => {
   };
 
   useEffect(() => {
-    setSelectedData(playlistData.lessons);
+    type === "edit"
+      ? setSelectedData(playlistData.lessons)
+      : setSelectedData([]);
     getCategories().then((result) => setCatLists(result));
   }, []);
 
@@ -182,7 +184,7 @@ const CreateContentList = ({ contentType, type, playlistData }) => {
             />
           </div>
 
-          {selectedData.length !== 0 ? (
+          {searchResults.length !== 0 ? (
             <ContentListModal
               open={open}
               close={handleClose}
@@ -192,26 +194,22 @@ const CreateContentList = ({ contentType, type, playlistData }) => {
               exData={selectedData}
               getDeletedItem={getDeletedItem}
             />
-          ) : (
-            <p>Sorry, there is no data avilable</p>
-          )}
+          ) : null}
 
           <div>
             <p>Playlists</p>
             {/* {console.log("fileteredConcatArr", filteredConcattArr)} */}
             <div style={styles.contentList}>
-              {selectedData.length === 0 ? (
-                <p>Sorry, there is no data available.</p>
-              ) : (
-                selectedData.map((data) => (
-                  <div style={styles.addedContentList}>
-                    <div>
-                      <img src={data.videoFile} alt={data.lessonName} />
+              {selectedData.length === 0
+                ? null
+                : selectedData.map((data) => (
+                    <div style={styles.addedContentList}>
+                      <div>
+                        <img src={data.videoFile} alt={data.lessonName} />
+                      </div>
+                      <span>{data.lessonName}</span>
                     </div>
-                    <span>{data.lessonName}</span>
-                  </div>
-                ))
-              )}
+                  ))}
             </div>
           </div>
         </div>
