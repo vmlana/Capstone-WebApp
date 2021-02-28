@@ -4,14 +4,7 @@ import * as Icon from "react-icons/ai";
 
 import SingleContentModal from "./SingleContentModal";
 
-const ContentImageTitle = ({
-  img,
-  title,
-  onClick,
-  checked,
-  index,
-  lessonId,
-}) => {
+const ContentImageTitle = ({ img, title, onClick, checked, index, id }) => {
   const [isChecked, setIsChecked] = useState(false);
   const [miniOpen, setMiniOpen] = useState(false);
   const [selectedTitle, setSelectedTitle] = useState("");
@@ -41,7 +34,7 @@ const ContentImageTitle = ({
         <img
           style={styles.img}
           src={img}
-          alt={lessonId}
+          alt={id}
           id={index + 1}
           onClick={switcher}
         />
