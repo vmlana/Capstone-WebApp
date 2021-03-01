@@ -37,3 +37,41 @@
     transform: rotate(360deg);
   }
 } */
+
+@font-face {
+  font-family: 'Gotham';
+  src: local('Gotham'), url(./fonts/Gotham-Light.otf) format('opentype');
+}
+
+@font-face {
+  font-family: 'Gotham';
+  font-weight: 900;
+  src: local('Gotham'), url(./fonts/Gotham-Bold.otf) format('opentype');
+}
+
+@font-face {
+  font-family: 'Gotham';
+  font-weight: 900;
+  src: local('Gotham'), url(./fonts/Gotham-Black.otf) format('opentype');
+}
+
+@font-face {
+  font-family: 'Gotham';
+  font-weight: 700;
+  src: local('Gotham'), url(./fonts/GothamMedium.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Gotham';
+  font-weight: 600;
+  src: local('Gotham'), url(./fonts/GothamMedium_1.ttf) format('truetype');
+}
+
+html {
+  font-family: Gotham;
+  line-height: 1.2;
+}
+
+li {
+  line-height: initial;
+}

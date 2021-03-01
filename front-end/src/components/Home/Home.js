@@ -1,5 +1,6 @@
 import React from 'react';
 import AboutPivot from './AboutPivot/AboutPivot';
+import Downloads from './Downloads/Downloads';
 import Features from './Features/Features';
 import SignUpSection from './SignUpSection/SignUpSection';
 import VideoTrailer from './VideoTrailer/VideoTrailer';
@@ -10,6 +11,7 @@ const Home = () => {
             <div>
                 <VideoTrailer />
                 <AboutPivot />
+                <Downloads />
                 <Features />
                 <SignUpSection />
             </div>

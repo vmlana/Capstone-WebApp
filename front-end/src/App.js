@@ -1,4 +1,4 @@
-// import './App.css';
+import './App.css';
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import NavRouter from './components/NavRouter';
@@ -11,10 +11,10 @@ function App() {
   const [path, setPath] = useState("");
   const history = useHistory();
   const userInfo = useSelector(state => state.user.userInfo);
-  const {userType, authId, token} = userInfo;
+  const { userType, authId, token } = userInfo;
 
 
-  useEffect(()=>{
+  useEffect(() => {
     const unregisterHistoryListener = history.listen((location, action) => {
       // console.log(action, location.pathname, location.state)
       setPath(location.pathname);
@@ -22,22 +22,22 @@ function App() {
     return () => {
       unregisterHistoryListener();
     }
-  },[token])
+  }, [token])
 
-  useEffect(()=>{
+  useEffect(() => {
     if (window.performance) {
       if (performance.navigation.type == 1) {
         setPath(history.location.pathname);
       }
     }
   }, [window.performance])
-  
+
   return (
     <main className="App">
       {
         path.includes("auth") && token
-        ? null :
-        <Header />
+          ? null :
+          <Header />
       }
       <NavRouter />
       <Footer />

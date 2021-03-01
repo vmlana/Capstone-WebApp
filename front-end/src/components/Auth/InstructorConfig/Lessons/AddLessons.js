@@ -127,22 +127,6 @@ const AddLessons = () => {
         } catch (err) {
             setSuccess(false);
         }
-
-        createLesson(lesson).then(
-            result => {
-                // console.log(result)
-                // return null
-                setLesson({
-                    action: 'add',
-                    lessonName: '',
-                    categoryId: '',
-                    description: '',
-                    imageFile: '',
-                    videoFile: '',
-                    instructorId: 2
-                })
-            }
-        )
     }
 
     // DropZOne Uploader
@@ -177,8 +161,25 @@ const AddLessons = () => {
 
 
     useEffect(() => {
-        console.log(lesson)
-    }, [lesson])
+        if (success === true) {
+            createLesson(lesson).then(
+                result => {
+                    console.log(result)
+                    // return null
+                    setLesson({
+                        action: 'add',
+                        lessonName: '',
+                        categoryId: '',
+                        description: '',
+                        imageFile: '',
+                        videoFile: '',
+                        instructorId: 2
+                    })
+                }
+            )
+        }
+
+    }, [success])
 
     return (
         <PageContainer>
