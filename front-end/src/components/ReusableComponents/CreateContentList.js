@@ -124,6 +124,29 @@ const CreateContentList = ({ contentsType, type, data }) => {
     setLevel(val);
   };
 
+  const sendDataToServer = () => {
+    const dataToSend = {
+      ...data,
+      action: "upd",
+      lessons: selectedData,
+      playlistDescription: listDescription,
+      playlistName: listName,
+    };
+
+    if (contentType === "edit") {
+      createPlaylist(dataToSend);
+    }
+  };
+
+  //   const dataToSend = {
+  //     ...data,
+  //     lessons: selectedData,
+  //     playlistDescription: listDescription,
+  //     playlistName: listName,
+  //   };
+
+  //   console.log("dataToSend", dataToSend);
+
   useEffect(() => {
     if (contentsType === "playlist") {
       if (type === "edit") {
@@ -265,7 +288,7 @@ const CreateContentList = ({ contentsType, type, data }) => {
             </div>
           </div>
           <div style={styles.actionBtns}>
-            <Button text={"Save"} size={"med"} />
+            <Button text={"Save"} size={"med"} onClick={sendDataToServer} />
             <Button text={"Delete"} size={"med"} />
           </div>
         </div>
