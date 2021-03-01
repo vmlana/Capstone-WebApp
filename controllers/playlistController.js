@@ -6,10 +6,12 @@ const { validationResult } = require("express-validator");
 // ----------------------------------------------------------
 exports.getPlaylists = (req, res) => {
 
-    let sPlaylistId = pivotDb.escape(req.query.playlistId).replace(/['']+/g, '');
-    let sCategoryId = pivotDb.escape(req.query.categoryId).replace(/['']+/g, '');
+    let sPlaylistId   = pivotDb.escape(req.query.playlistId).replace(/['']+/g, '');
+    let sCategoryId   = pivotDb.escape(req.query.categoryId).replace(/['']+/g, '');
     let sInstructorId = pivotDb.escape(req.query.instructorId).replace(/['']+/g, '');
-    let sMostViewed = pivotDb.escape(req.query.mostViewed).replace(/['']+/g, '');
+    let sMostViewed   = pivotDb.escape(req.query.mostViewed).replace(/['']+/g, '');
+    let sOrderBy      = pivotDb.escape(req.query.orderby).replace(/['']+/g, '');    
+
 
     // Set filters
     let sWhere = " WHERE p.active = 1 ";
@@ -23,10 +25,17 @@ exports.getPlaylists = (req, res) => {
         sWhere = sWhere + ` AND p.instructorId = ${sInstructorId} `;
     }
 
-    let sOrderBy = 'ORDER BY playlistName, playlistId, lessonOrder';
-    if (sMostViewed != "" && sMostViewed.toLowerCase() == "true") {
-        sOrderBy = 'ORDER BY playlistViews DESC, playlistId, lessonOrder';
+    let sMyOrderBy = '';
+    if (sOrderBy != "" && sOrderBy.toLowerCase() != "null") {
+        sMyOrderBy = sOrderBy + `, `;
     }
+
+    let sMyMostViewed = '';
+    if (sMostViewed != "" && sMostViewed.toLowerCase() == "true") {
+        sMyMostViewed = 'playlistViews DESC, ';
+    }
+
+    let sQryOrderBy = `ORDER BY ${sMyMostViewed} ${sMyOrderBy} playlistName, playlistId, lessonOrder`;
 
 
     let qry = `SELECT p.playlistId, p.name as playlistName, p.description as playlistDescription, log.qtd as playlistViews,
@@ -48,7 +57,7 @@ exports.getPlaylists = (req, res) => {
                                    GROUP BY playlistId 
                                  ) log ON ( p.playlistId = log.playlistId )                      
                 ${sWhere}                           
-                ${sOrderBy} `;
+                ${sQryOrderBy} `;
 
     pivotPoolDb.then(pool => {
         pool.query(qry)

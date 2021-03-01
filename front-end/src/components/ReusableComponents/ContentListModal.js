@@ -18,32 +18,82 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ContentListModal = ({ open, close, type, renewData }) => {
+const ContentListModal = ({
+  open,
+  close,
+  type,
+  renewData,
+  results,
+  exData,
+}) => {
   const classes = useStyles();
 
-  //   const [checked, setChecked] = useState(false);
   const [newLessonArr, setNewLessonArr] = useState([]);
+  const [newPlaylistArr, setNewPlaylistArr] = useState([]);
+  const [deletedItem, setDeletedItem] = useState("");
 
   const handleCheckedElement = (e, checked) => {
+    // if (type === "playlist") {
     let checkedList = newLessonArr;
-    checkedList.forEach((lesson) =>
-      lesson.title === e.target.alt ? (lesson.isChecked = checked) : lesson
-    );
 
-    console.log("inside handleCheckedElem", newLessonArr);
+    console.log(checked, e.target.alt);
+
+    type === "playlist"
+      ? checkedList.map((lesson) =>
+          lesson.lessonId == e.target.alt
+            ? (lesson.isChecked = checked)
+            : lesson
+        )
+      : checkedList.map((playlist) =>
+          playlist.playlistId == e.target.alt
+            ? (playlist.isChecked = checked)
+            : playlist
+        );
+
+    if (checked === false) {
+      renewData(checkedList, e.target.alt);
+    } else {
+      renewData(checkedList, null);
+    }
+
     setNewLessonArr(checkedList);
-    renewData(checkedList);
   };
 
   useEffect(() => {
-    const newArr = lessons.map((lesson) => {
-      return {
-        ...lesson,
-        isChecked: false,
-      };
-    });
-    setNewLessonArr(newArr);
-  }, []);
+    if (type === "playlist") {
+      console.log("playlist results", results);
+      let sortedLessonArr = results.map((result) => {
+        let check = exData.some(
+          (lesson) => result.lessonId === lesson.lessonId
+        );
+
+        if (check) {
+          return { ...result, isChecked: true };
+        } else {
+          return { ...result, isChecked: false };
+        }
+      });
+
+      setNewLessonArr(sortedLessonArr);
+    } else {
+      console.log("exData", exData);
+      let sortedPlaylistArr = results.map((result) => {
+        let check = exData.some(
+          (playlist) => result.playlistId === playlist.playlistId
+        );
+
+        if (check) {
+          return { ...result, isChecked: true };
+        } else {
+          return { ...result, isChecked: false };
+        }
+      });
+
+      console.log("sortedPalylist", sortedPlaylistArr);
+      //   setNewPlaylistArr(sortedPlaylistArr);
+      setNewLessonArr(sortedPlaylistArr);
+    }
+  }, [results, exData]);
 
   return (
     <div>
@@ -73,16 +123,29 @@ const ContentListModal = ({ open, close, type, renewData }) => {
 
             <ContentList>
               {newLessonArr
-                ? newLessonArr.map((video, index) => (
-                    <ContentImageTitle
-                      img={video.img}
-                      title={video.title}
-                      onClick={handleCheckedElement}
-                      checked={video.isChecked}
-                      key={index}
-                      index={index}
-                    />
-                  ))
+                ? type === "playlist"
+                  ? newLessonArr.map((video, index) => (
+                      <ContentImageTitle
+                        img={video.imageFile}
+                        title={video.lessonName}
+                        id={video.lessonId}
+                        onClick={handleCheckedElement}
+                        checked={video.isChecked}
+                        key={index}
+                        index={index}
+                      />
+                    ))
+                  : newLessonArr.map((playlist, index) => (
+                      <ContentImageTitle
+                        img={playlist.playlistImageFile}
+                        title={playlist.playlistName}
+                        id={playlist.playlistId}
+                        onClick={handleCheckedElement}
+                        checked={playlist.isChecked}
+                        key={index}
+                        index={index}
+                      />
+                    ))
                 : null}
             </ContentList>
           </ModalContent>

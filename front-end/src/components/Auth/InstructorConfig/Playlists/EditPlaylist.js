@@ -12,7 +12,11 @@ const EditPlaylist = (props) => {
   return (
     <div style={styles.container}>
       Edit Playlist: {playlistData.playlistName}
-      <CreateContentList type={"edit"} contentType={"playlist"} />
+      <CreateContentList
+        type={"edit"}
+        contentsType={"playlist"}
+        data={playlistData}
+      />
     </div>
   );
 };

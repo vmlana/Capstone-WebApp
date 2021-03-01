@@ -35,14 +35,27 @@ exports.getSearch = (req, res) => {
                     UNION
 
                     SELECT 'Programs' AS origin,
-                           g.groupBaseId AS itemId, g.name AS itemName, null AS itemDescription,
-                           null as instructorName, null as instructorId, null as instructorImage, null as itemImage
+                           g.groupBaseId AS itemId, g.name AS itemName, pi.playlistDescription AS itemDescription,
+                           pi.instructorName as instructorName, pi.instructorId as instructorId, pi.instructorImage as instructorImage, pi.playlistImage as itemImage
                       FROM groupBase g
                            INNER JOIN companyPrograms cp ON (cp.groupBaseId = g.groupBaseId)
                            INNER JOIN employees e ON (cp.companyId = e.companyId)
                            INNER JOIN users u ON (e.employeeId = u.employeeId AND e.companyId = u.companyId)
                            INNER JOIN workDepartments w ON (e.workDepartmentId = w.workDepartmentId)
                            INNER JOIN companyProgramXworkDepartment pw ON (pw.groupBaseId = g.groupBaseId AND pw.workDepartmentId = e.workDepartmentId)       
+                           INNER JOIN (SELECT groupBaseId, MIN(playlistId) as playlistId 
+                                         FROM groupBasePlaylists x
+                                        GROUP BY groupBaseId ) gp ON (g.groupBaseId = gp.groupBaseId)
+                           INNER JOIN (SELECT p.playlistId AS playlistId, p.name AS itemName, p.description AS playlistDescription, l.name as instructorName, 
+                                              p.instructorId, l.imageFile as instructorImage, pxi.imageFile AS playlistImage
+                                         FROM playlists p
+                                              INNER JOIN instructors i  ON (p.instructorId = i.instructorId)
+                                              INNER JOIN login l ON (i.instructorId = l.loginId)  
+                                              INNER JOIN ( SELECT pl.playlistId, MIN(l.imageFile) as imageFile
+                                                             FROM playlistLessons pl 
+                                                                  INNER JOIN lessons l ON (pl.lessonId = l.lessonId)
+                                                            GROUP BY pl.playlistId ) pxi ON (p.playlistId = pxi.playlistId)   
+                                       ) pi ON (gp.playlistId = pi.playlistId)                              
                      WHERE u.userId = ${sUserId}
                        AND LOWER(g.name) LIKE "%${skeyWord}%" 
 
@@ -70,30 +83,61 @@ exports.getSearch = (req, res) => {
                     if (results.length == 0) {
                         res.status(404).send("No Record Found");
                     } else {
-                        let vPlaylists = [];
-                        let vPrograms  = [];
-                        let vBlogs     = [];
+                        let vPlaylists   = [];
+                        let vPrograms    = [];
+                        let vBlogs       = [];
+                        let vInstructors = [];
+                        let myRecord     = {};
                         results.forEach(result => {
-                            let myRecord = {
-                                itemId: result.itemId,
-                                itemName: result.itemName,
-                                itemDescription: result.itemDescription,
-                                instructorName: result.instructorName,
-                                instructorId: result.instructorId,
-                                instructorImage: result.instructorImage,
-                                itemImage: result.itemImage                                   
-                            };
                             if (result.origin == 'Playlists') {
+                                myRecord = {
+                                    playlistId: result.itemId,
+                                    playlistName: result.itemName,
+                                    playlistDescription: result.itemDescription,
+                                    playlistImage: result.itemImage,                                       
+                                    instructorName: result.instructorName,
+                                    instructorId: result.instructorId,
+                                    instructorImage: result.instructorImage
+                                };                                
                                 vPlaylists.push(myRecord)
                             } else if (result.origin == 'Programs') {
+                                myRecord = {
+                                    programId: result.itemId,
+                                    programName: result.itemName,
+                                    programDescription: result.itemDescription,
+                                    programImageFile: result.itemImage,                                       
+                                    instructorName: result.instructorName,
+                                    instructorId: result.instructorId,
+                                    instructorImage: result.instructorImage
+                                };                                   
                                 vPrograms.push(myRecord)
                             } else if (result.origin == 'Blogs') {
+                                myRecord = {
+                                    blogId: result.itemId,
+                                    blogName: result.itemName,
+                                    blogDescription: result.itemDescription,
+                                    blogImageFile: result.itemImage,                                       
+                                    instructorName: result.instructorName,
+                                    instructorId: result.instructorId,
+                                    instructorImage: result.instructorImage
+                                };                                  
                                 vBlogs.push(myRecord)
+                            }
+
+                            let obj = vInstructors.find(o => o.instructorId === result.instructorId);
+                            if (obj==undefined) {
+                                myRecord = {
+                                    instructorName: result.instructorName,
+                                    instructorId: result.instructorId,
+                                    instructorImage: result.instructorImage
+                                };                                
+                                vInstructors.push(myRecord)                                
                             }
                         });
 
                         let myResult = {
                             keyword: skeyWord,
+                            instructors: vInstructors,
                             playlists: vPlaylists,
                             programs: vPrograms,
                             blogs: vBlogs

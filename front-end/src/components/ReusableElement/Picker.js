@@ -44,7 +44,7 @@ const Picker = ({ label, option, onChange }) => {
                     {item.level}
                   </MenuItem>
                 ) : label === "Category" ? (
-                  <MenuItem key={key} value={item.name}>
+                  <MenuItem key={key} value={item.categoryId}>
                     {item.name}
                   </MenuItem>
                 ) : (

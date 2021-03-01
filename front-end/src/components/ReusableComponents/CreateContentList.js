@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 
 import ContentListModal from "./ContentListModal";
-import ContentImageTitle from "./ContentImageTitle";
 import InputWithLabel from "../ReusableElement/InputWithLabel";
 import Picker from "../ReusableElement/Picker";
 import DatePicker from "../ReusableElement/DatePicker";
@@ -11,8 +10,13 @@ import Button from "../ReusableElement/Button";
 import TextField from "@material-ui/core/TextField";
 
 import { levels, categories, depts } from "../../demoData";
+import {
+  getCategories,
+  getPlaylistsByCategoryId,
+  getLessonsByCategoryId,
+} from "../Auth/Api/api";
 
-const CreateContentList = ({ contentType, type }) => {
+const CreateContentList = ({ contentsType, type, data }) => {
   const [open, setOpen] = useState(false);
   const [selectedData, setSelectedData] = useState([]);
   const [listName, setListName] = useState("");
@@ -20,6 +24,13 @@ const CreateContentList = ({ contentType, type }) => {
   const [freq, setFreq] = useState("");
   const [deptArr, setDeptArr] = useState([]);
   const [deptSwitch, setDeptSwitch] = useState(false);
+  const [cat, setCat] = useState("");
+  const [catLists, setCatLists] = useState([]);
+  const [level, setLevel] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [finalData, setFinalData] = useState([]);
+  const [contentType, setContentType] = useState("");
 
   const handleOpen = () => {
     setOpen(true);
@@ -33,9 +44,33 @@ const CreateContentList = ({ contentType, type }) => {
     e.preventDefault();
   };
 
-  const renewDataArray = (dataArr) => {
+  const renewDataArray = (dataArr, deletedId) => {
     let newArr = dataArr.filter((data) => data.isChecked === true);
-    setSelectedData(newArr);
+    let concatArr = selectedData.concat(newArr);
+    console.log("dataArr", dataArr);
+    console.log("new", newArr);
+    console.log("concat", concatArr);
+    const uniqueLessons =
+      contentType === "playlist"
+        ? [
+            ...concatArr
+              .reduce((map, obj) => map.set(obj.lessonId, obj), new Map())
+              .values(),
+          ]
+        : [
+            ...concatArr
+              .reduce((map, obj) => map.set(obj.playlistId, obj), new Map())
+              .values(),
+          ];
+
+    const finalFilteredData =
+      contentType === "playlist"
+        ? uniqueLessons.filter((item) => item.lessonId != deletedId)
+        : uniqueLessons.filter((item) => item.playlistId != deletedId);
+
+    console.log("final", finalFilteredData);
+
+    setSelectedData(finalFilteredData);
   };
 
   const addDeptData = (deptName) => {
@@ -59,13 +94,53 @@ const CreateContentList = ({ contentType, type }) => {
     setFreq(e.target.value);
   };
 
-  console.log("dept arr", deptArr);
-  useEffect(() => {}, [deptSwitch]);
+  const onCatClick = (val) => {
+    setCat(val);
+  };
+  const onLevelClick = (val) => {
+    setLevel(val);
+  };
+
+  //   const getDeletedItem = (itemId) => {
+  //     setDeletedItem(itemId);
+  //   };
+
+  useEffect(() => {
+    if (contentsType === "playlist") {
+      if (type === "edit") {
+        setSelectedData(data.lessons);
+        setContentType("playlist");
+      } else {
+        setSelectedData([]);
+        setContentType("playlist");
+      }
+    } else {
+      if (type === "edit") {
+        setSelectedData(data.playlists);
+        setContentType("program");
+      } else {
+        setSelectedData([]);
+        setContentType("program");
+      }
+    }
+
+    getCategories().then((result) => setCatLists(result));
+  }, []);
+
+  useEffect(() => {
+    contentsType === "playlist"
+      ? getLessonsByCategoryId(cat).then((result) => setSearchResults(result))
+      : getPlaylistsByCategoryId(cat).then((result) =>
+          setSearchResults(result)
+        );
+  }, [cat]);
 
   const filteredDeptArr =
     deptArr.length > 0
       ? deptArr.filter((item, index) => deptArr.indexOf(item) === index)
       : null;
+
+  console.log("selectedData to return", selectedData);
 
   return (
     <div>
@@ -114,31 +189,60 @@ const CreateContentList = ({ contentType, type }) => {
             />
           )}
           <div style={styles.picker}>
-            <Picker label={"Category"} option={categories} />
-            <Picker label={"Level"} option={levels} />
+            {catLists.length > 0 ? (
+              <Picker
+                label={"Category"}
+                option={catLists}
+                onChange={onCatClick}
+              />
+            ) : null}
+
+            <Picker label={"Level"} option={levels} onChange={onLevelClick} />
             <Button
               text={"See available Lessons"}
               type={"modal"}
               onClick={handleOpen}
             />
           </div>
-          <ContentListModal
-            open={open}
-            close={handleClose}
-            type={"playlist"}
-            renewData={renewDataArray}
-          />
+
+          {searchResults !== undefined ? (
+            <ContentListModal
+              open={open}
+              close={handleClose}
+              type={contentType}
+              renewData={renewDataArray}
+              results={searchResults}
+              exData={selectedData}
+            />
+          ) : (
+            <p>No match </p>
+          )}
+
           <div>
             <p>Playlists</p>
             <div style={styles.contentList}>
-              {selectedData.map((data) => (
-                <div style={styles.addedContentList}>
-                  <div>
-                    <img src={data.img} alt={data.title} />
-                  </div>
-                  <span>{data.title}</span>
-                </div>
-              ))}
+              {selectedData.length === 0
+                ? null
+                : contentType === "playlist"
+                ? selectedData.map((data) => (
+                    <div style={styles.addedContentList}>
+                      <div>
+                        <img src={data.videoFile} alt={data.lessonName} />
+                      </div>
+                      <span>{data.lessonName}</span>
+                    </div>
+                  ))
+                : selectedData.map((data) => (
+                    <div style={styles.addedContentList}>
+                      <div>
+                        <img
+                          src={data.playlistImageFile}
+                          alt={data.playlistName}
+                        />
+                      </div>
+                      <span>{data.playlistName}</span>
+                    </div>
+                  ))}
             </div>
           </div>
         </div>
@@ -216,6 +320,7 @@ const styles = {
     border: "1px solid black",
     minHeight: "300px",
     padding: "1rem",
+    overFlow: "hidden",
   },
   addedContentList: {
     // margin: "1rem",
