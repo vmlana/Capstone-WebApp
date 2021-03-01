@@ -1,4 +1,4 @@
-exports.s3UploadHandler = async (file, token) => {
+export const s3UploadHandler = async (file, token) => {
     
     // Split the filename to get the name and type
     let fileParts = file.name.split('.');
@@ -53,7 +53,7 @@ exports.s3UploadHandler = async (file, token) => {
     })
 }
 
-exports.s3UploadHandlerListeningProgress = async (file, token, progressCallback) => {
+export const s3UploadHandlerListeningProgress = async (file, token, progressCallback) => {
     const xhr = new XMLHttpRequest();
 
     // Split the filename to get the name and type
@@ -123,7 +123,7 @@ exports.s3UploadHandlerListeningProgress = async (file, token, progressCallback)
     }
 }
 
-exports.s3DeleteHandler = async (filePath, token) => {
+export const s3DeleteHandler = async (filePath, token) => {
 
     const result = await fetch("http://localhost:3000/api/v1/s3storage",
     {
