@@ -1,15 +1,15 @@
 import React from "react";
 import styled from "styled-components";
 
-const Button = ({ text, onClick, type }) =>
+const Button = ({ text, onClick, type, size }) =>
   type === "modal" ? (
     <ButtonElement onClick={onClick}>{text}</ButtonElement>
   ) : (
-    <ButtonElement>{text}</ButtonElement>
+    <ButtonElement size={size}>{text}</ButtonElement>
   );
 
 const ButtonElement = styled.button`
-  padding: 0.5rem 3rem;
+  padding: ${({ size }) => (size === "med" ? "1rem 3rem" : ".5rem 3rem")};
   display: block;
   background-color: grey;
   color: white;

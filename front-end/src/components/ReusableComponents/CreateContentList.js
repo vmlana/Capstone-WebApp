@@ -14,7 +14,30 @@ import {
   getCategories,
   getPlaylistsByCategoryId,
   getLessonsByCategoryId,
+  createPlaylist,
 } from "../Auth/Api/api";
+
+// {
+//     "action" : "upd",
+//     "playlistId": 2,
+//     "playlistName": "Stretch for Beginners",
+//     "playlistDescription": "This is another daily sequences for intermediate level",
+//     "playlistLevel": "B",
+//     "categoryId": 3,
+//     "instructorId": 2,
+//     "active": 1,
+//     "lessons": [
+//         {
+//             "lessonId": 1
+//         },
+//         {
+//             "lessonId": 2
+//         },
+//         {
+//             "lessonId": 3
+//         }
+//     ]
+// }
 
 const CreateContentList = ({ contentsType, type, data }) => {
   const [open, setOpen] = useState(false);
@@ -32,6 +55,8 @@ const CreateContentList = ({ contentsType, type, data }) => {
   const [finalData, setFinalData] = useState([]);
   const [contentType, setContentType] = useState("");
 
+  console.log(data);
+
   const handleOpen = () => {
     setOpen(true);
   };
@@ -47,9 +72,9 @@ const CreateContentList = ({ contentsType, type, data }) => {
   const renewDataArray = (dataArr, deletedId) => {
     let newArr = dataArr.filter((data) => data.isChecked === true);
     let concatArr = selectedData.concat(newArr);
-    console.log("dataArr", dataArr);
-    console.log("new", newArr);
-    console.log("concat", concatArr);
+    // console.log("dataArr", dataArr);
+    // console.log("new", newArr);
+    // console.log("concat", concatArr);
     const uniqueLessons =
       contentType === "playlist"
         ? [
@@ -67,8 +92,6 @@ const CreateContentList = ({ contentsType, type, data }) => {
       contentType === "playlist"
         ? uniqueLessons.filter((item) => item.lessonId != deletedId)
         : uniqueLessons.filter((item) => item.playlistId != deletedId);
-
-    console.log("final", finalFilteredData);
 
     setSelectedData(finalFilteredData);
   };
@@ -101,15 +124,13 @@ const CreateContentList = ({ contentsType, type, data }) => {
     setLevel(val);
   };
 
-  //   const getDeletedItem = (itemId) => {
-  //     setDeletedItem(itemId);
-  //   };
-
   useEffect(() => {
     if (contentsType === "playlist") {
       if (type === "edit") {
         setSelectedData(data.lessons);
         setContentType("playlist");
+        setListName(data.playlistName);
+        setListDescription(data.playlistDescription);
       } else {
         setSelectedData([]);
         setContentType("playlist");
@@ -139,8 +160,6 @@ const CreateContentList = ({ contentsType, type, data }) => {
     deptArr.length > 0
       ? deptArr.filter((item, index) => deptArr.indexOf(item) === index)
       : null;
-
-  console.log("selectedData to return", selectedData);
 
   return (
     <div>
@@ -175,7 +194,7 @@ const CreateContentList = ({ contentsType, type, data }) => {
       )}
       <div style={styles.biggerContainer}>
         <div>
-          {type === "playlist" ? (
+          {contentType === "playlist" ? (
             <InputWithLabel
               label={"Playlist Name"}
               onChange={listNameChange}
@@ -245,7 +264,12 @@ const CreateContentList = ({ contentsType, type, data }) => {
                   ))}
             </div>
           </div>
+          <div style={styles.actionBtns}>
+            <Button text={"Save"} size={"med"} />
+            <Button text={"Delete"} size={"med"} />
+          </div>
         </div>
+
         {contentType === "playlist" ? (
           <div style={styles.descContainer}>
             <p>Insert Your Description for the playlist</p>
@@ -338,14 +362,15 @@ const styles = {
     justifySelf: "center",
   },
   dateNumberPickerContainer: {
-    // display: "flex",
-    // justifyContent: "flex-start",
-    // alignItems: "center",
-    // flexWrap: "wrap",
     display: "grid",
     gridTemplateColumns: "repeat(3, 1fr)",
     alignItems: "center",
     gridGap: "1rem",
+  },
+  actionBtns: {
+    display: "flex",
+    justifyContent: "space-between",
+    marginTop: "3rem",
   },
 };
 
