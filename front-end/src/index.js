@@ -7,7 +7,6 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from './redux/store'
 
-import './sass/style.scss';
 import ScrollToTop from './components/Common/scroll-to-top';
 
 ReactDOM.render(
