@@ -61,7 +61,6 @@ const ContentListModal = ({
 
   useEffect(() => {
     if (type === "playlist") {
-      console.log("playlist results", results);
       let sortedLessonArr = results.map((result) => {
         let check = exData.some(
           (lesson) => result.lessonId === lesson.lessonId

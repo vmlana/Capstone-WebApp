@@ -56,3 +56,17 @@ export const createLesson = async (lessonData) => {
     .catch((error) => console.error(error));
   return newLesson;
 };
+
+export const createPlaylist = async (playlistData) => {
+  return JSON.stringify(playlistData);
+  const newPlaylist = await fetch(`${API_URL}/updplaylist`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(playlistData),
+  })
+    .then((response) => response.json())
+    .catch((error) => console.error(error));
+  return newPlaylist;
+};
