@@ -8,7 +8,10 @@ const validateLevel = value => {
     if (
         value === "B" ||
         value === "I" ||
-        value === "A" 
+        value === "A" ||
+        value === "Beginner" ||
+        value === "Intermediate" ||
+        value === "Advanced" 
     ) {
         return true;
     } else {
