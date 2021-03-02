@@ -19,7 +19,7 @@ exports.getSearch = (req, res) => {
 
         let qry = `SELECT 'Playlists' AS origin,
                           p.playlistId AS itemId, p.name AS itemName, p.description AS itemDescription, l.name as instructorName, 
-                          p.instructorId, l.imageFile as instructorImage, pi.imageFile AS itemImage, i.resume
+                          p.instructorId, l.imageFile as instructorImage, pi.imageFile AS itemImage, i.resume, null as itemDate
                      FROM playlists p
                           INNER JOIN instructors i  ON (p.instructorId = i.instructorId)
                           INNER JOIN login l ON (i.instructorId = l.loginId)  
@@ -37,7 +37,7 @@ exports.getSearch = (req, res) => {
                     SELECT 'Programs' AS origin,
                            g.groupBaseId AS itemId, g.name AS itemName, pi.playlistDescription AS itemDescription, 
                            pi.instructorName as instructorName, pi.instructorId as instructorId, pi.instructorImage as instructorImage, 
-                           pi.playlistImage as itemImage, pi.resume
+                           pi.playlistImage as itemImage, pi.resume, null as itemDate
                       FROM groupBase g
                            INNER JOIN companyPrograms cp ON (cp.groupBaseId = g.groupBaseId)
                            INNER JOIN employees e ON (cp.companyId = e.companyId)
@@ -64,7 +64,7 @@ exports.getSearch = (req, res) => {
 
                     SELECT 'Blogs' AS origin,
                            b.blogId AS itemId, b.title AS itemName, content AS itemDescription, l.name as instructorName, 
-                           b.instructorId, l.imageFile as instructorImage, b.imageFileThumb as itemImage, i.resume   
+                           b.instructorId, l.imageFile as instructorImage, b.imageFileThumb as itemImage, i.resume, DATE_FORMAT(b.postDate, "%b %d %Y") as itemDate   
                       FROM blogs b
                            INNER JOIN instructors i  ON (b.instructorId = i.instructorId)
                            INNER JOIN login l ON (i.instructorId = l.loginId)
@@ -118,6 +118,7 @@ exports.getSearch = (req, res) => {
                                     blogName: result.itemName,
                                     blogDescription: result.itemDescription,
                                     blogImageFile: result.itemImage,                                       
+                                    blogPostDate: result.itemDate,
                                     instructorName: result.instructorName,
                                     instructorId: result.instructorId,
                                     instructorImage: result.instructorImage
