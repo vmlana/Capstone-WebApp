@@ -144,10 +144,12 @@ exports.updPlaylist = (req, res) => {
             let sPlaylistId = pivotDb.escape(objPlaylist.playlistId).replace(/['']+/g, '');
             let sAction = pivotDb.escape(objPlaylist.action).replace(/['']+/g, '');
 
+            let sLevel = objPlaylist.playlistLevel[0].toUpperCase();
+
             if (sAction.toLowerCase() == 'add') {
                 qry = `INSERT INTO playlists (name, description, categoryId, instructorId, level, active) 
                             VALUES ("${objPlaylist.playlistName}", "${objPlaylist.playlistDescription}", ${objPlaylist.categoryId},
-                                     ${objPlaylist.instructorId}, "${objPlaylist.playlistLevel}", ${objPlaylist.active} ) `;
+                                     ${objPlaylist.instructorId}, "${sLevel}", ${objPlaylist.active} ) `;
             } else if (sAction.toLowerCase() == 'del') {
                 qry = `DELETE FROM playlistLessons WHERE playlistId = ${sPlaylistId} `;
             } else {
@@ -166,7 +168,7 @@ exports.updPlaylist = (req, res) => {
                         sSet = sSet + `description = "${objPlaylist.playlistDescription}", `;
                     }
                     if (objPlaylist.playlistLevel != undefined) {
-                        sSet = sSet + `level = "${objPlaylist.playlistLevel}", `;
+                        sSet = sSet + `level = "${sLevel}", `;
                     }
                     if (objPlaylist.active != undefined) {
                         sSet = sSet + `active = "${objPlaylist.active}", `;
