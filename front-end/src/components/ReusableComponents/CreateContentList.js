@@ -50,6 +50,8 @@ const CreateContentList = ({ contentsType, type, data }) => {
   const [cat, setCat] = useState("");
   const [catLists, setCatLists] = useState([]);
   const [level, setLevel] = useState("");
+  const [catSet, setCatSet] = useState("");
+  const [levelSet, setLevelSet] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [finalData, setFinalData] = useState([]);
@@ -72,9 +74,6 @@ const CreateContentList = ({ contentsType, type, data }) => {
   const renewDataArray = (dataArr, deletedId) => {
     let newArr = dataArr.filter((data) => data.isChecked === true);
     let concatArr = selectedData.concat(newArr);
-    // console.log("dataArr", dataArr);
-    // console.log("new", newArr);
-    // console.log("concat", concatArr);
     const uniqueLessons =
       contentType === "playlist"
         ? [
@@ -124,6 +123,13 @@ const CreateContentList = ({ contentsType, type, data }) => {
     setLevel(val);
   };
 
+  const onCatSetClick = (id) => {
+    setCatSet(id);
+  };
+  const onLevelSetClick = (val) => {
+    setLevelSet(val);
+  };
+
   const sendDataToServer = () => {
     const dataToSend = {
       ...data,
@@ -131,21 +137,30 @@ const CreateContentList = ({ contentsType, type, data }) => {
       lessons: selectedData,
       playlistDescription: listDescription,
       playlistName: listName,
+      playlistLevel: levelSet,
+      categoryId: catSet,
+      active: 1,
     };
 
-    if (contentType === "edit") {
-      createPlaylist(dataToSend);
-    }
+    // if (contentType === "edit") {
+    //   createPlaylist(dataToSend);
+    //   console.log("datatisend", dataToSend);
+    // }
+    console.log("called");
+    createPlaylist(dataToSend);
   };
 
   //   const dataToSend = {
   //     ...data,
+  //     action: "upd",
   //     lessons: selectedData,
   //     playlistDescription: listDescription,
   //     playlistName: listName,
+  //     playlistLevel: levelSet,
+  //     categoryId: catSet,
+  //     active: 1,
   //   };
-
-  //   console.log("dataToSend", dataToSend);
+  //   console.log("datatisend", dataToSend);
 
   useEffect(() => {
     if (contentsType === "playlist") {
@@ -154,6 +169,8 @@ const CreateContentList = ({ contentsType, type, data }) => {
         setContentType("playlist");
         setListName(data.playlistName);
         setListDescription(data.playlistDescription);
+        setCatSet(data.categoryId);
+        setLevelSet(data.playlistLevel);
       } else {
         setSelectedData([]);
         setContentType("playlist");
@@ -162,11 +179,15 @@ const CreateContentList = ({ contentsType, type, data }) => {
       if (type === "edit") {
         setSelectedData(data.playlists);
         setContentType("program");
+        setCatSet(data.categoryId);
+        setLevelSet(data.playlistLevel);
       } else {
         setSelectedData([]);
         setContentType("program");
       }
     }
+
+    console.log(data);
 
     getCategories().then((result) => setCatLists(result));
   }, []);
@@ -236,10 +257,18 @@ const CreateContentList = ({ contentsType, type, data }) => {
                 label={"Category"}
                 option={catLists}
                 onChange={onCatClick}
+                purpose={"search"}
+                type={"cat"}
               />
             ) : null}
 
-            <Picker label={"Level"} option={levels} onChange={onLevelClick} />
+            <Picker
+              label={"Level"}
+              option={levels}
+              onChange={onLevelClick}
+              purpose={"search"}
+              type={"level"}
+            />
             <Button
               text={"See available Lessons"}
               type={"modal"}
@@ -295,6 +324,23 @@ const CreateContentList = ({ contentsType, type, data }) => {
 
         {contentType === "playlist" ? (
           <div style={styles.descContainer}>
+            <Picker
+              label={"Set Category"}
+              option={catLists}
+              exValue={catSet}
+              onChange={onCatSetClick}
+              purpose={"set"}
+              type={"cat"}
+            />
+            {console.log("levelset", levelSet)}
+            <Picker
+              label={"Set Level"}
+              option={levels}
+              exValue={levelSet}
+              onChange={onLevelSetClick}
+              purpose={"set"}
+              type={"level"}
+            />
             <p>Insert Your Description for the playlist</p>
             <textarea
               value={listDescription}
