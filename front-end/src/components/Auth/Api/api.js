@@ -59,6 +59,7 @@ export const createLesson = async (lessonData) => {
 
 export const createPlaylist = async (playlistData) => {
   return JSON.stringify(playlistData);
+
   const newPlaylist = await fetch(`${API_URL}/updplaylist`, {
     method: "POST",
     headers: {
@@ -68,5 +69,6 @@ export const createPlaylist = async (playlistData) => {
   })
     .then((response) => response.json())
     .catch((error) => console.error(error));
+
   return newPlaylist;
 };
