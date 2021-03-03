@@ -12,6 +12,7 @@ const {getUser, updUser} = require("../controllers/userController.js");
 const {getLessons, updLesson} = require("../controllers/lessonController.js");
 const {getPlaylists, updPlaylist} = require("../controllers/playlistController.js");
 const {getPrograms} = require("../controllers/programController.js");
+const {getBlogs} = require("../controllers/blogController.js");
 const {postS3Storage, deleteS3Storage} = require("../controllers/s3StorageController");
 
 // Import validator
@@ -35,6 +36,7 @@ router
     .get("/programs", getPrograms)       
     .get("/playlists", getPlaylists)
     .get("/lessons", getLessons)    
+    .get("/blogs", getBlogs)      
     .get("/search", getSearch)    
     .post("/updlesson", lessonValidation, updLesson)        
     .post("/updplaylist", playlistValidation, updPlaylist)            
