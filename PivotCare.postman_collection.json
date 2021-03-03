@@ -69,6 +69,38 @@
 			"response": []
 		},
 		{
+			"name": "blogs",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/blogs?blogId=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"blogs"
+					],
+					"query": [
+						{
+							"key": "blogId",
+							"value": "1"
+						},
+						{
+							"key": "instructorId",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "cities",
 			"request": {
 				"method": "GET",
@@ -197,7 +229,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/api/v1/playlists?instructorId=2&categoryId=3&playlistId=2&mostViewed=true",
+					"raw": "http://localhost:3000/api/v1/playlists?instructorId=2&categoryId=3&playlistId=2&mostViewed=true&orderby=playlistLevel, categoryName",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -224,6 +256,10 @@
 						{
 							"key": "mostViewed",
 							"value": "true"
+						},
+						{
+							"key": "orderby",
+							"value": "playlistLevel, categoryName"
 						}
 					]
 				}
