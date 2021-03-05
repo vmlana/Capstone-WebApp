@@ -44,7 +44,7 @@ export const getProgramsByCompanyId = async (companyId) => {
 };
 
 export const createLesson = async (lessonData) => {
-  return JSON.stringify(lessonData);
+  // console.log(lessonData);
   const newLesson = await fetch(`${API_URL}/updlesson`, {
     method: "POST",
     headers: {
