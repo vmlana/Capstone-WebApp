@@ -18,7 +18,7 @@ const ViewContainer = ({ viewData, data }) => {
                 {
                     viewData.pageName == 'Program' ?
                         data.map((result) => {
-                            return <ContentBox /* src="../media/images/dummy.jpg" */ src={result.playlists[0].lessons[0].videoFile} title={result.programName} key={result.programId} redirectURI={`edit-program/${viewData.companyId}/${result.programId}`} DataContent={result} />
+                            return <ContentBox src={result.playlists[0].lessons[0].imageFile} title={result.programName} key={result.programId} redirectURI={`edit-program/${viewData.companyId}/${result.programId}`} DataContent={result} />
                         })
                         :
                         null
@@ -27,7 +27,7 @@ const ViewContainer = ({ viewData, data }) => {
                 {
                     viewData.pageName == 'Playlist' ?
                         data.map((result) => {
-                            return <ContentBox src={result.lessons[0].videoFile} title={result.playlistName} key={result.playlistId} redirectURI={`edit-playlist/${viewData.instructorId}/${result.playlistId}`} DataContent={result} />
+                            return <ContentBox src={result.lessons[0].imageFile} title={result.playlistName} key={result.playlistId} redirectURI={`edit-playlist/${viewData.instructorId}/${result.playlistId}`} DataContent={result} />
                         })
                         :
                         null
@@ -36,8 +36,8 @@ const ViewContainer = ({ viewData, data }) => {
                 {
                     viewData.pageName == 'Lesson' ?
                         data.map((result) => {
-                            // console.log(result.videoFile)
-                            return <ContentBox src={result.videoFile} title={result.lessonName} key={result.lessonId} redirectURI={`edit-lesson/${viewData.instructorId}/${result.lessonId}`} DataContent={result} />
+                            // console.log(result.imageFile)
+                            return <ContentBox src={result.imageFile} title={result.lessonName} key={result.lessonId} redirectURI={`edit-lesson/${viewData.instructorId}/${result.lessonId}`} DataContent={result} />
                         })
                         :
                         null
