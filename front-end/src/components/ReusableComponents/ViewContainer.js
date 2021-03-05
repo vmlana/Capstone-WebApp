@@ -36,7 +36,7 @@ const ViewContainer = ({ viewData, data }) => {
                 {
                     viewData.pageName == 'Lesson' ?
                         data.map((result) => {
-                            console.log(result.videoFile)
+                            // console.log(result.videoFile)
                             return <ContentBox src={result.videoFile} title={result.lessonName} key={result.lessonId} redirectURI={`edit-lesson/${viewData.instructorId}/${result.lessonId}`} DataContent={result} />
                         })
                         :

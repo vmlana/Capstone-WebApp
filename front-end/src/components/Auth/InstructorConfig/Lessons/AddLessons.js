@@ -3,6 +3,8 @@ import styled from "styled-components";
 import Dropzone, { defaultClassNames } from 'react-dropzone-uploader'
 import { s3UploadHandlerListeningProgress } from '../../../../services/s3Handler';
 import { getCategories, createLesson } from '../../Api/api'
+import { useHistory } from "react-router-dom";
+import FileUploadThumbnail from 'file-upload-thumbnail'
 
 // Reusable Components
 import Button from '../../../ReusableElement/Button';
@@ -27,6 +29,7 @@ const Layout = ({ input, previews, submitButton, dropzoneProps, files, extra: { 
 }
 
 const AddLessons = () => {
+    const history = useHistory();
     const [categories, setCategories] = useState([]);
     const [lesson, setLesson] = useState({
         action: 'add',
@@ -35,15 +38,30 @@ const AddLessons = () => {
         description: '',
         imageFile: '',
         videoFile: '',
+        videoDuration: 0,
         instructorId: 2
     });
 
     // File Upload
+    const [btnActive, setBtnActive] = useState(false);
     const [success, setSuccess] = useState(false);
     const [urls, setUrls] = useState('');
     const [uploadInput, setUploadInput] = useState([]);
+    const [imageFileInput, setImageFile] = useState('')
     const [isUploading, setIsUploading] = useState(false);
     const [uploadingProgress, setUploadingProgress] = useState(0);
+
+    function dataURItoBlob(dataURI) {
+        var mime = dataURI.split(',')[0].split(':')[1].split(';')[0];
+        var binary = atob(dataURI.split(',')[1]);
+        var array = [];
+        for (var i = 0; i < binary.length; i++) {
+            array.push(binary.charCodeAt(i));
+        }
+
+        var toFile = new File([new Uint8Array(array)], lesson.instructorId + '.png', { type: mime, lastModifiedDate: Date.now() });
+        return toFile;
+    }
 
     const handleChange = (ev) => {
         setSuccess(false);
@@ -53,7 +71,7 @@ const AddLessons = () => {
     const Success_message = () => (
         <div style={{ padding: 15 }}>
             <h3 style={{ color: 'green' }}>SUCCESSFUL UPLOAD</h3>
-            <div><a href={urls} target="_blank">{urls}</a></div>
+            {/* <div><a href={urls} target="_blank">{urls}</a></div> */}
             <br />
         </div>
     )
@@ -93,14 +111,12 @@ const AddLessons = () => {
 
     const onSubmit = async (e) => {
         e.preventDefault();
-        console.log('uploadinput', uploadInput);
         const uploadTracker = async (percent, fileName) => {
-            // console.log(percent);
-            // console.log(fileName);
             setUploadingProgress(Math.floor(percent));
             if (percent === 100) {
                 setSuccess(true);
                 setUploadInput([]);
+                setImageFile('')
                 setIsUploading(false);
                 setUploadingProgress(0);
             }
@@ -111,42 +127,67 @@ const AddLessons = () => {
         try {
             for (let i = 0; i < 1; i++) {
                 const dataURL = await s3UploadHandlerListeningProgress(uploadInput[i], "dummyToken", uploadTracker);
-                // console.log(dataURL);
-                // setUrls(dataURL)
-                // console.log(urls);
-
+                setUrls(dataURL);
                 setLesson(lesson => ({
                     ...lesson,
                     videoFile: dataURL
                 }));
 
+                const imageURL = await s3UploadHandlerListeningProgress(imageFileInput, "dummyToken", uploadTracker);
+                setLesson(lesson => ({
+                    ...lesson,
+                    imageFile: imageURL
+                }));
             }
             setSuccess(true);
-
             // console.log(lesson)
         } catch (err) {
             setSuccess(false);
         }
     }
 
-    // DropZOne Uploader
+    // DropZone Uploader
     // specify upload params and url for your files
     const getUploadParams = ({ file, meta }) => {
         handleChange();
-        // console.log(file);
+
         if (!file) {
             return;
         }
         setUploadInput(state => [...state, file]);
+        setLesson(lesson => ({
+            ...lesson,
+            videoDuration: meta.duration
+        }));
 
         return { url: 'https://httpbin.org/post' }
     }
 
     // called every time a file's `status` changes
-    // const handleChangeStatus = ({ meta, file }, status) => { /* console.log(status, meta, file) */ }
+    const handleChangeStatus = ({ meta, file }, status) => {
+        // console.log(status, meta, file)
+        if (status == 'removed') {
+            setUploadInput([])
+            setImageFile('')
+        }
+
+        if (status == 'preparing') {
+            new FileUploadThumbnail({
+                maxWidth: 1024,
+                maxHeight: 768,
+                file: file,
+                onSuccess: function (src) {
+                    // console.log('src', src)
+                    var fileObject = dataURItoBlob(src);
+                    // console.log('fileObject', fileObject)
+                    setImageFile(fileObject);
+                }
+            }).createThumbnailFromVideoFile();
+        }
+    }
 
     const handleSubmit = (files, allFiles) => {
-        console.log(files.map(f => f.meta))
+        // console.log(files.map(f => f.meta))
         allFiles.forEach(f => f.remove())
     }
     //  DropZoe Uploader
@@ -159,13 +200,23 @@ const AddLessons = () => {
         )
     }, [])
 
+    useEffect(() => {
+        // console.log('input', imageFileInput);
+        // console.log(imageFileInput.name);
+
+        if (imageFileInput.name != undefined && imageFileInput != '') {
+            setBtnActive(true)
+        } else {
+            setBtnActive(false)
+        }
+    }, [imageFileInput])
 
     useEffect(() => {
         if (success === true) {
             createLesson(lesson).then(
                 result => {
-                    console.log(result)
-                    // return null
+                    // console.log(result)
+
                     setLesson({
                         action: 'add',
                         lessonName: '',
@@ -173,8 +224,12 @@ const AddLessons = () => {
                         description: '',
                         imageFile: '',
                         videoFile: '',
+                        videoDuration: 0,
                         instructorId: 2
                     })
+
+                    // history.go(0)
+
                 }
             )
         }
@@ -208,10 +263,10 @@ const AddLessons = () => {
                             required
                             onChange={handleOnChange}
                         >
-                            <option value="">Select Category</option>
+                            <option value="" selected={lesson.categoryId == '' ? true : false}>Select Category</option>
                             {
                                 categories.map((category) => {
-                                    return <option key={category.categoryId} value={category.categoryId}>{category.name}</option>
+                                    return <option key={category.categoryId} value={category.categoryId} selected={lesson.categoryId == category.categoryId ? true : false}>{category.name}</option>
                                 })
                             }
                         </SelectOption>
@@ -233,7 +288,7 @@ const AddLessons = () => {
                     <div>
                         <Dropzone
                             getUploadParams={getUploadParams}
-                            // onChangeStatus={handleChangeStatus}
+                            onChangeStatus={handleChangeStatus}
                             LayoutComponent={Layout}
                             onSubmit={handleSubmit}
                             classNames={{ inputLabelWithFiles: defaultClassNames.inputLabel }}
@@ -246,7 +301,7 @@ const AddLessons = () => {
                     </div>
                     <ButtonGroup>
                         <Button text="Delete" />
-                        <Button text="Save" />
+                        <Button text="Save" type="add_lesson" isActive={btnActive} />
                     </ButtonGroup>
                 </div>
             </Form>
