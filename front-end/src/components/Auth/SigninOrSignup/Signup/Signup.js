@@ -15,9 +15,9 @@ const Signup = (props) => {
     const dispatch = useDispatch();
     const [userInput, setUserInput] = useState({
         userType: "company",
-        email: "tyoshida10@mylangara.ca",
-        password: "123456",
-        confirmPassword: "123456",
+        email: "",
+        password: "",
+        confirmPassword: "",
     });
 
     const handleOnChange = (e) => {

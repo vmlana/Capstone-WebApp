@@ -14,8 +14,8 @@ const Signin = (props) => {
     const dispatch = useDispatch();
     const [userInput, setUserInput] = useState({
         userType: "company",
-        email: "tyoshida10@mylangara.ca",
-        password: "123456",
+        email: "",
+        password: "",
     });
 
     const handleOnChange = (e) => {
@@ -38,21 +38,25 @@ const Signin = (props) => {
             password,
             userType
             )
+            .catch((error=>{
+                alert("Your Email or Password is wrong!!!");
+            }))
 
-        // console.log(response.body);
-        const {
-            authId,
-            accessToken,
-            refreshToken,
-            accessExpiresIn,
-            refreshExpiresIn
-          } = response.body;
+        if (response) {
+            // console.log(response.body);
+            const {
+                authId,
+                accessToken,
+                refreshToken,
+                accessExpiresIn,
+                refreshExpiresIn
+            } = response.body;
 
-        if (response.body.success) {
             dispatch(userSigninSignup(userType, authId, accessToken, refreshToken, accessExpiresIn, refreshExpiresIn));
-        } else {
-            alert("Your Email or Password is wrong!!!");
-        }
+        } 
+        // else {
+        //     alert("Your Email or Password is wrong!!!");
+        // }
     };
 
     return (
