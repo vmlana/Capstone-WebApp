@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from "react-router-dom";
 import { userSigninSignup } from '../../../../redux/user/user.actions';
+import {login} from '../../../../services/tokenApi';
 
 import styled from "styled-components";
 
@@ -13,7 +14,7 @@ const Signin = (props) => {
     const dispatch = useDispatch();
     const [userInput, setUserInput] = useState({
         userType: "company",
-        email: "test@email.com",
+        email: "tyoshida01@mylangara.ca",
         password: "123456",
     });
 
@@ -28,10 +29,27 @@ const Signin = (props) => {
     const signInHandler = async (e) => {
         e.preventDefault();
         // Call authentication API Here to get token
-        const response = await { success: true }
+        // const response = await { success: true }
 
-        if (response.success) {
-            dispatch(userSigninSignup(userInput.userType, 1, "ThisIsDummyToken"));
+        const {email, password, userType} = userInput;
+        const response = await login(
+            `http://localhost:3000/api/v1/login`,
+            email,
+            password,
+            userType
+            )
+
+        // console.log(response.body);
+        const {
+            authId,
+            accessToken,
+            refreshToken,
+            accessExpiresIn,
+            refreshExpiresIn
+          } = response.body;
+
+        if (response.body.success) {
+            dispatch(userSigninSignup(userType, authId, accessToken, refreshToken, accessExpiresIn, refreshExpiresIn));
         } else {
             alert("Your Email or Password is wrong!!!");
         }

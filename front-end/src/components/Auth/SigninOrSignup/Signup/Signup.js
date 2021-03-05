@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
 import { useDispatch } from 'react-redux';
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { userSigninSignup } from '../../../../redux/user/user.actions';
+import {login} from '../../../../services/tokenApi';
 
 import styled from "styled-components";
 
@@ -10,10 +11,11 @@ import styled from "styled-components";
 import InputWithLabel from "../../../ReusableElement/InputWithLabel";
 
 const Signup = (props) => {
+    const history = useHistory();
     const dispatch = useDispatch();
     const [userInput, setUserInput] = useState({
         userType: "company",
-        email: "test@email.com",
+        email: "tyoshida01@mylangara.ca",
         password: "123456",
         confirmPassword: "123456",
     });
@@ -30,12 +32,30 @@ const Signup = (props) => {
         e.preventDefault();
         if (userInput.password === userInput.confirmPassword) {
             // Call authentication API Here to get token
-            const response = await {success: true}
+            // const response = await {success: true}
 
-            if (response.success) {
-                dispatch(userSigninSignup(userInput.userType, 123456, "ThisIsDummyToken"));
-            } else {
-                alert("Your Email or Password is wrong!!!");
+            const {email, password, userType} = userInput;
+            const response = await login(
+                `http://localhost:3000/api/v1/signup`,
+                email,
+                password,
+                userType
+            )
+    
+            // console.log(response.body);
+            const {
+                authId,
+                accessToken,
+                refreshToken,
+                accessExpiresIn,
+                refreshExpiresIn
+              } = response.body;
+
+              if (response.body.success) {
+                dispatch(userSigninSignup(userType, authId, accessToken, refreshToken, accessExpiresIn, refreshExpiresIn));
+                history.push("/auth");
+                } else {
+                alert("Something is wrong!!!");
             }
         }
     };
