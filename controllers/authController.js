@@ -1,3 +1,4 @@
+require("dotenv").config();
 let express = require("express");
 let app = express();
 
@@ -5,20 +6,21 @@ const promise_mysql = require("promise-mysql");
 const {pivotPoolDb} = require("../connection");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const config = require("../config");
+// const config = require("../config");
 
-app.set("accessSecretKey", config.accessTokenSecret);
-app.set("refreshSecretKey", config.refreshTokenSecret);
+app.set("accessSecretKey", process.env.AccessTokenSecret);
+app.set("refreshSecretKey", process.env.RefreshTokenSecret);
+app.set("refreshSecretKey", process.env.RefreshTokenSecret);
 
 // const refreshTokensList = [];
 
 // Signup **************************************
 
 exports.register = (req, res) => {
-    const { email, password, type } = req.body;
+    const { email, password, userType } = req.body;
     let hashed_password = bcrypt.hashSync(password, 10);
 
-    // type should be user, instructor or company
+    // userType should be user, instructor or company
 
     try {
         pivotPoolDb
@@ -55,14 +57,15 @@ exports.register = (req, res) => {
                     // Insert a new record into users, companies or instructors table ===================
                     let table;
                     let idAttribute;
+                    let loginId = results.insertId;
 
-                    if (type === "user") {
+                    if (userType === "user") {
                         table = "users";
                         idAttribute = "userId"
-                    } else if (type === "instructor") {
+                    } else if (userType === "instructor") {
                         table = "instructors";
                         idAttribute = "instructorId"
-                    } else if (type === "company") {
+                    } else if (userType === "company") {
                         table = "companies";
                         idAttribute = "companyId"
                     }
@@ -70,38 +73,46 @@ exports.register = (req, res) => {
                     pool.query(
                         `
                         INSERT INTO ${table} (${idAttribute}) VALUES 
-                        ( ${results.insertId});
+                        ( ${loginId});
                         `
                     ).then((results)=>{
+                        console.log(results);
                         const payload = {
-                            id: results.insertId,
-                            type: type,
+                            authId: loginId,
+                            userType: userType,
                             // email: email,
                         };
                         const accessToken = jwt.sign(
                             payload,
                             app.get("accessSecretKey"),
                             {
-                                expiresIn: config.accessTokenLife,
+                                expiresIn: process.env.AccessTokenLife,
                             }
                         );
                         const refreshToken = jwt.sign(
                             payload,
                             app.get("refreshSecretKey"),
                             {
-                                expiresIn: config.refreshTokenLife,
+                                expiresIn: process.env.RefreshTokenLife,
                             }
                         );
 
                         // refreshTokensList.push(refreshToken);
                         res.status(200).send({
                             success: true,
-                            id: results.insertId,
-                            type: type,
+                            authId: loginId,
+                            userType: userType,
                             accessToken,
                             refreshToken,
-                            accessExpiresIn: parseInt(config.accessTokenLife),
-                            refreshExpiresIn: parseInt(config.refreshTokenLife),
+                            accessExpiresIn:
+                            new Date().getTime() +
+                            parseInt(process.env.AccessTokenLife) * 1000,
+                            refreshExpiresIn:
+                            new Date().getTime() +
+                            parseInt(process.env.RefreshTokenLife) * 1000,
+
+                            // accessExpiresIn: parseInt(process.env.AccessTokenLife),
+                            // refreshExpiresIn: parseInt(process.env.RefreshTokenLife),
                         });
                     })
                     .catch((error)=>{
@@ -124,18 +135,18 @@ exports.register = (req, res) => {
 // Login **************************************
 
 exports.login = (req, res) => {
-    const { email, password, type } = req.body;
+    const { email, password, userType } = req.body;
 
     let table;
     let idAttribute;
 
-    if (type === "user") {
+    if (userType === "user") {
         table = "users";
         idAttribute = "userId"
-    } else if (type === "instructor") {
+    } else if (userType === "instructor") {
         table = "instructors";
         idAttribute = "instructorId"
-    } else if (type === "company") {
+    } else if (userType === "company") {
         table = "companies";
         idAttribute = "companyId"
     }
@@ -163,7 +174,7 @@ exports.login = (req, res) => {
                 // `
                 // )
                 .then((results) => {
-
+                    // console.log(results[0]);
                     if(results.length === 0) {
                         res.sendStatus(401);
                     }
@@ -176,35 +187,35 @@ exports.login = (req, res) => {
                     } else {
                         // Issue token
                         const payload = {
-                            id: results[0].id,
-                            type: type,
+                            authId: results[0].loginId,
+                            userType: userType,
                         };
                         // console.log(payload);
                         const accessToken = jwt.sign(
                             payload,
                             app.get("accessSecretKey"),
-                            { expiresIn: config.accessTokenLife }
+                            { expiresIn: process.env.AccessTokenLife }
                         );
                         const refreshToken = jwt.sign(
                             payload,
                             app.get("refreshSecretKey"),
-                            { expiresIn: config.refreshTokenLife }
+                            { expiresIn: process.env.RefreshTokenLife }
                         );
 
                         // refreshTokensList.push(refreshToken);
 
                         res.status(200).json({
                             success: true,
-                            id: results[0].id,
-                            type: type,
+                            authId: results[0].loginId,
+                            userType: userType,
                             accessToken,
                             refreshToken,
                             accessExpiresIn:
                                 new Date().getTime() +
-                                parseInt(config.accessTokenLife) * 1000,
+                                parseInt(process.env.AccessTokenLife) * 1000,
                             refreshExpiresIn:
                                 new Date().getTime() +
-                                parseInt(config.refreshTokenLife) * 1000,
+                                parseInt(process.env.RefreshTokenLife) * 1000,
                         });
                     }
                     // res.send(results);
@@ -224,37 +235,42 @@ exports.login = (req, res) => {
 // Refresh Token **********************************
 
 exports.refreshToken = (req, res) => {
-    const { refreshToken } = req.body || req.query || req.headers["x-access-token"];
+    // const { refreshToken } = req.body || req.query || req.headers["refresh-token"];
+    const refreshToken = req.headers["refresh-token"];
 
-    jwt.verify(refreshToken, config.refreshTokenSecret, (err, user) => {
+    // console.log(refreshToken);
+
+    jwt.verify(refreshToken, app.get("refreshSecretKey"), (err, user) => {
         if (err) {
             return res.sendStatus(403);
         }
+        // console.log(user)
         const refreshedUser = {
-            id: user.id,
-            type: user.type,
+            authId: user.authId,
+            userType: user.userType,
         };
         const accessToken = jwt.sign(
             refreshedUser,
             app.get("accessSecretKey"),
             {
-                expiresIn: config.accessTokenLife,
+                expiresIn: process.env.AccessTokenLife,
             }
         );
         const refreshToken = jwt.sign(
             refreshedUser,
             app.get("refreshSecretKey"),
-            { expiresIn: config.refreshTokenLife }
+            { expiresIn: process.env.RefreshTokenLife }
         );
         const response = {
             success: "true",
-            type: user.type,
+            authId: user.authId,
+            userType: user.userType,
             accessToken,
             refreshToken,
             accessExpiresIn:
-                new Date().getTime() + parseInt(config.accessTokenLife) * 1000,
+                new Date().getTime() + parseInt(process.env.AccessTokenLife) * 1000,
             refreshExpiresIn:
-                new Date().getTime() + parseInt(config.refreshTokenLife) * 1000,
+                new Date().getTime() + parseInt(process.env.RefreshTokenLife) * 1000,
         };
 
         res.status(200).json(response);
@@ -265,6 +281,8 @@ exports.refreshToken = (req, res) => {
 
 exports.verify = (req, res) => {
     const tokenContents = req.decoded;
+    // console.log(req.headers["access-token"]);
+    // console.log(req.headers["refresh-token"]);
     // res.json(tokenContents);
-    res.json({message: "success"});
+    res.status(200).send({success: true});
 };

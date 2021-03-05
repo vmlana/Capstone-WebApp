@@ -9,6 +9,7 @@ import DropdownInputCityName from './DropdownInputCityName';
 import dummyImg from '../../../../assets/dummy.jpg';
 
 import { readFileURL } from '../../../../services/readFileURL';
+import { customFetch } from '../../../../services/tokenApi';
 
 const Account = () => {
     const dispatch = useDispatch();
@@ -30,7 +31,7 @@ const Account = () => {
     const [uploadImage, setUploadImage] = useState("");
     const [uploadCSV, setUploadCSV] = useState("");
     const userInfo = useSelector(state => state.user.userInfo);
-    const { userType, authId, token } = userInfo;
+    const { userType, authId, accessToken } = userInfo;
 
     const addNewEmployee = (e) => {
         e.persist();
@@ -176,20 +177,34 @@ const Account = () => {
 
     const updateCompanyInfo = async () => {
 
-        console.log({
-            companyId: authId,
-            companyName: companyInfo.companyName,
-            accountResponsible: companyInfo.accountResponsible,
-            contactEmail: companyInfo.contactEmail,
-            phoneNumber: companyInfo.phoneNumber,
-            address: companyInfo.address,
-            cityName: companyInfo.cityName,
-            postalCode: companyInfo.postalCode,
-            employees: companyInfo.employees,
-        });
+        // console.log({
+        //     companyId: authId,
+        //     companyName: companyInfo.companyName,
+        //     accountResponsible: companyInfo.accountResponsible,
+        //     contactEmail: companyInfo.contactEmail,
+        //     phoneNumber: companyInfo.phoneNumber,
+        //     address: companyInfo.address,
+        //     cityName: companyInfo.cityName,
+        //     postalCode: companyInfo.postalCode,
+        //     employees: companyInfo.employees,
+        // });
+
+        if ( 
+            !companyInfo.companyName ||
+            !companyInfo.accountResponsible ||
+            !companyInfo.contactEmail ||
+            !companyInfo.phoneNumber ||
+            !companyInfo.address ||
+            !companyInfo.cityName ||
+            !companyInfo.postalCode ||
+            companyInfo.employees.length === 0 
+            ) {
+            alert("You are missing something");
+            return;
+        }
 
         try {
-            const resultData = await fetch("http://localhost:3000/api/v1/updcompany",
+            const resultData = await customFetch("http://localhost:3000/api/v1/updcompany",
                 {
                     method: "POST",
                     headers: {
@@ -210,10 +225,13 @@ const Account = () => {
                         }
                     ),
                 }).then(response => {
-                    return response.json();
+                    alert("Successfully Uploaded!!!");
+                    // return response.json();
+                    return response.body;
                 });
-            console.log(resultData);
+            // console.log(resultData);
         } catch (error) {
+            alert("Error happnes")
             console.log(error);
         }
     }
@@ -228,11 +246,29 @@ const Account = () => {
     }, []);
 
     useEffect(() => {
+
         (async () => {
+            // Validation TESE Code ====================
+            // const companyData = await customFetch(`http://localhost:3000/api/v1/verify`,{
+            //     method: "POST",
+            //     headers: {
+            //         "Content-Type": "application/json",
+            //     }}).then(results => {
+            //         console.log(results)
+            //         return results;
+            //     }).catch(err => {
+            //         console.log(err)
+            //         throw err;
+            //     })
+
             try {
-                const companyData = await fetch(`http://localhost:3000/api/v1/company?companyId=1`).then(results => {
-                    return results.json();
+                const companyData = await customFetch(`http://localhost:3000/api/v1/company?companyId=${authId}`,{method: "GET",})
+                .then(results => {
+                    // console.log("results",results)
+                    // return results.json(); // returns error
+                    return results.body;
                 }).catch(err => {
+                    console.log("err",err)
                     throw err;
                 })
 
