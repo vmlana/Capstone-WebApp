@@ -74,7 +74,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/api/v1/blogs?blogId=1",
+					"raw": "http://localhost:3000/api/v1/blogs",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -88,11 +88,12 @@
 					"query": [
 						{
 							"key": "blogId",
-							"value": "1"
+							"value": "1",
+							"disabled": true
 						},
 						{
 							"key": "instructorId",
-							"value": null,
+							"value": "2",
 							"disabled": true
 						}
 					]
@@ -436,7 +437,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"action\" : \"upd\",        \r\n    \"playlistId\": 2,\r\n    \"playlistName\": \"Stretch for Beginners\",\r\n    \"playlistDescription\": \"This is another daily sequences for intermediate level\",\r\n    \"playlistLevel\": \"B\",\r\n    \"categoryId\": 3,\r\n    \"instructorId\": 2,\r\n    \"active\": 1,\r\n    \"lessons\": [\r\n        {\r\n            \"lessonId\": 1\r\n        },\r\n        {\r\n            \"lessonId\": 2\r\n        },        \r\n        {\r\n            \"lessonId\": 3\r\n        }\r\n    ]\r\n}\r\n\r\n",
+					"raw": "{\r\n    \"action\" : \"upd\",        \r\n    \"playlistId\": 2,\r\n    \"playlistName\": \"Stretch for Beginners vini\",\r\n    \"playlistDescription\": \"This is another daily sequences for intermediate level \",\r\n    \"playlistLevel\": \"Beg\",\r\n    \"categoryId\": 3,\r\n    \"instructorId\": 2,\r\n    \"active\": 1,\r\n    \"lessons\": [\r\n        {\r\n            \"lessonId\": 1\r\n        },\r\n        {\r\n            \"lessonId\": 3\r\n        }\r\n    ]\r\n}\r\n\r\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -514,6 +515,36 @@
 						"api",
 						"v1",
 						"updcompany"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "activityLog",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\": 3,\r\n    \"programId\": 101,\r\n    \"playlistId\": 104,\r\n    \"lessonId\": 114\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/v1/activitylog",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"activitylog"
 					]
 				}
 			},
