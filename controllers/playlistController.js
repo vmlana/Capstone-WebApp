@@ -74,10 +74,14 @@ exports.getPlaylists = (req, res) => {
                         let vPlaylist = {};
                         let vLessons = [];
                         let iPlaylistBase = i;
+                        let iLessonBase = -1;
                         iPlaylistId = results[iPlaylistBase].playlistId;
 
                         // Creates array of all the lessons for the playlist
                         while (i < results.length && iPlaylistId == results[i].playlistId) {
+                            if (iLessonBase == -1) {
+                                iLessonBase = i;
+                            }
                             vLessons.push({
                                 lessonId: results[i].lessonId,
                                 lessonName: results[i].lessonName,
@@ -95,6 +99,7 @@ exports.getPlaylists = (req, res) => {
                             playlistDescription: results[iPlaylistBase].playlistDescription,
                             playlistLevel: results[iPlaylistBase].playlistLevel,
                             playlistViews: results[iPlaylistBase].playlistViews,
+                            ImageFile: results[iLessonBase].imageFile,                            
                             categoryId: results[iPlaylistBase].categoryId,
                             categoryName: results[iPlaylistBase].categoryName,
                             instructorName: results[iPlaylistBase].instructorName,

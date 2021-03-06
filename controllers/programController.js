@@ -106,7 +106,7 @@ exports.getPrograms = (req, res) => {
                                 playlistName: results[iPlaylistBase].playlistName,
                                 playlistDescription: results[iPlaylistBase].playlistDescription,
                                 playlistLevel: results[iPlaylistBase].playlistLevel,
-                                playlistImageFile: sdefaultPlaylistImage,
+                                imageFile: sdefaultPlaylistImage,
                                 categoryName: results[iPlaylistBase].categoryName,
                                 instructorName: results[iPlaylistBase].instructorName,
                                 lessons: vLessons
@@ -118,7 +118,7 @@ exports.getPrograms = (req, res) => {
                         vProgram = {
                             programId: results[iProgramBase].programId,
                             programName: results[iProgramBase].programName,
-                            programImageFile: sdefaultProgramImage,
+                            imageFile: sdefaultProgramImage,
                             initialDate: results[iProgramBase].initialDate,
                             endDate: results[iProgramBase].endDate,
                             dayOfWeek: results[iProgramBase].dayOfWeek,
