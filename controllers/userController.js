@@ -78,11 +78,14 @@ exports.getDashboard = (req, res) => {
             sFinalDate = sToday;
         }
 
-        let qry = `select lg.loginId, lg.name as userName, w.name AS department,
+        let qry = `select u.userId, lg.userLogin, lg.name as userName, lg.imageFile as imageFile, u.employeeId,
+                          c.companyId, lc.name as companyName, w.name AS department, e.employeeId,
                           log2.selected_date, log2.total_work, log2.log_work, log2.percent
                      FROM login lg
                           INNER JOIN users u ON (lg.loginId = u.userId)
                           INNER JOIN employees e ON (u.companyId = e.companyId AND u.employeeId = e.employeeId)
+                          INNER JOIN companies c ON (u.companyId = c.companyId)
+                          INNER JOIN login lc ON (c.companyId = lc.loginId)
                           INNER JOIN workDepartments w ON (e.workDepartmentId = w.workDepartmentId)                     
                           LEFT JOIN ( SELECT selected_date,
                                              ${totalWork} AS total_work,
@@ -126,12 +129,16 @@ exports.getDashboard = (req, res) => {
                         });
 
                         let myResult = {
-                            userId    : results[0].loginId,
-                            userName  : results[0].userName,
-                            department: results[0].department,
-                            workInDay : workInDay,
-                            streakDay : 20,
-                            daysResult: vWeekDays
+                            userId     : results[0].userId,
+                            userName   : results[0].userName,
+                            imageFile  : results[0].imageFile,
+                            employeeId : results[0].employeeId,
+                            companyId  : results[0].companyId,
+                            companyName: results[0].companyName,
+                            department : results[0].department,
+                            workInDay  : workInDay,
+                            streakDay  : 20,
+                            daysResult : vWeekDays
                         }
 
                         res.status(200).send(myResult);
