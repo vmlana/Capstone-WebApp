@@ -371,6 +371,41 @@
 			"response": []
 		},
 		{
+			"name": "dashboard",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/dashboard?userId=3&initialDate=2021-02-28&finalDate=2021-03-06",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"dashboard"
+					],
+					"query": [
+						{
+							"key": "userId",
+							"value": "3"
+						},
+						{
+							"key": "initialDate",
+							"value": "2021-02-28"
+						},
+						{
+							"key": "finalDate",
+							"value": "2021-03-06"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "updInstructor",
 			"request": {
 				"method": "POST",
