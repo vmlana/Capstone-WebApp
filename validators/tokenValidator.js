@@ -7,11 +7,11 @@ exports.tokenValidator = (req, res, next) => {
     const token =
         req.body.token || req.query.token || req.headers["access-token"];
 
-    // console.log(token);
+    // console.log("token", token);
 
     if (token) {
         jwt.verify(token, process.env.AccessTokenSecret, (error, decoded) => {
-            // console.log(error);
+            // console.log("eror", error);
             if (error) {
                 return res.status(401).json({
                     success: false,

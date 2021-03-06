@@ -1,3 +1,5 @@
+import { apiUrl } from './apiUrl';
+
 export const s3UploadHandler = async (file, token) => {
 
 	// Split the filename to get the name and type
@@ -14,7 +16,7 @@ export const s3UploadHandler = async (file, token) => {
 
 	// console.log(fileType);
 
-	await fetch("http://localhost:3000/api/v1/s3storage",
+	await fetch(`${apiUrl}/s3storage`,
 		{
 			method: "POST",
 			mode: 'cors',
@@ -71,7 +73,7 @@ export const s3UploadHandlerListeningProgress = async (file, token, progressCall
 	// console.log(fileType);
 
 	try {
-		await fetch("http://localhost:3000/api/v1/s3storage",
+		await fetch(`${apiUrl}/s3storage`,
 			{
 				method: "POST",
 				mode: 'cors',
@@ -125,7 +127,7 @@ export const s3UploadHandlerListeningProgress = async (file, token, progressCall
 
 export const s3DeleteHandler = async (filePath, token) => {
 
-	const result = await fetch("http://localhost:3000/api/v1/s3storage",
+	const result = await fetch(`${apiUrl}/s3storage`,
 		{
 			method: "DELETE",
 			headers: {

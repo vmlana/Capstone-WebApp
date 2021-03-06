@@ -2,7 +2,7 @@ import merge from 'lodash/merge'
 // import Cookies from 'js-cookie'
 import { configureRefreshFetch, fetchJSON } from 'refresh-fetch'
 
-// import { userSigninSignup } from '../redux/user/user.actions';
+import { apiUrl } from './apiUrl';
 
 const LOCALSTORAGE_NAME = 'PivotCareUser'
 
@@ -50,7 +50,7 @@ const login = async (url, email, password, userType) => {
     })
   })
     .then(response => {
-        console.log(response);
+        // console.log(response);
         saveToken(JSON.stringify(response.body));
         return response;
     })
@@ -82,7 +82,7 @@ const refreshToken = async () => {
     }
     const { userType, authId, accessToken, refreshToken } = JSON.parse(storedTokens);  
     // console.log(refreshToken);
-    return fetchJSONWithToken('http://localhost:3000/api/v1/token', {
+    return fetchJSONWithToken(`${apiUrl}/token`, {
         method: 'POST',
         headers: {
             "refresh-token": refreshToken,

@@ -34,7 +34,7 @@ router
     .get("/tags", getTags)    
     .get("/cities", getCities)        
     .get("/companies", tokenValidator, getCompanies)     
-    .get("/company", getCompany)  
+    .get("/company", tokenValidator, getCompany)  
     .get("/instructor", getInstructor)      
     .get("/user", getUser)          
     .get("/dashboard", getDashboard)              

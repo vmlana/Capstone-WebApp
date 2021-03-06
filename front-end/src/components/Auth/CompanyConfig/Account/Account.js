@@ -11,6 +11,8 @@ import dummyImg from '../../../../assets/dummy.jpg';
 import { readFileURL } from '../../../../services/readFileURL';
 import { customFetch } from '../../../../services/tokenApi';
 
+import { apiUrl } from '../../../../services/apiUrl';
+
 const Account = () => {
     const dispatch = useDispatch();
     const [companyInfo, setCompanyInfo] = useState({
@@ -32,6 +34,8 @@ const Account = () => {
     const [uploadCSV, setUploadCSV] = useState("");
     const userInfo = useSelector(state => state.user.userInfo);
     const { userType, authId, accessToken } = userInfo;
+
+    // console.log(process.env.NODE_ENV);
 
     const addNewEmployee = (e) => {
         e.persist();
@@ -204,7 +208,7 @@ const Account = () => {
         }
 
         try {
-            const resultData = await customFetch("http://localhost:3000/api/v1/updcompany",
+            const resultData = await customFetch(`${apiUrl}/updcompany`,
                 {
                     method: "POST",
                     headers: {
@@ -249,7 +253,7 @@ const Account = () => {
 
         (async () => {
             // Validation TESE Code ====================
-            // const companyData = await customFetch(`http://localhost:3000/api/v1/verify`,{
+            // const companyData = await customFetch(`${apiUrl}/verify`,{
             //     method: "POST",
             //     headers: {
             //         "Content-Type": "application/json",
@@ -262,7 +266,7 @@ const Account = () => {
             //     })
 
             try {
-                const companyData = await customFetch(`http://localhost:3000/api/v1/company?companyId=${authId}`,{method: "GET",})
+                const companyData = await customFetch(`${apiUrl}/company?companyId=${authId}`,{method: "GET",})
                 .then(results => {
                     // console.log("results",results)
                     // return results.json(); // returns error
