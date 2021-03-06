@@ -6,10 +6,9 @@ const promise_mysql = require("promise-mysql");
 const {pivotPoolDb} = require("../connection");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-// const config = require("../config");
+const config = require("../config");
 
 app.set("accessSecretKey", process.env.AccessTokenSecret);
-app.set("refreshSecretKey", process.env.RefreshTokenSecret);
 app.set("refreshSecretKey", process.env.RefreshTokenSecret);
 
 // const refreshTokensList = [];
@@ -42,7 +41,10 @@ exports.register = (req, res) => {
                 // console.log(isUserExist);
 
                 if (isUserExist.length > 0) {
-                    res.send({ message: "This email address is already used." });
+                    res.send({ 
+                        message: "This email address is already used.",
+                        success: false
+                    });
                     return;
                 }
 
@@ -86,14 +88,14 @@ exports.register = (req, res) => {
                             payload,
                             app.get("accessSecretKey"),
                             {
-                                expiresIn: process.env.AccessTokenLife,
+                                expiresIn: parseInt(process.env.AccessTokenLife),
                             }
                         );
                         const refreshToken = jwt.sign(
                             payload,
                             app.get("refreshSecretKey"),
                             {
-                                expiresIn: process.env.RefreshTokenLife,
+                                expiresIn: parseInt(process.env.RefreshTokenLife),
                             }
                         );
 
@@ -194,7 +196,7 @@ exports.login = (req, res) => {
                         const accessToken = jwt.sign(
                             payload,
                             app.get("accessSecretKey"),
-                            { expiresIn: process.env.AccessTokenLife }
+                            { expiresIn: parseInt(process.env.AccessTokenLife) }
                         );
                         const refreshToken = jwt.sign(
                             payload,
@@ -253,7 +255,7 @@ exports.refreshToken = (req, res) => {
             refreshedUser,
             app.get("accessSecretKey"),
             {
-                expiresIn: process.env.AccessTokenLife,
+                expiresIn: parseInt(process.env.AccessTokenLife),
             }
         );
         const refreshToken = jwt.sign(

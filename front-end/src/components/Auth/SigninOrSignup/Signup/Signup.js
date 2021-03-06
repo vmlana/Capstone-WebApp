@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { Link, useHistory } from "react-router-dom";
 import { userSigninSignup } from '../../../../redux/user/user.actions';
 import {login} from '../../../../services/tokenApi';
+import { apiUrl } from '../../../../services/apiUrl';
 
 import styled from "styled-components";
 
@@ -34,27 +35,37 @@ const Signup = (props) => {
             // Call authentication API Here to get token
             // const response = await {success: true}
 
-            const {email, password, userType} = userInput;
-            const response = await login(
-                `http://localhost:3000/api/v1/signup`,
-                email,
-                password,
-                userType
-            )
-    
-            // console.log(response.body);
-            const {
-                authId,
-                accessToken,
-                refreshToken,
-                accessExpiresIn,
-                refreshExpiresIn
-              } = response.body;
+            try {
+                const {email, password, userType} = userInput;
+                const response = await login(
+                    `${apiUrl}/signup`,
+                    email,
+                    password,
+                    userType
+                )
+                .catch((error=>{
+                    throw error;
+                }))
 
-              if (response.body.success) {
+                // console.log(response.body.success);
+    
+                if(!response || !response.body.success) {
+                    alert("Something is wrong!!!");
+                    return;
+                }
+    
+                const {
+                    authId,
+                    accessToken,
+                    refreshToken,
+                    accessExpiresIn,
+                    refreshExpiresIn
+                  } = response.body;
+    
                 dispatch(userSigninSignup(userType, authId, accessToken, refreshToken, accessExpiresIn, refreshExpiresIn));
                 history.push("/auth");
-                } else {
+
+                } catch(error){
                 alert("Something is wrong!!!");
             }
         }

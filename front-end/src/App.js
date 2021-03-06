@@ -16,9 +16,7 @@ function App() {
   const [path, setPath] = useState("");
   const history = useHistory();
   const userInfo = useSelector(state => state.user.userInfo);
-  const { userType, authId, accessToken, accessExpiresIn, refreshExpiresIn} = userInfo;
-  const [localStorageUserInfo, setLocalStorageUserInfo] = useState(JSON.parse(window.localStorage.getItem("PivotCareUser")))
-
+  const { accessToken, accessExpiresIn, refreshExpiresIn} = userInfo;
 
   useEffect(() => {
     const unregisterHistoryListener = history.listen((location, action) => {
@@ -27,15 +25,9 @@ function App() {
 
       // Check Token expiry HERE!!!!
       const now = new Date().getTime();
-      // console.log(new Date().getTime());
-      // console.log(now > accessExpiresIn);
-      // console.log(now > accessExpiresIn);
-      // console.log(now < refreshExpiresIn);
-      // console.log(accessExpiresIn);
       if(accessExpiresIn < now && now < refreshExpiresIn) {
         refreshToken().then(response=>{
           if(response){
-            // console.log(response.response.ok);
 
             const {
               userType,
@@ -63,7 +55,7 @@ function App() {
     return () => {
       unregisterHistoryListener();
     }
-  }, [accessToken])
+  }, [accessToken, dispatch])
 
   useEffect(() => {
     if (window.performance) {

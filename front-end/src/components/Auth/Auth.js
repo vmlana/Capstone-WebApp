@@ -4,10 +4,8 @@ import SigninOrSignup from './SigninOrSignup/SigninOrSignup';
 import CompanyConfig from './CompanyConfig/CompanyConfig';
 import InstructorConfig from './InstructorConfig/InstructorConfig';
 import { userSigninSignup } from '../../redux/user/user.actions';
-import { useHistory } from 'react-router-dom';
 
 const Auth = (props) => {
-    const history = useHistory();
     const dispatch = useDispatch();
     const [tokenIsValid, setTokenIsValid] = useState(false);
     const [localStorageUserInfo, setLocalStorageUserInfo] = useState(JSON.parse(window.localStorage.getItem("PivotCareUser")))
@@ -35,7 +33,7 @@ const Auth = (props) => {
                 )
             );
         }
-    }, [localStorageUserInfo])
+    }, [localStorageUserInfo, dispatch])
 
     // let userDirection;
 

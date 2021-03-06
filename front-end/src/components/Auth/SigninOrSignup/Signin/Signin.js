@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { Link } from "react-router-dom";
 import { userSigninSignup } from '../../../../redux/user/user.actions';
 import {login} from '../../../../services/tokenApi';
+import { apiUrl } from '../../../../services/apiUrl';
 
 import styled from "styled-components";
 
@@ -31,32 +32,38 @@ const Signin = (props) => {
         // Call authentication API Here to get token
         // const response = await { success: true }
 
-        const {email, password, userType} = userInput;
-        const response = await login(
-            `http://localhost:3000/api/v1/login`,
-            email,
-            password,
-            userType
-            )
-            .catch((error=>{
+        try {
+            const {email, password, userType} = userInput;
+            const response = await login(
+                `${apiUrl}/login`,
+                email,
+                password,
+                userType
+                )
+                .catch((error=>{
+                    throw error;
+                }))
+            
+            if(!response || !response.body.success) {
                 alert("Your Email or Password is wrong!!!");
-            }))
+                return;
+            }
 
-        if (response) {
-            // console.log(response.body);
-            const {
-                authId,
-                accessToken,
-                refreshToken,
-                accessExpiresIn,
-                refreshExpiresIn
-            } = response.body;
+            if (response) {
+                // console.log(response.body);
+                const {
+                    authId,
+                    accessToken,
+                    refreshToken,
+                    accessExpiresIn,
+                    refreshExpiresIn
+                } = response.body;
 
-            dispatch(userSigninSignup(userType, authId, accessToken, refreshToken, accessExpiresIn, refreshExpiresIn));
-        } 
-        // else {
-        //     alert("Your Email or Password is wrong!!!");
-        // }
+                dispatch(userSigninSignup(userType, authId, accessToken, refreshToken, accessExpiresIn, refreshExpiresIn));
+            }
+        } catch(error){
+            alert("Your Email or Password is wrong!!!");
+        }
     };
 
     return (
