@@ -8,7 +8,7 @@ const {getCities} = require("../controllers/cityController.js");
 const {getSearch} = require("../controllers/searchController.js");
 const {getCompany, getCompanies, updCompany} = require("../controllers/companyController.js");
 const {getInstructor, updInstructor } = require("../controllers/instructorController.js");
-const {getUser, updUser} = require("../controllers/userController.js");
+const {getUser, getDashboard, updUser} = require("../controllers/userController.js");
 const {getLessons, updLesson} = require("../controllers/lessonController.js");
 const {getPlaylists, updPlaylist} = require("../controllers/playlistController.js");
 const {getPrograms} = require("../controllers/programController.js");
@@ -36,6 +36,7 @@ router
     .get("/company", getCompany)  
     .get("/instructor", getInstructor)      
     .get("/user", getUser)          
+    .get("/dashboard", getDashboard)              
     .get("/programs", getPrograms)       
     .get("/playlists", getPlaylists)
     .get("/lessons", getLessons)    
