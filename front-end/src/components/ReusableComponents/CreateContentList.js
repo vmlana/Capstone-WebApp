@@ -57,7 +57,7 @@ const CreateContentList = ({ contentsType, type, data }) => {
   const [finalData, setFinalData] = useState([]);
   const [contentType, setContentType] = useState("");
 
-  console.log(data);
+  console.log(deptArr);
 
   const handleOpen = () => {
     setOpen(true);
