@@ -26,6 +26,7 @@ const {lessonValidation} = require("../validators/lessonValidator");
 const {playlistValidation} = require("../validators/playlistValidator");
 const {tokenValidator} = require("../validators/tokenValidator");
 const {activityLogValidation} = require("../validators/activityLogValidator");
+const {userSignupValidator} = require("../validators/userSignupValidator");
 
 // Routes to capstone api - Version 1
 router
@@ -51,7 +52,7 @@ router
     .post("/activitylog", activityLogValidation, activityLog)     
     .post("/s3storage", s3FileTypeValidator, postS3Storage)
     .delete("/s3storage", deleteS3Storage)
-    .post("/signup", register)
+    .post("/signup", userSignupValidator, register)
     .post("/login", login)
     .post("/verify", tokenValidator, verify)
     .post("/token", refreshToken);
