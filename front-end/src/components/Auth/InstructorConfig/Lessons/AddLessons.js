@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux';
 import styled from "styled-components";
 import Dropzone, { defaultClassNames } from 'react-dropzone-uploader'
 import { s3UploadHandlerListeningProgress } from '../../../../services/s3Handler';
@@ -30,6 +31,11 @@ const Layout = ({ input, previews, submitButton, dropzoneProps, files, extra: { 
 
 const AddLessons = () => {
     const history = useHistory();
+    const dispatch = useDispatch();
+
+    const userInfo = useSelector(state => state.user.userInfo);
+    const { userType, authId, token } = userInfo;
+
     const [categories, setCategories] = useState([]);
     const [lesson, setLesson] = useState({
         action: 'add',
@@ -39,7 +45,7 @@ const AddLessons = () => {
         imageFile: '',
         videoFile: '',
         videoDuration: 0,
-        instructorId: 2
+        instructorId: authId
     });
 
     // File Upload
@@ -225,7 +231,7 @@ const AddLessons = () => {
                         imageFile: '',
                         videoFile: '',
                         videoDuration: 0,
-                        instructorId: 2
+                        instructorId: authId
                     })
 
                     // history.go(0)

@@ -16,11 +16,11 @@ const PivotFeatures = () => {
                             healthy habits and making the difference in their daily work environment.
                         </p>
                     </div>
-                    <img className="feature-image" src="./media/images/dane-deaner-iJ1lw8iNIy8-unsplash.png" alt="feature-1" />
+                    <img className="feature-image" src="./media/images/company-feature.jpg" alt="feature-1" />
                 </div>
 
                 <div className="feature feature-even">
-                    <img className="feature-image" src="./media/images/bruce-mars-jY-GlbKeTDs-unsplash.png" alt="feature-2" />
+                    <img className="feature-image" src="./media/images/instructor-feature.jpg" alt="feature-2" />
                     <div className="feature-description">
                         <h2>OFFER REMOTE GUIDENCE AND SUPPORT</h2>
                         <p>
@@ -48,7 +48,7 @@ const PivotFeatures = () => {
                             issues prevention.
                         </p>
                     </div>
-                    <img className="feature-image" src="./media/images/israel-andrade-YI_9SivVt_s-unsplash.png" alt="feature-3" />
+                    <img className="feature-image" src="./media/images/employee-feature.jpg" alt="feature-3" />
                 </div>
             </div>
         </PivotFeatureSection>

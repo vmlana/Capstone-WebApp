@@ -9,6 +9,8 @@ import InputWithLabel from '../../../ReusableElement/InputWithLabel';
 import CertificationModal from './CertificationModal';
 import Image from '../../../ReusableElement/Image';
 
+import { apiUrl } from '../../../../services/apiUrl';
+
 const Profile = () => {
 	const dispatch = useDispatch();
 	const [instructorInfo, setInstructorInfo] = useState({
@@ -84,12 +86,12 @@ const Profile = () => {
 	useEffect(async () => {
 
 		try {
-			const instructorData = await fetch(`http://localhost:3000/api/v1/instructor?instructorId=2`).then(results => {
+			const instructorData = await fetch(`${apiUrl}/instructor?instructorId=${authId}`).then(results => {
 				return results.json();
 			}).catch(err => {
 				throw err;
 			})
-			console.log(instructorData);
+			// console.log(instructorData);
 			let {
 				instructorId,
 				instructorName,
@@ -206,11 +208,11 @@ const Profile = () => {
 									<FAIcons.FaUpload style={{ margin: "0.30rem" }} />
 								</FileUploadContainer>
 							) : (
-									<>
-										<FAIcons.FaUpload />
-										<label style={{ marginLeft: "1rem" }}>Upload profile picture</label>
-									</>
-								)}
+								<>
+									<FAIcons.FaUpload />
+									<label style={{ marginLeft: "1rem" }}>Upload profile picture</label>
+								</>
+							)}
 						</label>
 						<UploadFile
 							type="file"
