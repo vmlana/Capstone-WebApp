@@ -38,7 +38,7 @@ exports.register = (req, res) => {
                     throw error;
                 })
 
-                // console.log(isUserExist);
+                // console.log(3, isUserExist);
 
                 if (isUserExist.length > 0) {
                     res.send({ 
@@ -57,28 +57,38 @@ exports.register = (req, res) => {
                     )
                 .then((results) => {
                     // Insert a new record into users, companies or instructors table ===================
-                    let table;
-                    let idAttribute;
+                    // let table;
+                    // let idAttribute;
                     let loginId = results.insertId;
+                    let query;
 
                     if (userType === "user") {
-                        table = "users";
-                        idAttribute = "userId"
+                        // table = "users";
+                        // idAttribute = "userId";
+                        query = `
+                            INSERT INTO users (userId, companyId, employeeId) VALUES (${loginId}, ${req.body.companyId}, ${promise_mysql.escape(req.body.employeeId)});
+                        `
                     } else if (userType === "instructor") {
-                        table = "instructors";
-                        idAttribute = "instructorId"
+                        // table = "instructors";
+                        // idAttribute = "instructorId"
+                        query = `
+                            INSERT INTO instructors (instructorId) VALUES (${loginId});
+                        `
                     } else if (userType === "company") {
-                        table = "companies";
-                        idAttribute = "companyId"
+                        // table = "companies";
+                        // idAttribute = "companyId";
+                        query = `
+                            INSERT INTO companies (companyId) VALUES (${loginId});
+                        `
                     }
 
-                    pool.query(
-                        `
-                        INSERT INTO ${table} (${idAttribute}) VALUES 
-                        ( ${loginId});
-                        `
+                    pool.query(query
+                        // `
+                        // INSERT INTO ${table} (${idAttribute}) VALUES 
+                        // ( ${loginId});
+                        // `
                     ).then((results)=>{
-                        console.log(results);
+                        // console.log(results);
                         const payload = {
                             authId: loginId,
                             userType: userType,
@@ -139,8 +149,6 @@ exports.register = (req, res) => {
 exports.login = (req, res) => {
     const { email, password, userType } = req.body;
 
-    // console.log(email, password, userType);
-
     let table;
     let idAttribute;
 
@@ -178,9 +186,9 @@ exports.login = (req, res) => {
                 // `
                 // )
                 .then((results) => {
-                    // console.log(results[0]);
-                    if(results.length === 0) {
+                    if(results.length === 0 || !results) {
                         res.sendStatus(401);
+                        return;
                     }
 
                     if (!bcrypt.compareSync(password, results[0].password)) {
