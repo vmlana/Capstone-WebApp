@@ -92,7 +92,7 @@ const Picker = ({ label, option, onChange, exValue, purpose, type }) => {
         >
           {option
             ? option.map((item, key) => (
-                <MenuItem key={key} value={item.name}>
+                <MenuItem key={key} value={item.categoryId}>
                   {item.name}
                 </MenuItem>
               ))
