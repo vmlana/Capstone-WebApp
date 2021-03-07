@@ -99,7 +99,7 @@ exports.getPlaylists = (req, res) => {
                             playlistDescription: results[iPlaylistBase].playlistDescription,
                             playlistLevel: results[iPlaylistBase].playlistLevel,
                             playlistViews: results[iPlaylistBase].playlistViews,
-                            ImageFile: results[iLessonBase].imageFile,                            
+                            imageFile: results[iLessonBase].imageFile,                            
                             categoryId: results[iPlaylistBase].categoryId,
                             categoryName: results[iPlaylistBase].categoryName,
                             instructorName: results[iPlaylistBase].instructorName,
