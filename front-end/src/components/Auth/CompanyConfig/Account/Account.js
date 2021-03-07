@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from "styled-components";
+import * as FAIcons from "react-icons/fa";
 
 import InputWithLabel from '../../../ReusableElement/InputWithLabel';
 import DropdownInput from './DropdownInput';
@@ -10,6 +11,7 @@ import dummyImg from '../../../../assets/dummy.jpg';
 
 import { readFileURL } from '../../../../services/readFileURL';
 import { customFetch } from '../../../../services/tokenApi';
+import { s3UploadHandler } from '../../../../services/s3Handler';
 
 import { apiUrl } from '../../../../services/apiUrl';
 
@@ -34,6 +36,9 @@ const Account = () => {
     const [uploadCSV, setUploadCSV] = useState("");
     const userInfo = useSelector(state => state.user.userInfo);
     const { userType, authId, accessToken } = userInfo;
+    const [imageUrl, setImageUrl] = useState("");
+    const [logo, setLogo] = useState("");
+    const [saveSuccess, setSaveSuccess] = useState(false);
 
     // console.log(process.env.NODE_ENV);
 
@@ -207,8 +212,59 @@ const Account = () => {
             return;
         }
 
+        if (uploadImage !== "") {
+            try {
+                const url = await s3UploadHandler(uploadImage);
+                setImageUrl(url);
+                setSaveSuccess(true);
+            } catch(error){
+                alert("Image Upload failed.")
+                setSaveSuccess(false);
+            }
+        } else {
+            setSaveSuccess(true);
+        }
+
+        // try {
+        //     const resultData = await customFetch(`${apiUrl}/updcompany`,
+        //         {
+        //             method: "POST",
+        //             headers: {
+        //                 "Content-Type": "application/json",
+        //             },
+        //             body: JSON.stringify(
+        //                 {
+        //                     companyId: authId,
+        //                     companyName: companyInfo.companyName,
+        //                     accountResponsible: companyInfo.accountResponsible,
+        //                     contactEmail: companyInfo.contactEmail,
+        //                     phoneNumber: companyInfo.phoneNumber,
+        //                     address: companyInfo.address,
+        //                     // cityName: companyInfo.cityName,
+        //                     cityId: companyInfo.cityId,
+        //                     postalCode: companyInfo.postalCode,
+        //                     employees: companyInfo.employees,
+        //                 }
+        //             ),
+        //         }).then(response => {
+        //             alert("Successfully Uploaded!!!");
+        //             // return response.json();
+        //             return response.body;
+        //         });
+        //     // console.log(resultData);
+        // } catch (error) {
+        //     alert("Error happnes")
+        //     console.log(error);
+        // }
+    }
+
+    useEffect(()=>{
+        if(saveSuccess === false){
+            return;
+        }
+        (async()=>{
         try {
-            const resultData = await customFetch(`${apiUrl}/updcompany`,
+            await customFetch(`${apiUrl}/updcompany`,
                 {
                     method: "POST",
                     headers: {
@@ -226,10 +282,13 @@ const Account = () => {
                             cityId: companyInfo.cityId,
                             postalCode: companyInfo.postalCode,
                             employees: companyInfo.employees,
+                            imageFile: imageUrl
                         }
                     ),
                 }).then(response => {
-                    alert("Successfully Uploaded!!!");
+                    setSaveSuccess(false);
+                    setImageUrl("");
+                    alert("Successfully Updated!!!");
                     // return response.json();
                     return response.body;
                 });
@@ -238,7 +297,8 @@ const Account = () => {
             alert("Error happnes")
             console.log(error);
         }
-    }
+    })()
+    }, [saveSuccess])
 
     // Listen window width ********************************************
     useEffect(() => {
@@ -286,7 +346,8 @@ const Account = () => {
                     address,
                     cityName,
                     postalCode,
-                    employees
+                    employees,
+                    imageFile
                 } = companyData;
 
                 if (postalCode == null) {
@@ -305,11 +366,17 @@ const Account = () => {
                     employees
                 }))
 
+                setLogo(imageFile ? imageFile : "")
+
             } catch (err) {
                 console.log("No user data found")
             }
         })();
     }, [authId]);
+
+    useEffect(()=>{
+        console.log(uploadImage);
+    }, [uploadImage])
 
     return (
         <AccountPageContainer>
@@ -317,7 +384,40 @@ const Account = () => {
                 <HeaderWrapDiv>
                     <AccountPageHeader>Company account</AccountPageHeader>
                 </HeaderWrapDiv>
-                <UploadLogoDiv>
+                <LogoPositionDiv>
+                    <CompanyLogoP>Company Logo</CompanyLogoP>
+                    <CompanyLogoContainer>
+                        <label>
+                                <FileUploadContainer>
+                                    <img
+                                    src={
+                                        uploadImage ?
+                                        readFileURL(uploadImage)
+                                        : logo ?
+                                        logo :
+                                        dummyImg
+                                        }
+                                    alt="company logo"
+                                    style={{ width: "125px", height: "auto" }} />
+                                    <FAIcons.FaUpload style={{ margin: "0.30rem" }} />
+                                </FileUploadContainer>
+                                <InvisibleInput
+                                    type="file"
+                                    accept=".jpg,.jpeg,.png"
+                                    onChange={(e) => {
+                                        setUploadImage(e.target.files[0]);
+                                        e.target.value = '';
+                                    }}
+                                />
+                        </label>
+                        <UploadFile
+                            type="file"
+                            id="fileUpload"
+                            // onChange={}
+                        />
+                    </CompanyLogoContainer>
+                </LogoPositionDiv>
+                {/* <UploadLogoDiv>
                     <UploadLogoLabel>
                         <img
                             src={
@@ -328,13 +428,6 @@ const Account = () => {
                                     dummyImg
                             }
                             alt="logo" />
-                        {/* {
-                                uploadImage
-                                ?
-                                null
-                                :
-                                <small>Upload Logo</small>
-                            } */}
                         <InvisibleInput
                             type="file"
                             accept=".jpg,.jpeg,.png"
@@ -344,15 +437,15 @@ const Account = () => {
                             }}
                         />
                     </UploadLogoLabel>
-                </UploadLogoDiv>
+                </UploadLogoDiv> */}
             </HeaderDiv>
-            {
+            {/* {
                 windowWidth >= 767 ?
                     <EmployeeInfoHeader>
                         Employees Information
                 </EmployeeInfoHeader>
                     : null
-            }
+            } */}
             <Form>
                 <div>
                     <InputWithLabel
@@ -420,14 +513,17 @@ const Account = () => {
                         />
                     </PhoneCityPostalDiv>
                 </div>
-                {
+                {/* {
                     windowWidth >= 767 ?
                         null :
                         <EmployeeInfoHeader>
                             Employees Information
-                    </EmployeeInfoHeader>
-                }
+                        </EmployeeInfoHeader>
+                } */}
                 <EmployeeInformationDiv>
+                    <EmployeeInfoHeader>
+                        Employees Information
+                    </EmployeeInfoHeader>
                     <div>
                         <CSVHeaderAndUploadDiv>
                             <UploadCSVHeader>
@@ -514,10 +610,10 @@ const Account = () => {
                                         <span>{employee.employeeName}</span>
                                         <span>{employee.employeeId}</span>
                                         <span>{employee.departmentName}</span>
-                                        <span
+                                        <DeleteButton
                                             onClick={deleteEmployee}
                                             id={employee.employeeId}
-                                        >x</span>
+                                        >x</DeleteButton>
                                     </EmployeesListItem>
                                 )}
                             </EmployeesList>
@@ -539,16 +635,17 @@ const Account = () => {
 const mobileBreakPoint = "767px";
 
 const AccountPageContainer = styled.div`
-    max-width: 1300px;
+    max-width: 650px;
     margin: 0 auto;
+    margin-left: 0;
     padding: 2rem;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    /* display: grid;
+    grid-template-columns: 1fr 1fr; */
 `;
 
 const HeaderDiv = styled.div`
-    display: grid;
-    grid-template-columns: 1fr 65px;
+    /* display: grid;
+    grid-template-columns: 1fr 65px; */
     @media (max-width: ${mobileBreakPoint}) {
         display: block;
     }
@@ -558,6 +655,7 @@ const HeaderWrapDiv = styled.div`
     position: relative;
     border-bottom: solid 1px #000000;
     max-width: 300px;
+    margin-top: 3rem;
     margin-bottom: 3rem;
     @media (max-width: ${mobileBreakPoint}) {
         margin-right: 0;
@@ -568,9 +666,9 @@ const HeaderWrapDiv = styled.div`
 
 const AccountPageHeader = styled.h2`
     font-size: 1.25rem;
-    font-weight: normal;
+    font-weight: bold;
     position: absolute;
-    top: -1.75rem;
+    top: -1.5rem;
     background-color: #fff;
     padding-right: 2rem;
     text-transform: uppercase;
@@ -579,6 +677,46 @@ const AccountPageHeader = styled.h2`
     } */
 `;
 
+const LogoPositionDiv = styled.div`
+    position: absolute;
+    right: 3rem;
+    margin-bottom: 1rem;
+    @media (max-width: ${mobileBreakPoint}) {
+        position: inherit;
+    }
+`;
+
+const CompanyLogoP = styled.p`
+    margin: 0;
+    margin-bottom: .5rem;
+`;
+
+const FileUploadContainer = styled.div`
+	width: 125px;
+    border: solid 1px black;
+    /* position: absolute;
+    right: 3rem; */
+    background-color: #ddd;
+    /* margin-bottom: 1rem; */
+    /* @media (max-width: ${mobileBreakPoint}) {
+        position: inherit;
+    } */
+`;
+
+const CompanyLogoContainer = styled.div`
+	display: flex;
+    text-align: right;
+    justify-content: flex-end;
+    @media (max-width: ${mobileBreakPoint}) {
+        justify-content: center;
+    }
+`;
+
+const UploadFile = styled.input.attrs({ type: 'file' })`
+	display: none;
+`;
+
+// *****************************
 const UploadLogoDiv = styled.div`
     position: relative;
     @media (max-width: ${mobileBreakPoint}) {
@@ -595,13 +733,14 @@ const UploadLogoLabel = styled.label`
         position: initial;
     }
 `;
+// *******************************
 
 const Form = styled.form`
-	display: grid;
+	/* display: grid;
 	grid-template-columns: 1fr 1fr;
     grid-gap: 1rem;
     height: 440px;
-    grid-column: span 2;
+    grid-column: span 2; */
     @media (max-width: ${mobileBreakPoint}) {
         display: block;
         height: auto;
@@ -618,23 +757,26 @@ const PhoneCityPostalDiv = styled.div`
     }
 `;
 
-const EmployeeInfoHeader = styled.h3`
-    text-align: center;
-    font-weight: normal;
-    margin: 0;
-    @media (max-width: ${mobileBreakPoint}) {
-        margin-top: 3rem;
-        margin-bottom: 2rem;
-    }
-`;
-
 const EmployeeInformationDiv = styled.div`
     display: grid;
-    flex-direction: column;
-    grid-template-rows: 1fr 1fr 3fr;
+    /* flex-direction: column;
+    grid-template-rows: 1fr 1fr 3fr; */
+    margin-top: 3rem;
     @media (max-width: ${mobileBreakPoint}) {
         display: block;
     }
+`;
+
+const EmployeeInfoHeader = styled.h3`
+    text-align: left;
+    font-weight: bold;
+    font-size: 1.25rem;
+    margin: 0;
+    margin-bottom: 1rem;
+    /* @media (max-width: ${mobileBreakPoint}) {
+        margin-top: 3rem;
+        margin-bottom: 2rem;
+    } */
 `;
 
 const CSVHeaderAndUploadDiv = styled.div`
@@ -734,9 +876,9 @@ const UploadPElement = styled.p`
 const InputEmployeesDiv = styled.div`
     display: flex;
     justify-content: space-between;
-    @media (max-width: ${mobileBreakPoint}) {
+    /* @media (max-width: ${mobileBreakPoint}) {
         display: block;
-    }
+    } */
 `;
 
 const AddNewEmployeeElement = styled.div`
@@ -787,8 +929,16 @@ const EmployeesListItem = styled.li`
     grid-column-gap: .5rem;
     grid-template-columns: 35% 20% 35% 10%;
     margin-bottom: .75rem;
-    min-width: 450px;
+    /* min-width: 450px; */
 `;
+
+const DeleteButton = styled.span`
+    &:hover {
+        cursor: pointer;
+    }
+`;
+
+
 
 const SaveBtnDiv = styled.div`
     grid-column: span 2;
