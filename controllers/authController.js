@@ -139,6 +139,8 @@ exports.register = (req, res) => {
 exports.login = (req, res) => {
     const { email, password, userType } = req.body;
 
+    // console.log(email, password, userType);
+
     let table;
     let idAttribute;
 
@@ -238,7 +240,7 @@ exports.login = (req, res) => {
 
 exports.refreshToken = (req, res) => {
     // const { refreshToken } = req.body || req.query || req.headers["refresh-token"];
-    const refreshToken = req.headers["refresh-token"];
+    const refreshToken = req.headers["refresh-token"] || req.body.refreshToken;
 
     // console.log(refreshToken);
 
