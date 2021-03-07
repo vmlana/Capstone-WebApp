@@ -38,7 +38,7 @@ exports.register = (req, res) => {
                         throw error;
                     })
 
-                // console.log(isUserExist);
+                // console.log(3, isUserExist);
 
                 if (isUserExist.length > 0) {
                     res.send({
@@ -54,50 +54,61 @@ exports.register = (req, res) => {
                     INSERT INTO login (userLogin, password) VALUES 
                     ( ${promise_mysql.escape(email)}, '${hashed_password}');
                     `
-                )
-                    .then((results) => {
-                        // Insert a new record into users, companies or instructors table ===================
-                        let table;
-                        let idAttribute;
-                        let loginId = results.insertId;
 
-                        if (userType === "user") {
-                            table = "users";
-                            idAttribute = "userId"
-                        } else if (userType === "instructor") {
-                            table = "instructors";
-                            idAttribute = "instructorId"
-                        } else if (userType === "company") {
-                            table = "companies";
-                            idAttribute = "companyId"
-                        }
+                    )
+                .then((results) => {
+                    // Insert a new record into users, companies or instructors table ===================
+                    // let table;
+                    // let idAttribute;
+                    let loginId = results.insertId;
+                    let query;
 
-                        pool.query(
-                            `
-                        INSERT INTO ${table} (${idAttribute}) VALUES 
-                        ( ${loginId});
+                    if (userType === "user") {
+                        // table = "users";
+                        // idAttribute = "userId";
+                        query = `
+                            INSERT INTO users (userId, companyId, employeeId) VALUES (${loginId}, ${req.body.companyId}, ${promise_mysql.escape(req.body.employeeId)});
                         `
-                        ).then((results) => {
-                            console.log(results);
-                            const payload = {
-                                authId: loginId,
-                                userType: userType,
-                                // email: email,
-                            };
-                            const accessToken = jwt.sign(
-                                payload,
-                                app.get("accessSecretKey"),
-                                {
-                                    expiresIn: parseInt(process.env.AccessTokenLife),
-                                }
-                            );
-                            const refreshToken = jwt.sign(
-                                payload,
-                                app.get("refreshSecretKey"),
-                                {
-                                    expiresIn: parseInt(process.env.RefreshTokenLife),
-                                }
-                            );
+                    } else if (userType === "instructor") {
+                        // table = "instructors";
+                        // idAttribute = "instructorId"
+                        query = `
+                            INSERT INTO instructors (instructorId) VALUES (${loginId});
+                        `
+                    } else if (userType === "company") {
+                        // table = "companies";
+                        // idAttribute = "companyId";
+                        query = `
+                            INSERT INTO companies (companyId) VALUES (${loginId});
+                        `
+                    }
+
+                    pool.query(query
+                        // `
+                        // INSERT INTO ${table} (${idAttribute}) VALUES 
+                        // ( ${loginId});
+                        // `
+                    ).then((results)=>{
+                        // console.log(results);
+                        const payload = {
+                            authId: loginId,
+                            userType: userType,
+                            // email: email,
+                        };
+                        const accessToken = jwt.sign(
+                            payload,
+                            app.get("accessSecretKey"),
+                            {
+                                expiresIn: parseInt(process.env.AccessTokenLife),
+                            }
+                        );
+                        const refreshToken = jwt.sign(
+                            payload,
+                            app.get("refreshSecretKey"),
+                            {
+                                expiresIn: parseInt(process.env.RefreshTokenLife),
+                            }
+                        );
 
                             // refreshTokensList.push(refreshToken);
                             res.status(200).send({
@@ -139,8 +150,6 @@ exports.register = (req, res) => {
 exports.login = (req, res) => {
     const { email, password, userType } = req.body;
 
-    // console.log(email, password, userType);
-
     let table;
     let idAttribute;
 
@@ -172,16 +181,17 @@ exports.login = (req, res) => {
                     where l.userLogin = ${promise_mysql.escape(email)};
                 `
                 )
-                    // pool.query(
-                    //     `
-                    //     select * from login where userLogin = ${promise_mysql.escape(email)};
-                    // `
-                    // )
-                    .then((results) => {
-                        // console.log(results[0]);
-                        if (results.length === 0) {
-                            res.sendStatus(401);
-                        }
+
+                // pool.query(
+                //     `
+                //     select * from login where userLogin = ${promise_mysql.escape(email)};
+                // `
+                // )
+                .then((results) => {
+                    if(results.length === 0 || !results) {
+                        res.sendStatus(401);
+                        return;
+                    }
 
                         if (!bcrypt.compareSync(password, results[0].password)) {
                             res.send({
