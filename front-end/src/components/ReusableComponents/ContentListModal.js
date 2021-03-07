@@ -136,7 +136,7 @@ const ContentListModal = ({
                     ))
                   : newLessonArr.map((playlist, index) => (
                       <ContentImageTitle
-                        img={playlist.playlistImageFile}
+                        img={playlist.imageFile}
                         title={playlist.playlistName}
                         id={playlist.playlistId}
                         onClick={handleCheckedElement}

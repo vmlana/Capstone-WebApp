@@ -291,7 +291,7 @@ const CreateContentList = ({ contentsType, type, data }) => {
           )}
 
           <div>
-            <p>Playlists</p>
+            {contentType === "playlists" ? <p>Lessons</p> : <p>Playlists</p>}
             <div style={styles.contentList}>
               {selectedData.length === 0
                 ? null
@@ -307,10 +307,7 @@ const CreateContentList = ({ contentsType, type, data }) => {
                 : selectedData.map((data) => (
                     <div style={styles.addedContentList}>
                       <div>
-                        <img
-                          src={data.playlistImageFile}
-                          alt={data.playlistName}
-                        />
+                        <img src={data.imageFile} alt={data.playlistName} />
                       </div>
                       <span>{data.playlistName}</span>
                     </div>

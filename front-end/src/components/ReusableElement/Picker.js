@@ -81,6 +81,23 @@ const Picker = ({ label, option, onChange, exValue, purpose, type }) => {
               ))
             : null}
         </Select>
+      ) : label === "" ? (
+        <Select
+          labelId="demo-simple-select-placeholder-label-label"
+          id="demo-simple-select-placeholder-label"
+          value={value}
+          onChange={handleChange}
+          displayEmpty
+          className={classes.selectEmpty}
+        >
+          {option
+            ? option.map((item, key) => (
+                <MenuItem key={key} value={item.name}>
+                  {item.name}
+                </MenuItem>
+              ))
+            : null}
+        </Select>
       ) : (
         <Select
           labelId="demo-simple-select-placeholder-label-label"
