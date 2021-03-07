@@ -8,7 +8,7 @@ const Features = () => {
             <FeatureList>
                 <Feature>
                     <ImageContainer>
-                        <FeatureImage src="./media/images/dane-deaner-iJ1lw8iNIy8-unsplash.png" alt="feature-1" />
+                        <FeatureImage src="./media/images/company-feature.jpg" alt="feature-1" />
                     </ImageContainer>
                     <FeatureText>
                         <H3>For Companies</H3>
@@ -18,7 +18,7 @@ const Features = () => {
 
                 <Feature>
                     <ImageContainer>
-                        <FeatureImage src="./media/images/bruce-mars-jY-GlbKeTDs-unsplash.png" alt="feature-2" />
+                        <FeatureImage src="./media/images/instructor-feature.jpg" alt="feature-2" />
                     </ImageContainer>
                     <FeatureText>
                         <H3>For Instructors</H3>
@@ -28,7 +28,7 @@ const Features = () => {
 
                 <Feature>
                     <ImageContainer>
-                        <FeatureImage src="./media/images/israel-andrade-YI_9SivVt_s-unsplash.png" alt="feature-3" />
+                        <FeatureImage src="./media/images/employee-feature.jpg" alt="feature-3" />
                     </ImageContainer>
                     <FeatureText>
                         <H3>For Employees</H3>
