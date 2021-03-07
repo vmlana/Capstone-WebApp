@@ -3,10 +3,10 @@ let express = require("express");
 let app = express();
 
 const promise_mysql = require("promise-mysql");
-const {pivotPoolDb} = require("../connection");
+const { pivotPoolDb } = require("../connection");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const config = require("../config");
+// const config = require("../config");
 
 app.set("accessSecretKey", process.env.AccessTokenSecret);
 app.set("refreshSecretKey", process.env.RefreshTokenSecret);
@@ -26,22 +26,22 @@ exports.register = (req, res) => {
             .then(async (pool) => {
                 // Check the existing records ===================
                 const isUserExist = await pool
-                .query(
-                    `
+                    .query(
+                        `
                     select * from login where userLogin = ${promise_mysql.escape(email)};
                     `
-                )
-                .then((results) => {
-                    return results;
-                })
-                .catch((error)=>{
-                    throw error;
-                })
+                    )
+                    .then((results) => {
+                        return results;
+                    })
+                    .catch((error) => {
+                        throw error;
+                    })
 
                 // console.log(isUserExist);
 
                 if (isUserExist.length > 0) {
-                    res.send({ 
+                    res.send({
                         message: "This email address is already used.",
                         success: false
                     });
@@ -54,81 +54,81 @@ exports.register = (req, res) => {
                     INSERT INTO login (userLogin, password) VALUES 
                     ( ${promise_mysql.escape(email)}, '${hashed_password}');
                     `
-                    )
-                .then((results) => {
-                    // Insert a new record into users, companies or instructors table ===================
-                    let table;
-                    let idAttribute;
-                    let loginId = results.insertId;
+                )
+                    .then((results) => {
+                        // Insert a new record into users, companies or instructors table ===================
+                        let table;
+                        let idAttribute;
+                        let loginId = results.insertId;
 
-                    if (userType === "user") {
-                        table = "users";
-                        idAttribute = "userId"
-                    } else if (userType === "instructor") {
-                        table = "instructors";
-                        idAttribute = "instructorId"
-                    } else if (userType === "company") {
-                        table = "companies";
-                        idAttribute = "companyId"
-                    }
+                        if (userType === "user") {
+                            table = "users";
+                            idAttribute = "userId"
+                        } else if (userType === "instructor") {
+                            table = "instructors";
+                            idAttribute = "instructorId"
+                        } else if (userType === "company") {
+                            table = "companies";
+                            idAttribute = "companyId"
+                        }
 
-                    pool.query(
-                        `
+                        pool.query(
+                            `
                         INSERT INTO ${table} (${idAttribute}) VALUES 
                         ( ${loginId});
                         `
-                    ).then((results)=>{
-                        console.log(results);
-                        const payload = {
-                            authId: loginId,
-                            userType: userType,
-                            // email: email,
-                        };
-                        const accessToken = jwt.sign(
-                            payload,
-                            app.get("accessSecretKey"),
-                            {
-                                expiresIn: parseInt(process.env.AccessTokenLife),
-                            }
-                        );
-                        const refreshToken = jwt.sign(
-                            payload,
-                            app.get("refreshSecretKey"),
-                            {
-                                expiresIn: parseInt(process.env.RefreshTokenLife),
-                            }
-                        );
+                        ).then((results) => {
+                            console.log(results);
+                            const payload = {
+                                authId: loginId,
+                                userType: userType,
+                                // email: email,
+                            };
+                            const accessToken = jwt.sign(
+                                payload,
+                                app.get("accessSecretKey"),
+                                {
+                                    expiresIn: parseInt(process.env.AccessTokenLife),
+                                }
+                            );
+                            const refreshToken = jwt.sign(
+                                payload,
+                                app.get("refreshSecretKey"),
+                                {
+                                    expiresIn: parseInt(process.env.RefreshTokenLife),
+                                }
+                            );
 
-                        // refreshTokensList.push(refreshToken);
-                        res.status(200).send({
-                            success: true,
-                            authId: loginId,
-                            userType: userType,
-                            accessToken,
-                            refreshToken,
-                            accessExpiresIn:
-                            new Date().getTime() +
-                            parseInt(process.env.AccessTokenLife) * 1000,
-                            refreshExpiresIn:
-                            new Date().getTime() +
-                            parseInt(process.env.RefreshTokenLife) * 1000,
+                            // refreshTokensList.push(refreshToken);
+                            res.status(200).send({
+                                success: true,
+                                authId: loginId,
+                                userType: userType,
+                                accessToken,
+                                refreshToken,
+                                accessExpiresIn:
+                                    new Date().getTime() +
+                                    parseInt(process.env.AccessTokenLife) * 1000,
+                                refreshExpiresIn:
+                                    new Date().getTime() +
+                                    parseInt(process.env.RefreshTokenLife) * 1000,
 
-                            // accessExpiresIn: parseInt(process.env.AccessTokenLife),
-                            // refreshExpiresIn: parseInt(process.env.RefreshTokenLife),
-                        });
+                                // accessExpiresIn: parseInt(process.env.AccessTokenLife),
+                                // refreshExpiresIn: parseInt(process.env.RefreshTokenLife),
+                            });
+                        })
+                            .catch((error) => {
+                                throw error;
+                            });
                     })
-                    .catch((error)=>{
+                    .catch((error) => {
                         throw error;
                     });
-                })
-                .catch((error)=>{
-                    throw error;
-                });
             })
-            .catch((error)=>{
+            .catch((error) => {
                 throw error;
             });
-    } catch(error) {
+    } catch (error) {
         res.sendStatus(409);
     }
 
@@ -172,66 +172,66 @@ exports.login = (req, res) => {
                     where l.userLogin = ${promise_mysql.escape(email)};
                 `
                 )
-                // pool.query(
-                //     `
-                //     select * from login where userLogin = ${promise_mysql.escape(email)};
-                // `
-                // )
-                .then((results) => {
-                    // console.log(results[0]);
-                    if(results.length === 0) {
-                        res.sendStatus(401);
-                    }
+                    // pool.query(
+                    //     `
+                    //     select * from login where userLogin = ${promise_mysql.escape(email)};
+                    // `
+                    // )
+                    .then((results) => {
+                        // console.log(results[0]);
+                        if (results.length === 0) {
+                            res.sendStatus(401);
+                        }
 
-                    if (!bcrypt.compareSync(password, results[0].password)) {
-                        res.send({
-                            success: false,
-                            message: "Your email or password is wrong.",
-                        });
-                    } else {
-                        // Issue token
-                        const payload = {
-                            authId: results[0].loginId,
-                            userType: userType,
-                        };
-                        // console.log(payload);
-                        const accessToken = jwt.sign(
-                            payload,
-                            app.get("accessSecretKey"),
-                            { expiresIn: parseInt(process.env.AccessTokenLife) }
-                        );
-                        const refreshToken = jwt.sign(
-                            payload,
-                            app.get("refreshSecretKey"),
-                            { expiresIn: process.env.RefreshTokenLife }
-                        );
+                        if (!bcrypt.compareSync(password, results[0].password)) {
+                            res.send({
+                                success: false,
+                                message: "Your email or password is wrong.",
+                            });
+                        } else {
+                            // Issue token
+                            const payload = {
+                                authId: results[0].loginId,
+                                userType: userType,
+                            };
+                            // console.log(payload);
+                            const accessToken = jwt.sign(
+                                payload,
+                                app.get("accessSecretKey"),
+                                { expiresIn: parseInt(process.env.AccessTokenLife) }
+                            );
+                            const refreshToken = jwt.sign(
+                                payload,
+                                app.get("refreshSecretKey"),
+                                { expiresIn: process.env.RefreshTokenLife }
+                            );
 
-                        // refreshTokensList.push(refreshToken);
+                            // refreshTokensList.push(refreshToken);
 
-                        res.status(200).json({
-                            success: true,
-                            authId: results[0].loginId,
-                            userType: userType,
-                            accessToken,
-                            refreshToken,
-                            accessExpiresIn:
-                                new Date().getTime() +
-                                parseInt(process.env.AccessTokenLife) * 1000,
-                            refreshExpiresIn:
-                                new Date().getTime() +
-                                parseInt(process.env.RefreshTokenLife) * 1000,
-                        });
-                    }
-                    // res.send(results);
-                })
-                .catch((error) => {
-                    throw error;
-                });
+                            res.status(200).json({
+                                success: true,
+                                authId: results[0].loginId,
+                                userType: userType,
+                                accessToken,
+                                refreshToken,
+                                accessExpiresIn:
+                                    new Date().getTime() +
+                                    parseInt(process.env.AccessTokenLife) * 1000,
+                                refreshExpiresIn:
+                                    new Date().getTime() +
+                                    parseInt(process.env.RefreshTokenLife) * 1000,
+                            });
+                        }
+                        // res.send(results);
+                    })
+                    .catch((error) => {
+                        throw error;
+                    });
             })
             .catch((error) => {
                 throw error;
             });
-    } catch(error) {
+    } catch (error) {
         res.sendStatus(401);
     }
 };
@@ -288,5 +288,5 @@ exports.verify = (req, res) => {
     // console.log(req.headers["access-token"]);
     // console.log(req.headers["refresh-token"]);
     // res.json(tokenContents);
-    res.status(200).send({success: true});
+    res.status(200).send({ success: true });
 };
