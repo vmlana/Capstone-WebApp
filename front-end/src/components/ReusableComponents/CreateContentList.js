@@ -193,6 +193,7 @@ const CreateContentList = ({ contentsType, type, data }) => {
   }, []);
 
   useEffect(() => {
+    console.log("cat", cat);
     contentsType === "playlist"
       ? getLessonsByCategoryId(cat).then((result) => setSearchResults(result))
       : getPlaylistsByCategoryId(cat).then((result) =>
@@ -298,7 +299,7 @@ const CreateContentList = ({ contentsType, type, data }) => {
                 ? selectedData.map((data) => (
                     <div style={styles.addedContentList}>
                       <div>
-                        <img src={data.videoFile} alt={data.lessonName} />
+                        <img src={data.imageFile} alt={data.lessonName} />
                       </div>
                       <span>{data.lessonName}</span>
                     </div>
