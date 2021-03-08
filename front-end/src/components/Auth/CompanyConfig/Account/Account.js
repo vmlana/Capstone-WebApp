@@ -198,7 +198,7 @@ const Account = () => {
         //     employees: companyInfo.employees,
         // });
 
-        if ( 
+        if (
             !companyInfo.companyName ||
             !companyInfo.accountResponsible ||
             !companyInfo.contactEmail ||
@@ -206,8 +206,8 @@ const Account = () => {
             !companyInfo.address ||
             !companyInfo.cityName ||
             !companyInfo.postalCode ||
-            companyInfo.employees.length === 0 
-            ) {
+            companyInfo.employees.length === 0
+        ) {
             alert("You are missing something");
             return;
         }
@@ -217,7 +217,7 @@ const Account = () => {
                 const url = await s3UploadHandler(uploadImage);
                 setImageUrl(url);
                 setSaveSuccess(true);
-            } catch(error){
+            } catch (error) {
                 alert("Image Upload failed.")
                 setSaveSuccess(false);
             }
@@ -258,46 +258,46 @@ const Account = () => {
         // }
     }
 
-    useEffect(()=>{
-        if(saveSuccess === false){
+    useEffect(() => {
+        if (saveSuccess === false) {
             return;
         }
-        (async()=>{
-        try {
-            await customFetch(`${apiUrl}/updcompany`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(
-                        {
-                            companyId: authId,
-                            companyName: companyInfo.companyName,
-                            accountResponsible: companyInfo.accountResponsible,
-                            contactEmail: companyInfo.contactEmail,
-                            phoneNumber: companyInfo.phoneNumber,
-                            address: companyInfo.address,
-                            // cityName: companyInfo.cityName,
-                            cityId: companyInfo.cityId,
-                            postalCode: companyInfo.postalCode,
-                            employees: companyInfo.employees,
-                            imageFile: imageUrl
-                        }
-                    ),
-                }).then(response => {
-                    setSaveSuccess(false);
-                    setImageUrl("");
-                    alert("Successfully Updated!!!");
-                    // return response.json();
-                    return response.body;
-                });
-            // console.log(resultData);
-        } catch (error) {
-            alert("Error happnes")
-            console.log(error);
-        }
-    })()
+        (async () => {
+            try {
+                await customFetch(`${apiUrl}/updcompany`,
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(
+                            {
+                                companyId: authId,
+                                companyName: companyInfo.companyName,
+                                accountResponsible: companyInfo.accountResponsible,
+                                contactEmail: companyInfo.contactEmail,
+                                phoneNumber: companyInfo.phoneNumber,
+                                address: companyInfo.address,
+                                // cityName: companyInfo.cityName,
+                                cityId: companyInfo.cityId,
+                                postalCode: companyInfo.postalCode,
+                                employees: companyInfo.employees,
+                                imageFile: imageUrl
+                            }
+                        ),
+                    }).then(response => {
+                        setSaveSuccess(false);
+                        setImageUrl("");
+                        alert("Successfully Updated!!!");
+                        // return response.json();
+                        return response.body;
+                    });
+                // console.log(resultData);
+            } catch (error) {
+                alert("Error happnes")
+                console.log(error);
+            }
+        })()
     }, [saveSuccess])
 
     // Listen window width ********************************************
@@ -326,15 +326,15 @@ const Account = () => {
             //     })
 
             try {
-                const companyData = await customFetch(`${apiUrl}/company?companyId=${authId}`,{method: "GET",})
-                .then(results => {
-                    // console.log("results",results)
-                    // return results.json(); // returns error
-                    return results.body;
-                }).catch(err => {
-                    console.log("err",err)
-                    throw err;
-                })
+                const companyData = await customFetch(`${apiUrl}/company?companyId=${authId}`, { method: "GET", })
+                    .then(results => {
+                        // console.log("results",results)
+                        // return results.json(); // returns error
+                        return results.body;
+                    }).catch(err => {
+                        console.log("err", err)
+                        throw err;
+                    })
 
                 // console.log(companyData);
 
@@ -374,7 +374,7 @@ const Account = () => {
         })();
     }, [authId]);
 
-    useEffect(()=>{
+    useEffect(() => {
         console.log(uploadImage);
     }, [uploadImage])
 
@@ -388,32 +388,32 @@ const Account = () => {
                     <CompanyLogoP>Company Logo</CompanyLogoP>
                     <CompanyLogoContainer>
                         <label>
-                                <FileUploadContainer>
-                                    <img
+                            <FileUploadContainer>
+                                <img
                                     src={
                                         uploadImage ?
-                                        readFileURL(uploadImage)
-                                        : logo ?
-                                        logo :
-                                        dummyImg
-                                        }
+                                            readFileURL(uploadImage)
+                                            : logo ?
+                                                logo :
+                                                dummyImg
+                                    }
                                     alt="company logo"
                                     style={{ width: "125px", height: "auto" }} />
-                                    <FAIcons.FaUpload style={{ margin: "0.30rem" }} />
-                                </FileUploadContainer>
-                                <InvisibleInput
-                                    type="file"
-                                    accept=".jpg,.jpeg,.png"
-                                    onChange={(e) => {
-                                        setUploadImage(e.target.files[0]);
-                                        e.target.value = '';
-                                    }}
-                                />
+                                <FAIcons.FaUpload style={{ margin: "0.30rem" }} />
+                            </FileUploadContainer>
+                            <InvisibleInput
+                                type="file"
+                                accept=".jpg,.jpeg,.png"
+                                onChange={(e) => {
+                                    setUploadImage(e.target.files[0]);
+                                    e.target.value = '';
+                                }}
+                            />
                         </label>
                         <UploadFile
                             type="file"
                             id="fileUpload"
-                            // onChange={}
+                        // onChange={}
                         />
                     </CompanyLogoContainer>
                 </LogoPositionDiv>
