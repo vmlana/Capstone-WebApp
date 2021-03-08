@@ -95,7 +95,7 @@ exports.getSearch = (req, res) => {
                                     playlistId: result.itemId,
                                     playlistName: result.itemName,
                                     playlistDescription: result.itemDescription,
-                                    playlistImage: result.itemImage,                                       
+                                    imageFile: result.itemImage,                                       
                                     instructorName: result.instructorName,
                                     instructorId: result.instructorId,
                                     instructorImage: result.instructorImage
@@ -106,7 +106,7 @@ exports.getSearch = (req, res) => {
                                     programId: result.itemId,
                                     programName: result.itemName,
                                     programDescription: result.itemDescription,
-                                    programImageFile: result.itemImage,                                       
+                                    imageFile: result.itemImage,                                       
                                     instructorName: result.instructorName,
                                     instructorId: result.instructorId,
                                     instructorImage: result.instructorImage
