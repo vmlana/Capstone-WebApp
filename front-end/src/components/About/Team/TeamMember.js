@@ -14,9 +14,9 @@ const TeamMember = (props) => {
                     {(props.memberAdditionalRole != "" && props.memberAdditionalRole != null) ? <p className="member-additional-role">{props.memberAdditionalRole}</p> : null}
                     <p className="member-role">{props.memberRole}</p>
                     <p className="member-profile">
-                        {(props.linkedIn != "" && props.linkedIn != null) ? <a href={props.linkedIn} style={{ color: "#0E76A8" }} target="_blank"><FAIcons.FaLinkedin /></a> : ""}
-                        {(props.gitHub != "" && props.gitHub != null) ? <a href={props.gitHub} style={{ color: "#7DBBE6" }} target="_blank"><FAIcons.FaGithubSquare /></a> : ""}
-                        {(props.behance != "" && props.behance != null) ? <a href={props.behance} style={{ color: "#053EFF" }} target="_blank"><FAIcons.FaBehanceSquare /></a> : ""}
+                        {(props.linkedIn != "" && props.linkedIn != null) ? <a href={props.linkedIn} style={{ color: "#0E76A8", margin: 5 }} target="_blank"><FAIcons.FaLinkedin size={24} /></a> : ""}
+                        {(props.gitHub != "" && props.gitHub != null) ? <a href={props.gitHub} style={{ color: "#7DBBE6", margin: 5 }} target="_blank"><FAIcons.FaGithubSquare size={24} /></a> : ""}
+                        {(props.behance != "" && props.behance != null) ? <a href={props.behance} style={{ color: "#053EFF", margin: 5 }} target="_blank"><FAIcons.FaBehanceSquare size={24} /></a> : ""}
                     </p>
                 </div>
             </div>
@@ -25,6 +25,7 @@ const TeamMember = (props) => {
 }
 
 const TeamMemberInfo = styled.div`
+    padding: 1rem;
 
     .team-member-info {
         text-align: center;

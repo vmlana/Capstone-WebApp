@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useHistory } from "react-router-dom";
 import { userSigninSignup } from '../../../../redux/user/user.actions';
-import {login} from '../../../../services/tokenApi';
+import { login } from '../../../../services/tokenApi';
 import { apiUrl } from '../../../../services/apiUrl';
 
 import styled from "styled-components";
@@ -24,11 +24,11 @@ const Signup = (props) => {
     const handleOnChange = (e) => {
         e.persist();
         setUserInput((prev) => ({
-          ...prev,
-          [e.target.name]: e.target.value,
+            ...prev,
+            [e.target.name]: e.target.value,
         }));
     };
-    
+
     const signUpHandler = async (e) => {
         e.preventDefault();
         if (userInput.password === userInput.confirmPassword) {
@@ -36,36 +36,36 @@ const Signup = (props) => {
             // const response = await {success: true}
 
             try {
-                const {email, password, userType} = userInput;
+                const { email, password, userType } = userInput;
                 const response = await login(
                     `${apiUrl}/signup`,
                     email,
                     password,
                     userType
                 )
-                .catch((error=>{
-                    throw error;
-                }))
+                    .catch((error => {
+                        throw error;
+                    }))
 
                 // console.log(response.body.success);
-    
-                if(!response || !response.body.success) {
+
+                if (!response || !response.body.success) {
                     alert("Something is wrong!!!");
                     return;
                 }
-    
+
                 const {
                     authId,
                     accessToken,
                     refreshToken,
                     accessExpiresIn,
                     refreshExpiresIn
-                  } = response.body;
-    
+                } = response.body;
+
                 dispatch(userSigninSignup(userType, authId, accessToken, refreshToken, accessExpiresIn, refreshExpiresIn));
                 history.push("/auth");
 
-                } catch(error){
+            } catch (error) {
                 alert("Something is wrong!!!");
             }
         }
@@ -127,8 +127,8 @@ const Signup = (props) => {
                 <LinkToSignupText>
                     Already have an account?&nbsp;
                         <Link to="/auth">
-                            <UnderlineSpan>Sign in</UnderlineSpan>
-                        </Link>
+                        <UnderlineSpan>Sign in</UnderlineSpan>
+                    </Link>
                     &nbsp;here
                 </LinkToSignupText>
             </Form>

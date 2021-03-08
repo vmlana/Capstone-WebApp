@@ -18,8 +18,6 @@ const Team = () => {
                     <TeamMember memberImage="./media/images/Vini.jpg" memberName="Vinicius Meyer Lana" memberAdditionalRole="Project Manager" memberRole="Backend Developer" linkedIn="https://www.linkedin.com/" gitHub="https://github.com/" behance="" />
                     <TeamMember memberImage="./media/images/Hardik.jpg" memberName="Hardikkumar Vasoya" memberAdditionalRole="Dev Lead" memberRole="Full Stack Developer" linkedIn="https://www.linkedin.com/" gitHub="https://github.com/" behance="" />
                     <TeamMember memberImage="./media/images/Hiteshri.jpg" memberName="Hiteshri Nanda" memberAdditionalRole="Design Lead" memberRole="UI/UX Designer" linkedIn="https://www.linkedin.com/" gitHub="" behance="https://www.behance.net/" />
-                    {/* </div>
-                <div class="team-info team-info-two"> */}
                     <TeamMember memberImage="./media/images/Ken.jpg" memberName="Ken Tauchi" memberRole="Full Stack Developer" linkedIn="https://www.linkedin.com/" gitHub="https://github.com/" behance="" />
                     <TeamMember memberImage="./media/images/Roj.jpg" memberName="Roujyar Darvish" memberRole="UI/UX Designer" linkedIn="https://www.linkedin.com/" gitHub="" behance="https://www.behance.net/" />
                     <TeamMember memberImage="./media/images/Tomo.jpg" memberName="Tomohiro Yoshida" memberRole="Full Stack Developer" linkedIn="https://www.linkedin.com/" gitHub="https://github.com/" behance="" />
@@ -62,21 +60,8 @@ const TeamSection = styled.div`
             flex-wrap: wrap;
             justify-content: center;
 
-            .team-member-box:nth-of-type(1) {
+            /* .team-member-box:nth-of-type(1) {
                 flex-basis: 100%;
-            }
-
-            /* &.team-info-one {
-                .team-member-box {
-                    flex: 1 0 50%;
-                    text-align: center;
-                    padding: 10px;
-                }
-
-                .team-member-box:first-child {
-                    flex: 0 1 100%;
-                }
-
             } */
         }
         
