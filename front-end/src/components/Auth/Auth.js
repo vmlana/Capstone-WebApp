@@ -75,6 +75,9 @@ const Auth = (props) => {
         // console.log(now < accessExpiresIn)
         // console.log(accessExpiresIn)
         setTokenIsValid(now < accessExpiresIn)
+        if(now > accessExpiresIn) {
+            props.history.push("/auth");
+        }
     }, [accessToken])
 
     let userDirection;
