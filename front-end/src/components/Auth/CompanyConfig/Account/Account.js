@@ -15,6 +15,8 @@ import { s3UploadHandler } from '../../../../services/s3Handler';
 
 import { apiUrl } from '../../../../services/apiUrl';
 
+import { device } from '../../../StyleComponent/responsiveDevice';
+
 const Account = () => {
     const dispatch = useDispatch();
     const [companyInfo, setCompanyInfo] = useState({
@@ -40,7 +42,6 @@ const Account = () => {
     const [logo, setLogo] = useState("");
     const [saveSuccess, setSaveSuccess] = useState(false);
 
-    // console.log(process.env.NODE_ENV);
 
     const addNewEmployee = (e) => {
         e.persist();
