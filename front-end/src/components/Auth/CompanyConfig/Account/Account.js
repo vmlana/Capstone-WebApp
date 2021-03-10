@@ -647,21 +647,22 @@ const AccountPageContainer = styled.div`
 const HeaderDiv = styled.div`
     /* display: grid;
     grid-template-columns: 1fr 65px; */
-    @media (max-width: ${mobileBreakPoint}) {
+    /* @media (max-width: ${mobileBreakPoint}) {
         display: block;
-    }
+    } */
 `;
 
 const HeaderWrapDiv = styled.div`
-    position: relative;
-    border-bottom: solid 1px #000000;
-    max-width: 300px;
-    margin-top: 3rem;
-    margin-bottom: 3rem;
-    @media (max-width: ${mobileBreakPoint}) {
-        margin-right: 0;
-        margin-left: 0;
-        max-width: 100%;
+    margin-right: 0;
+    margin-left: 0;
+    max-width: 100%;
+
+    @media ${device.tablet} {
+        position: relative;
+        border-bottom: solid 1px #000000;
+        max-width: 300px;
+        margin-top: 3rem;
+        margin-bottom: 3rem;
     }
 `;
 
@@ -678,12 +679,21 @@ const AccountPageHeader = styled.h2`
     } */
 `;
 
+// const LogoPositionDiv = styled.div`
+//     position: absolute;
+//     right: 3rem;
+//     margin-bottom: 1rem;
+//     @media (max-width: ${mobileBreakPoint}) {
+//         position: inherit;
+//     }
+// `;
 const LogoPositionDiv = styled.div`
-    position: absolute;
-    right: 3rem;
-    margin-bottom: 1rem;
-    @media (max-width: ${mobileBreakPoint}) {
-        position: inherit;
+    position: inherit;
+
+    @media ${device.tablet} {
+        position: absolute;
+        right: 3rem;
+        margin-bottom: 1rem;
     }
 `;
 
@@ -705,12 +715,14 @@ const FileUploadContainer = styled.div`
 `;
 
 const CompanyLogoContainer = styled.div`
-	display: flex;
-    text-align: right;
-    justify-content: flex-end;
-    @media (max-width: ${mobileBreakPoint}) {
-        justify-content: center;
+    justify-content: center;
+
+    @media ${device.tablet} {
+        display: flex;
+        text-align: right;
+        justify-content: flex-end;
     }
+    
 `;
 
 const UploadFile = styled.input.attrs({ type: 'file' })`
@@ -719,19 +731,21 @@ const UploadFile = styled.input.attrs({ type: 'file' })`
 
 // *****************************
 const UploadLogoDiv = styled.div`
-    position: relative;
-    @media (max-width: ${mobileBreakPoint}) {
-        width: 100px;
-        height: auto;
+    width: 100px;
+    height: auto;
+
+    @media ${device.tablet} {
+        position: relative;
     }
 `;
 
 const UploadLogoLabel = styled.label`
-    position: absolute;
-    top: -1rem;
-    cursor: pointer;
-    @media (max-width: ${mobileBreakPoint}) {
-        position: initial;
+    position: initial;
+
+    @media ${device.tablet} {
+        position: absolute;
+        top: -1rem;
+        cursor: pointer;
     }
 `;
 // *******************************
@@ -742,29 +756,29 @@ const Form = styled.form`
     grid-gap: 1rem;
     height: 440px;
     grid-column: span 2; */
-    @media (max-width: ${mobileBreakPoint}) {
-        display: block;
-        height: auto;
-    }
+    display: block;
+    height: auto;
 `;
 
 const PhoneCityPostalDiv = styled.div`
-    display: grid;
-    grid-column-gap: .5rem;
-    grid-template-columns: 1.5fr 2fr 2fr;
-    align-items: flex-end;
-    @media (max-width: ${mobileBreakPoint}) {
-        display: block;
+    display: block;
+
+    @media ${device.tablet} {
+        display: grid;
+        grid-column-gap: .5rem;
+        grid-template-columns: 1.5fr 2fr 2fr;
+        align-items: flex-end;
     }
 `;
 
 const EmployeeInformationDiv = styled.div`
-    display: grid;
-    /* flex-direction: column;
-    grid-template-rows: 1fr 1fr 3fr; */
-    margin-top: 3rem;
-    @media (max-width: ${mobileBreakPoint}) {
-        display: block;
+    display: block;
+
+    @media ${device.tablet} {
+        display: grid;
+        /* flex-direction: column;
+        grid-template-rows: 1fr 1fr 3fr; */
+        margin-top: 3rem;
     }
 `;
 
@@ -798,18 +812,20 @@ const DownloadCSVLink = styled.a`
 `;
 
 const UploadCSVDiv = styled.div`
-    display: flex;
-    @media (max-width: ${mobileBreakPoint}) {
-        display: block;
+    display: block;
+
+    @media ${device.tablet} {
+        display: flex;
     }
 `;
 
 const UploadCSVLabel = styled.label`
-    display: flex;
-    width: 70%;
-    @media (max-width: ${mobileBreakPoint}) {
-        display: block;
-        width: 100%;
+    display: block;
+    width: 100%;
+
+    @media ${device.tablet} {
+        display: flex;
+        width: 70%;
     }
 `;
 
@@ -818,59 +834,62 @@ const InvisibleInput = styled.input`
 `;
 
 const ChooseFilePElement = styled.p`
-  text-transform: uppercase;
-  font-size: .8rem;
-  padding: 0.5rem;
-  background-color: #ddd;
-  color: grey;
-  border: solid 1px #ccc;
-  border-radius: 3px;
-  text-align: center;
-  margin: 0 auto;
-  width: 40%;
-  cursor: pointer;
-  &:focus {
-    outline: none;
-    box-shadow: none;
-  }
-  @media (max-width: ${mobileBreakPoint}) {
-        width: 100%;
-        margin-bottom: 1rem;
+    width: 100%;
+    margin-bottom: 1rem;
+
+    @media ${device.tablet} {
+        text-transform: uppercase;
+        font-size: .8rem;
+        padding: 0.5rem;
+        background-color: #ddd;
+        color: grey;
+        border: solid 1px #ccc;
+        border-radius: 3px;
+        text-align: center;
+        margin: 0 auto;
+        width: 40%;
+        cursor: pointer;
+        &:focus {
+            outline: none;
+            box-shadow: none;
+        }
     }
 `;
 
 const SelectedFilePElement = styled.p`
-  padding: 0.5rem;
-  color: ${props => props.uploadCSV ? "black" : "#ccc"};
-  border: solid 1px #ccc;
-  border-radius: 3px;
-  margin: 0 .5rem;
-  width: 100%;
-  cursor: pointer;
-  @media (max-width: ${mobileBreakPoint}) {
     margin: 0 auto;
     width: 100%;
     margin-bottom: 1rem;
+
+    @media ${device.tablet} {
+        padding: 0.5rem;
+        color: ${props => props.uploadCSV ? "black" : "#ccc"};
+        border: solid 1px #ccc;
+        border-radius: 3px;
+        margin: 0 .5rem;
+        width: 100%;
+        cursor: pointer;
   }
 `;
 
 const UploadPElement = styled.p`
-    text-transform: uppercase;
-    padding: 0.5rem;
-    background-color: grey;
-    color: white;
-    border: solid 1px #ccc;
-    border-radius: 3px;
-    text-align: center;
-    margin: 0;
-    width: 30%;
-    cursor: pointer;
-    &:active {
-        opacity: .5;
-    }
-    @media (max-width: ${mobileBreakPoint}) {
-        width: 100%;
-        margin-bottom: 1rem;
+    width: 100%;
+    margin-bottom: 1rem;
+
+    @media ${device.tablet} {
+        text-transform: uppercase;
+        padding: 0.5rem;
+        background-color: grey;
+        color: white;
+        border: solid 1px #ccc;
+        border-radius: 3px;
+        text-align: center;
+        margin: 0;
+        width: 30%;
+        cursor: pointer;
+        &:active {
+            opacity: .5;
+        }
     }
 `;
 
