@@ -102,6 +102,34 @@
 			"response": []
 		},
 		{
+			"name": "schedules",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/schedules",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"schedules"
+					],
+					"query": [
+						{
+							"key": "userId",
+							"value": "3",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "cities",
 			"request": {
 				"method": "GET",
@@ -371,6 +399,50 @@
 			"response": []
 		},
 		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "content-type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "access-token",
+						"value": "dPyyz4agUzPPKE3zvbGHivfg2EOhuj0w",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "refresh-token",
+						"value": "kod4CavdiIsVLBSM9V6YEaS7Bbhrl09m",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\r\n        \"email\": \"changizi_yogaandwellness@gmail.com\",\r\n        \"password\": \"123456\",\r\n        \"userType\": \"instructor\"\r\n    }"
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/v1/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "dashboard",
 			"request": {
 				"method": "GET",
@@ -580,6 +652,36 @@
 						"api",
 						"v1",
 						"activitylog"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "schedules",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\": 3,\r\n    \"programId\": 102,\r\n    \"playlistId\": null,\r\n    \"scheduleDate\": \"2021-03-25 09:00\",\r\n    \"reminderMinutes\": 5\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/v1/schedules",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"schedules"
 					]
 				}
 			},
