@@ -13,6 +13,7 @@ const {getLessons, updLesson} = require("../controllers/lessonController.js");
 const {getPlaylists, updPlaylist} = require("../controllers/playlistController.js");
 const {getPrograms} = require("../controllers/programController.js");
 const {getBlogs} = require("../controllers/blogController.js");
+const {getSchedule, addSchedule} = require("../controllers/scheduleController.js");
 const {activityLog} = require("../controllers/activityLogController.js");
 const {postS3Storage, deleteS3Storage} = require("../controllers/s3StorageController");
 const { register, login, verify, refreshToken } = require("../controllers/authController");
@@ -24,6 +25,7 @@ const {instructorValidation} = require("../validators/instructorValidator");
 const {userValidation} = require("../validators/userValidator");
 const {lessonValidation} = require("../validators/lessonValidator");
 const {playlistValidation} = require("../validators/playlistValidator");
+const {scheduleValidation} = require("../validators/scheduleValidator");
 const {tokenValidator} = require("../validators/tokenValidator");
 const {activityLogValidation} = require("../validators/activityLogValidator");
 const {userSignupValidator} = require("../validators/userSignupValidator");
@@ -43,13 +45,15 @@ router
     .get("/playlists", getPlaylists)
     .get("/lessons", getLessons)    
     .get("/blogs", getBlogs)      
-    .get("/search", getSearch)    
+    .get("/schedules", getSchedule)    
+    .get("/search", getSearch)      
     .post("/updlesson", lessonValidation, updLesson)        
     .post("/updplaylist", playlistValidation, updPlaylist)            
     .post("/updinstructor", instructorValidation, updInstructor)    
     .post("/updcompany", tokenValidator, companyValidation, updCompany)  
     .post("/upduser", userValidation, updUser)   
     .post("/activitylog", activityLogValidation, activityLog)     
+    .post("/schedules", scheduleValidation, addSchedule)         
     .post("/s3storage", s3FileTypeValidator, postS3Storage)
     .delete("/s3storage", deleteS3Storage)
     .post("/signup", userSignupValidator, register)
