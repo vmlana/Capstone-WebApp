@@ -35,7 +35,7 @@ exports.getPlaylists = (req, res) => {
         sMyMostViewed = 'playlistViews DESC, ';
     }
 
-    let sQryOrderBy = `ORDER BY ${sMyMostViewed} ${sMyOrderBy} playlistName, playlistId, lessonOrder`;
+    let sQryOrderBy = `ORDER BY ${sMyMostViewed} ${sMyOrderBy} playlistName, playlistId, lessonOrder, lessonId, otherPlaylistName `;
 
 
     let qry = `SELECT p.playlistId, p.name as playlistName, p.description as playlistDescription, log.qtd as playlistViews,
@@ -44,7 +44,8 @@ exports.getPlaylists = (req, res) => {
                       CASE WHEN p.level = "B" THEN "Begginer"
                            WHEN p.level = "I" THEN "Intermediate"
                            WHEN p.level = "A" THEN "Advanced"
-                      ELSE "All Levels" END AS playlistLevel
+                      ELSE "All Levels" END AS playlistLevel,
+                      opl.playlistId AS otherPlaylistId, opl.name as otherPlaylistName, opl.imageFile as otherImageFile
                  FROM playlists p
                       INNER JOIN playlistLessons pl ON (p.playlistId = pl.playlistId)
                       INNER JOIN lessons l ON (pl.lessonId = l.lessonId)
@@ -55,7 +56,12 @@ exports.getPlaylists = (req, res) => {
                                     FROM (SELECT DISTINCT userId, DATE(logDate) as logDate, playlistId
                                             FROM activityLog ) a
                                    GROUP BY playlistId 
-                                 ) log ON ( p.playlistId = log.playlistId )                      
+                                 ) log ON ( p.playlistId = log.playlistId )  
+                      LEFT JOIN ( SELECT p2.playlistId, p2.name, p2.instructorId, l2.imageFile
+                                    FROM playlists p2
+                                         INNER JOIN playlistLessons pl2 ON (pl2.playlistId = p2.playlistId AND pl2.order = 1)
+                                         INNER JOIN lessons l2 ON (l2.lessonId = pl2.lessonId)                                    
+                                   WHERE active = 1 ) opl ON (opl.instructorId = p.instructorId AND opl.playlistId <> p.playlistId)                                                     
                 ${sWhere}                           
                 ${sQryOrderBy} `;
 
@@ -73,24 +79,44 @@ exports.getPlaylists = (req, res) => {
                     while (i < results.length) {
                         let vPlaylist = {};
                         let vLessons = [];
+                        let vRelatedPlaylists = [];
                         let iPlaylistBase = i;
-                        let iLessonBase = -1;
+                        let iImageBase = -1;
                         iPlaylistId = results[iPlaylistBase].playlistId;
 
                         // Creates array of all the lessons for the playlist
                         while (i < results.length && iPlaylistId == results[i].playlistId) {
-                            if (iLessonBase == -1) {
-                                iLessonBase = i;
+
+                            vRelatedPlaylists = [];
+                            let iLessonBase = i;
+                            let iLessonId = results[iLessonBase].lessonId;
+
+                            // Creates array of all the other playlists related to the same instructor
+                            while (i < results.length && iPlaylistId == results[i].playlistId && iLessonId == results[i].lessonId) {
+
+                                if (iImageBase == -1) {
+                                    iImageBase = i;
+                                }
+                                if (results[i].otherPlaylistId > 0 && results[i].otherPlaylistId != undefined) {
+                                    vRelatedPlaylists.push({
+                                        playlistId: results[i].otherPlaylistId,
+                                        playlistName: results[i].otherPlaylistName,
+                                        imageFile: results[i].otherImageFile
+                                    });
+                                }
+
+                                i++;
                             }
+
                             vLessons.push({
-                                lessonId: results[i].lessonId,
-                                lessonName: results[i].lessonName,
-                                lessonOrder: results[i].lessonOrder,
-                                lessonDescription: results[i].lessonDescription,
-                                imageFile: results[i].imageFile,
-                                videoFile: results[i].videoFile
+                                lessonId: results[iLessonBase].lessonId,
+                                lessonName: results[iLessonBase].lessonName,
+                                lessonOrder: results[iLessonBase].lessonOrder,
+                                lessonDescription: results[iLessonBase].lessonDescription,
+                                imageFile: results[iLessonBase].imageFile,
+                                videoFile: results[iLessonBase].videoFile
                             });
-                            i++;
+
                         }
 
                         vPlaylist = {
@@ -99,12 +125,13 @@ exports.getPlaylists = (req, res) => {
                             playlistDescription: results[iPlaylistBase].playlistDescription,
                             playlistLevel: results[iPlaylistBase].playlistLevel,
                             playlistViews: results[iPlaylistBase].playlistViews,
-                            imageFile: results[iLessonBase].imageFile,                            
+                            imageFile: results[iImageBase].imageFile,                            
                             categoryId: results[iPlaylistBase].categoryId,
                             categoryName: results[iPlaylistBase].categoryName,
                             instructorName: results[iPlaylistBase].instructorName,
                             instructorID: results[iPlaylistBase].instructorID,
-                            lessons: vLessons
+                            lessons: vLessons,
+                            relatedPlaylists: vRelatedPlaylists
                         };
 
                         vPlaylists.push(vPlaylist);
