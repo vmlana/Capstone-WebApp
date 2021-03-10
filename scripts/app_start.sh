@@ -8,4 +8,4 @@ cd /home/ec2-user/Capstone-WebApp/front-end
 
 pm2 serve build/ 5000 --name pivotcare-front-end --spa
 
-sudo service nginx start
+sudo service nginx restart
