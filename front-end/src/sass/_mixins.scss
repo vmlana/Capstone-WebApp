@@ -1,0 +1,43 @@
+/* Media Queries */
+$exSmall: 320px;
+$small: 550px;
+$medium: 768px;
+$mediumLarge: 1024px;
+$large: 1224px;
+$exLarge: 1500px;
+
+@mixin mq-exSmall() {
+    @media screen and (min-width: $exSmall) {
+        @content;
+    }
+}
+
+@mixin mq-small() {
+    @media screen and (min-width: $small) {
+        @content;
+    }
+}
+
+@mixin mq-medium() {
+    @media screen and (min-width: $medium) {
+        @content;
+    }
+}
+
+@mixin mq-mediumLarge() {
+    @media screen and (min-width: $mediumLarge) {
+        @content;
+    }
+}
+
+@mixin mq-large() {
+    @media screen and (min-width: $large) {
+        @content;
+    }
+}
+
+@mixin mq-exLarge() {
+    @media screen and (min-width: $exLarge) {
+        @content;
+    }
+}
