@@ -1,0 +1,691 @@
+{
+	"info": {
+		"_postman_id": "58f89f38-b6d1-4a28-8bcc-7e7ed9b692d8",
+		"name": "PivotCare",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "categories",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/categories",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"categories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "departments",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/departments",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"departments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "tags",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/tags",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"tags"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "blogs",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/blogs",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"blogs"
+					],
+					"query": [
+						{
+							"key": "blogId",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "instructorId",
+							"value": "2",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "schedules",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/schedules",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"schedules"
+					],
+					"query": [
+						{
+							"key": "userId",
+							"value": "3",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "cities",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/cities",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"cities"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "companies",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/companies",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"companies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "company",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/company?companyId=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"company"
+					],
+					"query": [
+						{
+							"key": "companyId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "instructor",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/instructor?instructorId=2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"instructor"
+					],
+					"query": [
+						{
+							"key": "instructorId",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/user?userId=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"user"
+					],
+					"query": [
+						{
+							"key": "userId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "playlists",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/playlists?instructorId=2&categoryId=3&playlistId=2&mostViewed=true&orderby=playlistLevel, categoryName",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"playlists"
+					],
+					"query": [
+						{
+							"key": "instructorId",
+							"value": "2"
+						},
+						{
+							"key": "categoryId",
+							"value": "3"
+						},
+						{
+							"key": "playlistId",
+							"value": "2"
+						},
+						{
+							"key": "mostViewed",
+							"value": "true"
+						},
+						{
+							"key": "orderby",
+							"value": "playlistLevel, categoryName"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "lessons",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/lessons?lessonId=5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"lessons"
+					],
+					"query": [
+						{
+							"key": "lessonId",
+							"value": "5"
+						},
+						{
+							"key": "categoryId",
+							"value": "3",
+							"disabled": true
+						},
+						{
+							"key": "instructorId",
+							"value": "2",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "programs",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/programs?companyId=1&programId=1&userId=3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"programs"
+					],
+					"query": [
+						{
+							"key": "companyId",
+							"value": "1"
+						},
+						{
+							"key": "programId",
+							"value": "1"
+						},
+						{
+							"key": "userId",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "search",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/search?userId=3&keyword=",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"search"
+					],
+					"query": [
+						{
+							"key": "userId",
+							"value": "3"
+						},
+						{
+							"key": "keyword",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "content-type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "access-token",
+						"value": "dPyyz4agUzPPKE3zvbGHivfg2EOhuj0w",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "refresh-token",
+						"value": "kod4CavdiIsVLBSM9V6YEaS7Bbhrl09m",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\r\n        \"email\": \"changizi_yogaandwellness@gmail.com\",\r\n        \"password\": \"123456\",\r\n        \"userType\": \"instructor\"\r\n    }"
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/v1/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "dashboard",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/dashboard?userId=3&initialDate=2021-02-28&finalDate=2021-03-06",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"dashboard"
+					],
+					"query": [
+						{
+							"key": "userId",
+							"value": "3"
+						},
+						{
+							"key": "initialDate",
+							"value": "2021-02-28"
+						},
+						{
+							"key": "finalDate",
+							"value": "2021-03-06"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updInstructor",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\r\n        \"instructorId\": \"2\",\r\n        \"userLogin\": \"bob@instructor.ca\",\r\n        \"instructorName\": \"q\",\r\n        \"resume\": \"A great teacher with a lot of experience in the field\",\r\n        \"specializationArea\": \"Physiotherapy\",\r\n        \"phoneNumber\": \"788719417\",\r\n        \"address\": \"458, 49th Str.\",\r\n        \"cityName\": \"Vancouver\",\r\n        \"provinceName\": \"British Columbia\",\r\n        \"provinceCode\": \"BC\",\r\n        \"postalCode\": \"V6B 1B4\",\r\n        \"imageFile\": null\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/v1/updinstructor",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"updinstructor"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updLesson",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\r\n        \"action\" : \"add\",\r\n        \"lessonId\": 1,\r\n        \"lessonName\": \"VINICIUS 2\",\r\n        \"description\": \"turn your neck 2 times to the left\",\r\n        \"imageFile\": \"xxx\",\r\n        \"videoFile\": \"https://pivotcare-s3.s3-us-west-2.amazonaws.com/exercise01.mp4\",\r\n        \"categoryId\": 1,\r\n        \"instructorId\": 2\r\n    }\r\n\r\n    ",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/v1/updlesson",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"updlesson"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updPlaylist",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"action\" : \"upd\",        \r\n    \"playlistId\": 2,\r\n    \"playlistName\": \"Stretch for Beginners vini\",\r\n    \"playlistDescription\": \"This is another daily sequences for intermediate level \",\r\n    \"playlistLevel\": \"Beg\",\r\n    \"categoryId\": 3,\r\n    \"instructorId\": 2,\r\n    \"active\": 1,\r\n    \"lessons\": [\r\n        {\r\n            \"lessonId\": 1\r\n        },\r\n        {\r\n            \"lessonId\": 3\r\n        }\r\n    ]\r\n}\r\n\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/v1/updplaylist",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"updplaylist"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updUser",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\r\n        \"userId\": 3,\r\n        \"userName\": \"V\",\r\n        \"imageFile\": \"my image file name\"\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/v1/upduser",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"upduser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updCompany",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"companyId\": 1,\r\n    \"userLogin\": \"hr@walmart.ca\",\r\n    \"companyName\": \"B\",\r\n    \"accountResponsible\": \"Mary Popins\",\r\n    \"contactEmail\": \"mpopings@walmart.ca\",\r\n    \"phoneNumber\": \"8877849854\",\r\n    \"address\": \"19, 1st Ave\",\r\n    \"cityId\": 3, \r\n    \"postalCode\": null,\r\n    \"imageFile\": null,\r\n    \"employees\": [\r\n        {\r\n            \"employeeName\": \"Hardikkumar Vasoya\",\r\n            \"employeeId\": \"100348170\",\r\n            \"departmentName\": \"Warehouse\"\r\n        },\r\n        {\r\n            \"employeeName\": \"Ken Tauchi\",\r\n            \"employeeId\": \"100346354\",\r\n            \"departmentName\": \"Warehouse\"\r\n        },\r\n        {\r\n            \"employeeName\": \"Tomohiro Yoshida\",\r\n            \"employeeId\": \"100346604\",\r\n            \"departmentName\": \"Office\"\r\n        },\r\n        {\r\n            \"employeeName\": \"Vinicius Meyer Lana\",\r\n            \"employeeId\": \"100350049\",\r\n            \"departmentName\": \"Office\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/v1/updcompany",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"updcompany"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "activityLog",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\": 3,\r\n    \"programId\": 101,\r\n    \"playlistId\": 104,\r\n    \"lessonId\": 114\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/v1/activitylog",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"activitylog"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "schedules",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\": 3,\r\n    \"programId\": 102,\r\n    \"playlistId\": null,\r\n    \"scheduleDate\": \"2021-03-25 09:00\",\r\n    \"reminderMinutes\": 5\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/v1/schedules",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"schedules"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
