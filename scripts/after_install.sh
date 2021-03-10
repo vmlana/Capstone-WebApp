@@ -10,4 +10,6 @@ cd /home/ec2-user/Capstone-WebApp/front-end
 
 npm install --production
 
+npm audit fix
+
 npm run build
