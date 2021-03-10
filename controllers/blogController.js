@@ -58,7 +58,7 @@ exports.getBlogs = (req, res) => {
 
                             vRelatedBlogs = [];
                             let iTagBase = i;
-                            iTagId = results[iTagBase].tagId;
+                            let iTagId = results[iTagBase].tagId;
 
                             // Creates array of all the other blogs related to the same tag
                             while (i < results.length && iBlogId == results[i].blogId && iTagId == results[i].tagId) {
