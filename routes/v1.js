@@ -13,6 +13,7 @@ const {getLessons, updLesson} = require("../controllers/lessonController.js");
 const {getPlaylists, updPlaylist} = require("../controllers/playlistController.js");
 const {getPrograms} = require("../controllers/programController.js");
 const {getBlogs} = require("../controllers/blogController.js");
+const {getSurvey} = require("../controllers/surveyController.js");
 const {getSchedule, addSchedule} = require("../controllers/scheduleController.js");
 const {activityLog} = require("../controllers/activityLogController.js");
 const {postS3Storage, deleteS3Storage} = require("../controllers/s3StorageController");
@@ -47,6 +48,7 @@ router
     .get("/blogs", getBlogs)      
     .get("/schedules", getSchedule)    
     .get("/search", getSearch)      
+    .get("/survey", getSurvey)          
     .post("/updlesson", lessonValidation, updLesson)        
     .post("/updplaylist", playlistValidation, updPlaylist)            
     .post("/updinstructor", instructorValidation, updInstructor)    
