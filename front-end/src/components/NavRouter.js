@@ -14,7 +14,11 @@ const NavRouter = () => (
     <Route exact path="/about" component={About} />
     <Route exact path="/contact" component={Contact} />
     <Route path="/auth" component={Auth} />
-    <Route path="/s3test" component={S3Test} />
+    {
+      process.env.NODE_ENV === "development" ?
+      <Route path="/s3test" component={S3Test} />:
+      null
+    }
     <Route component={ErrorPage} />
   </Switch>
 );
