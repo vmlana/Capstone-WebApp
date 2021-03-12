@@ -74,7 +74,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/api/v1/blogs",
+					"raw": "http://localhost:3000/api/v1/blogs?userId=3",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -88,13 +88,17 @@
 					"query": [
 						{
 							"key": "blogId",
-							"value": "1",
+							"value": "2",
 							"disabled": true
 						},
 						{
 							"key": "instructorId",
 							"value": "2",
 							"disabled": true
+						},
+						{
+							"key": "userId",
+							"value": "3"
 						}
 					]
 				}
