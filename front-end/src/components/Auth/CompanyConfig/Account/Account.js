@@ -699,7 +699,6 @@ const Account = () => {
     );
 };
 
-const mobileBreakPoint = "767px";
 
 const AccountPageContainer = styled.div`
     max-width: 550px;
@@ -708,7 +707,8 @@ const AccountPageContainer = styled.div`
     padding: 2rem;
     color: ${colors.darkGrey};
     @media ${device.laptop} {
-    max-width: 650px;
+        max-width: 650px;
+        margin-left: 5%;
     }
     /* display: grid;
     grid-template-columns: 1fr 1fr; */
@@ -718,11 +718,9 @@ const HeaderDiv = styled.div`
     position: relative;
     height: 1.5rem;
     margin-bottom: 1rem;
-    /* display: grid;
-    grid-template-columns: 1fr 65px; */
-    /* @media (max-width: ${mobileBreakPoint}) {
-        display: block;
-    } */
+    @media ${device.tablet} {
+        margin-bottom: 3.5rem;
+    }
 `;
 
 const HeaderWrapDiv = styled.div`
@@ -749,25 +747,14 @@ const AccountPageHeader = styled.h2`
     color: ${colors.darkGrey};
     padding-right: 2rem;
     text-transform: uppercase;
-    /* @media (max-width: ${mobileBreakPoint}) {
-        top: -1.75rem;
-    } */
 `;
 
-// const LogoPositionDiv = styled.div`
-//     position: absolute;
-//     right: 3rem;
-//     margin-bottom: 1rem;
-//     @media (max-width: ${mobileBreakPoint}) {
-//         position: inherit;
-//     }
-// `;
 const LogoPositionDiv = styled.div`
     position: inherit;
 
     @media ${device.tablet} {
         position: absolute;
-        right: 3rem;
+        right: 5%;
         margin-bottom: 1rem;
     }
 `;
@@ -784,9 +771,6 @@ const FileUploadContainer = styled.div`
     border-radius: 5px;
     background-color: #ddd;
     margin-bottom: 1.5rem;
-    /* @media (max-width: ${mobileBreakPoint}) {
-        position: inherit;
-    } */
 `;
 
 const CompanyLogoContainer = styled.div`
@@ -828,11 +812,6 @@ const UploadLogoLabel = styled.label`
 // *******************************
 
 const Form = styled.form`
-	/* display: grid;
-	grid-template-columns: 1fr 1fr;
-    grid-gap: 1rem;
-    height: 440px;
-    grid-column: span 2; */
     display: block;
     height: auto;
 `;
@@ -860,13 +839,9 @@ const EmployeeInformationDiv = styled.div`
 const EmployeeInfoHeader = styled.h3`
     text-align: left;
     font-weight: bold;
-    font-size: 1.25rem;
+    font-size: 1.5rem;
     margin: 0;
     margin-bottom: 1rem;
-    /* @media (max-width: ${mobileBreakPoint}) {
-        margin-top: 3rem;
-        margin-bottom: 2rem;
-    } */
 `;
 
 const CSVUploadDiv = styled.div`
@@ -1056,8 +1031,6 @@ const AddNewEmployeeElement = styled.div`
 
 const AddEmployeeMobileDiv = styled.div`
     display: flex;
-    /* align-items: center;
-    justify-content: center; */
 `;
 
 const EmployeesListLabel = styled.p`
