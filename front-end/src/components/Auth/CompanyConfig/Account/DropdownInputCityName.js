@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 120,
     width: "100%",
     margin: 0,
-    marginBottom: ".5rem",
+    marginBottom: "1rem",
   },
   selectEmpty: {
     marginTop: theme.spacing(2),
@@ -62,7 +62,7 @@ export default function DropdownInput(props) {
   }, [cityName])
 
   return (
-    <Label>
+    <Label className="AccountDropdownInput">
       <LabelText>{props.labelText}</LabelText>
       <FormControl className={classes.formControl}>
         <Select
