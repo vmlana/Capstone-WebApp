@@ -559,13 +559,23 @@ const Account = () => {
                                     }}
                                 />
                             </UploadCSVLabel>
-                            <UploadPElement
+                            <Button
+                                text="Upload"
+                                onClick={uploadCSVToList}
+                                style={
+                                {
+                                    width: windowWidth < 768 ? "100%" : "30%",
+                                    backgroundColor: colors.primaryViolet
+                                }}
+                            />
+                            {/* <UploadPElement
                                 onClick={uploadCSVToList}
                             >
                                 Upload
-                            </UploadPElement>
+                            </UploadPElement> */}
                         </UploadCSVDiv>
                     </CSVUploadDiv>
+
                     <InputEmployeesDiv>
                         <InputWithLabel
                             label="Full Name"
@@ -580,43 +590,73 @@ const Account = () => {
                             value={companyInfo.employeeName}
                             onChange={handleOnChange}
                         />
-                        <InputWithLabel
-                            label="ID"
-                            type="text"
-                            name="employeeId"
-                            labelStyle={
-                                windowWidth < 768 ?
-                                {width: "100%"}
-                                :
-                                { width: "18%" }
-                            }
-                            value={companyInfo.employeeId}
-                            onChange={handleOnChange}
-                        />
-                        {/* <InputWithLabel
-                            label="Department"
-                            type="text"
-                            name="departmentName"
-                            labelStyle={{width:"33%"}}
-                            value={companyInfo.departmentName}
-                            onChange={handleOnChange}
-                        /> */}
-                        <DropdownInput
-                            labelText="Department"
-                            onChange={departmentUpdate}
-                        />
-                        <AddNewEmployeeElement
-                            onClick={addNewEmployee}
-                        >
-                            +
-                        </AddNewEmployeeElement>
+
+                        {
+                            windowWidth < 768 ?
+                            <>
+                                <DepartmentWrapper>
+                                    <DropdownInput
+                                        labelText="Department"
+                                        onChange={departmentUpdate}
+                                    />
+                                </DepartmentWrapper>
+                                <AddEmployeeMobileDiv>
+                                    <InputWithLabel
+                                        label="ID"
+                                        type="text"
+                                        name="employeeId"
+                                        labelStyle={
+                                            windowWidth < 768 ?
+                                            {width: "100%"}
+                                            :
+                                            { width: "18%" }
+                                        }
+                                        value={companyInfo.employeeId}
+                                        onChange={handleOnChange}
+                                    />
+                                    <AddNewEmployeeElement
+                                        onClick={addNewEmployee}
+                                    >
+                                        +
+                                    </AddNewEmployeeElement>
+                                </AddEmployeeMobileDiv>
+                            </>
+                            :
+                            <>
+                                <InputWithLabel
+                                label="ID"
+                                type="text"
+                                name="employeeId"
+                                labelStyle={
+                                    windowWidth < 768 ?
+                                    {width: "100%"}
+                                    :
+                                    { width: "18%" }
+                                }
+                                value={companyInfo.employeeId}
+                                onChange={handleOnChange}
+                                />
+                                <DropdownInput
+                                    labelText="Department"
+                                    onChange={departmentUpdate}
+                                />
+                                <AddNewEmployeeElement
+                                    onClick={addNewEmployee}
+                                >
+                                    +
+                                </AddNewEmployeeElement>
+                            </>
+                        }
                     </InputEmployeesDiv>
+
                     {
                         companyInfo.employees.length === 0 ?
                             <EmployeesList>
                                 No employees added
-                        </EmployeesList>
+                            </EmployeesList>
                             :
+                            <>
+                            <EmployeesListLabel>Employees List</EmployeesListLabel>
                             <EmployeesList>
                                 {companyInfo.employees.map(employee =>
                                     <EmployeesListItem key={employee.employeeId}>
@@ -630,6 +670,7 @@ const Account = () => {
                                     </EmployeesListItem>
                                 )}
                             </EmployeesList>
+                            </>
                     }
                 </EmployeeInformationDiv>
                 <SaveBtnDiv>
@@ -739,7 +780,7 @@ const CompanyLogoP = styled.p`
 
 const FileUploadContainer = styled.div`
 	width: 125px;
-    border: solid 1px black;
+    border: solid 1px ${colors.mediumGrey};
     border-radius: 5px;
     background-color: #ddd;
     margin-bottom: 1.5rem;
@@ -981,33 +1022,56 @@ const InputEmployeesDiv = styled.div`
     }
 `;
 
+const DepartmentWrapper = styled.div`
+    margin-bottom: 1rem;
+    @media ${device.tablet} {
+        margin-bottom: 0rem;
+    }
+`
+
 const AddNewEmployeeElement = styled.div`
     border-radius: 50%;
-    font-size: 1.5rem;
+    font-size: 2rem;
+    font-weight: 500;
     color: white;
-    padding: .5rem;
+    padding: .75rem;
     background-color: ${colors.primaryViolet};
     cursor: pointer;
     align-self: flex-end;
     margin: .25rem;
     margin-bottom: .75rem;
+    margin-left: 2rem;
     height: 1rem;
     width: 1rem;
     display: flex;
     justify-content: center;
     align-items: center;
+    /* align-items: flex-start; */
     &:active {
         opacity: .5;
     }
+    @media ${device.tablet} {
+        margin-left: .25rem;
+    }`;
+
+const AddEmployeeMobileDiv = styled.div`
+    display: flex;
+    /* align-items: center;
+    justify-content: center; */
+`;
+
+const EmployeesListLabel = styled.p`
+    margin-bottom: 0
 `;
 
 const EmployeesList = styled.ul`
     border: solid 1px #ccc;
-    border-radius: 3px;
-    padding: .5rem;
-    overflow: scroll;
+    border-radius: 5px;
+    padding: 1rem;
+    overflow-x: scroll;
     overflow-y: scroll;
     height: 175px;
+    margin-top: .75rem;
     ::-webkit-scrollbar{
         width: 10px;
         height: 10px;
@@ -1015,21 +1079,31 @@ const EmployeesList = styled.ul`
     ::-webkit-scrollbar-track{
         /* background: #ddd; */
         border: none;
+        /* border: solid 1px #ddd; */
         border-radius: 20px;
     }
     ::-webkit-scrollbar-thumb{
-        background: #ddd;
+        background: ${colors.white};
+        border: solid 1px ${colors.mediumGrey};
         border-radius: 20px;
         box-shadow: none;
+        @media ${device.tablet} {
+            background: ${colors.primaryViolet};
+            border: none;
+        }
     }
+    @media ${device.tablet} {
+            overflow-x: hidden;
+        }
+
 `;
 
 const EmployeesListItem = styled.li`
     display: grid;
     grid-column-gap: .5rem;
-    grid-template-columns: 35% 20% 35% 10%;
+    grid-template-columns: 35% 25% 30% 10%;
     margin-bottom: .75rem;
-    /* min-width: 450px; */
+    min-width: 450px;
 `;
 
 const DeleteButton = styled.span`

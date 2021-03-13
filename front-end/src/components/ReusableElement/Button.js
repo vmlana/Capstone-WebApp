@@ -4,17 +4,17 @@ import { PresignedPost } from "aws-sdk/clients/s3";
 
 const Button = ({ text, onClick, type, size, isActive, style }) =>
 	type === "modal" ? (
-		<ButtonElement onClick={onClick} style={{...style}}>
+		<ButtonElement onClick={(e)=>{ e.preventDefault(); onClick(e)}} style={{...style}}>
 			{text}
 		</ButtonElement>
 	) : (
 			type === "add_lesson" ? (
-				<ButtonElement size={size} onClick={onClick} disabled={!isActive} style={{...style}}>
+				<ButtonElement size={size} onClick={(e)=>{ e.preventDefault(); onClick(e)}} disabled={!isActive} style={{...style}}>
 					{text}
 				</ButtonElement>
 			) : (
 					<ButtonElement
-						size={size} onClick={onClick} style={{...style}}>
+						size={size} onClick={(e)=>{ e.preventDefault(); onClick(e)}} style={{...style}}>
 						{text}
 					</ButtonElement>
 				)
