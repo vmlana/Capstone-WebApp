@@ -8,6 +8,10 @@ exports.getBlogs = (req, res) => {
 
     let sBlogId       = pivotDb.escape(req.query.blogId).replace(/['']+/g, '');
     let sInstructorId = pivotDb.escape(req.query.instructorId).replace(/['']+/g, '');
+    let sUserId       = pivotDb.escape(req.query.userId).replace(/['']+/g, '');    
+
+    // sets the number of days to consider when searching the blogs for a user
+    const numDays = 30;
 
     // Set filters
     let sWhere = " WHERE 1 = 1 ";
@@ -17,6 +21,15 @@ exports.getBlogs = (req, res) => {
     if (sInstructorId != "" && sInstructorId.toLowerCase() != "null") {
         sWhere = sWhere + ` AND b.instructorId = ${sInstructorId} `;
     }
+    if (sUserId != "" && sUserId.toLowerCase() != "null") {
+        sWhere = sWhere + ` AND b.categoryId IN (SELECT p.categoryId
+                                                   FROM activityLog l
+                                                        LEFT JOIN playlists p ON (l.playlistId = p.playlistId)
+                                                  WHERE l.userId = ${sUserId} 
+                                                    AND DATEDIFF(CURDATE(), logDate) < ${numDays} 
+                                                  GROUP BY p.categoryId )   `;
+    }
+
 
     let qry = `SELECT b.blogId AS blogId, b.title AS blogTitle, content AS blogContent, b.postDate AS orderedDate,
                       DATE_FORMAT(b.postDate, "%b %d %Y") as blogPostDate, b.imageFileBlog as blogImageFile, b.imageFileThumb as blogThumbImageFile,   

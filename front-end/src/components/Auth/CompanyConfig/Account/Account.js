@@ -16,6 +16,9 @@ import { s3UploadHandler } from '../../../../services/s3Handler';
 import { apiUrl } from '../../../../services/apiUrl';
 
 import { device } from '../../../StyleComponent/responsiveDevice';
+import { colors } from '../../../StyleComponent/colors';
+
+import Button from "../../../ReusableElement/Button";
 
 const Account = () => {
     const dispatch = useDispatch();
@@ -383,10 +386,20 @@ const Account = () => {
         <AccountPageContainer>
             <HeaderDiv>
                 <HeaderWrapDiv>
-                    <AccountPageHeader>Company account</AccountPageHeader>
+                    {
+                        windowWidth < 768 ?
+                        <AccountPageHeader>Account</AccountPageHeader>:
+                        <AccountPageHeader>Company account</AccountPageHeader>
+                    }
                 </HeaderWrapDiv>
+            </HeaderDiv>
                 <LogoPositionDiv>
-                    <CompanyLogoP>Company Logo</CompanyLogoP>
+                    {
+                        windowWidth < 768 ?
+                        <CompanyLogoP>Company Logo</CompanyLogoP>
+                        :
+                        null
+                    }
                     <CompanyLogoContainer>
                         <label>
                             <FileUploadContainer>
@@ -439,7 +452,6 @@ const Account = () => {
                         />
                     </UploadLogoLabel>
                 </UploadLogoDiv> */}
-            </HeaderDiv>
             {/* {
                 windowWidth >= 767 ?
                     <EmployeeInfoHeader>
@@ -455,8 +467,8 @@ const Account = () => {
                         name="companyName"
                         required
                         value={companyInfo.companyName}
-                        // value={undefined}
                         onChange={handleOnChange}
+                        inputStyle={{marginBottom: "1rem"}}
                     />
                     <InputWithLabel
                         label="Name"
@@ -465,6 +477,7 @@ const Account = () => {
                         required
                         value={companyInfo.accountResponsible}
                         onChange={handleOnChange}
+                        inputStyle={{marginBottom: "1rem"}}
                     />
                     <InputWithLabel
                         label="Email"
@@ -473,6 +486,7 @@ const Account = () => {
                         required
                         value={companyInfo.contactEmail}
                         onChange={handleOnChange}
+                        inputStyle={{marginBottom: "1rem"}}
                     />
                     <InputWithLabel
                         label="Company Address"
@@ -481,6 +495,7 @@ const Account = () => {
                         required
                         value={companyInfo.address}
                         onChange={handleOnChange}
+                        inputStyle={{marginBottom: "1rem"}}
                     />
                     <PhoneCityPostalDiv>
                         <InputWithLabel
@@ -490,15 +505,8 @@ const Account = () => {
                             required
                             value={companyInfo.phoneNumber}
                             onChange={handleOnChange}
+                            inputStyle={{marginBottom: "1rem"}}
                         />
-                        {/* <InputWithLabel
-                        label="City"
-                        type="text"
-                        name="cityName"
-                        required
-                        value={companyInfo.cityName}
-                        onChange={handleOnChange}
-                    /> */}
                         <DropdownInputCityName
                             labelText="city"
                             onChange={cityIdUpdate}
@@ -511,21 +519,15 @@ const Account = () => {
                             required
                             value={companyInfo.postalCode}
                             onChange={handleOnChange}
+                            inputStyle={{marginBottom: "1rem"}}
                         />
                     </PhoneCityPostalDiv>
                 </div>
-                {/* {
-                    windowWidth >= 767 ?
-                        null :
-                        <EmployeeInfoHeader>
-                            Employees Information
-                        </EmployeeInfoHeader>
-                } */}
                 <EmployeeInformationDiv>
                     <EmployeeInfoHeader>
                         Employees Information
                     </EmployeeInfoHeader>
-                    <div>
+                    <CSVUploadDiv>
                         <CSVHeaderAndUploadDiv>
                             <UploadCSVHeader>
                                 Upload CSV file
@@ -536,9 +538,9 @@ const Account = () => {
                         </CSVHeaderAndUploadDiv>
                         <UploadCSVDiv>
                             <UploadCSVLabel>
-                                <ChooseFilePElement>
+                                {/* <ChooseFilePElement>
                                     Choose File
-                                </ChooseFilePElement>
+                                </ChooseFilePElement> */}
                                 <SelectedFilePElement
                                     uploadCSV={uploadCSV}
                                 >
@@ -563,13 +565,18 @@ const Account = () => {
                                 Upload
                             </UploadPElement>
                         </UploadCSVDiv>
-                    </div>
+                    </CSVUploadDiv>
                     <InputEmployeesDiv>
                         <InputWithLabel
                             label="Full Name"
                             type="text"
                             name="employeeName"
-                            labelStyle={{ width: "33%" }}
+                            labelStyle={
+                                windowWidth < 768 ?
+                                {width: "100%"}
+                                :
+                                { width: "33%" }
+                            }
                             value={companyInfo.employeeName}
                             onChange={handleOnChange}
                         />
@@ -577,7 +584,12 @@ const Account = () => {
                             label="ID"
                             type="text"
                             name="employeeId"
-                            labelStyle={{ width: "18%" }}
+                            labelStyle={
+                                windowWidth < 768 ?
+                                {width: "100%"}
+                                :
+                                { width: "18%" }
+                            }
                             value={companyInfo.employeeId}
                             onChange={handleOnChange}
                         />
@@ -621,12 +633,25 @@ const Account = () => {
                     }
                 </EmployeeInformationDiv>
                 <SaveBtnDiv>
-                    <button
+                    {/* <button
                         onClick={e => {
                             e.preventDefault();
                             updateCompanyInfo();
                         }}
-                    >Save</button>
+                    >Save</button> */}
+                    <Button
+                        size="med"
+                        onClick={e => {
+                            e.preventDefault();
+                            updateCompanyInfo();
+                        }}
+                        text="Save"
+                        style={
+                            {
+                                width: windowWidth < 768 ? "100%" : "50%",
+                                backgroundColor: colors.primaryViolet
+                            }
+                            } />
                 </SaveBtnDiv>
             </Form>
         </AccountPageContainer>
@@ -636,15 +661,22 @@ const Account = () => {
 const mobileBreakPoint = "767px";
 
 const AccountPageContainer = styled.div`
-    max-width: 650px;
-    margin: 0 auto;
+    max-width: 550px;
+    /* margin: 0 auto; */
     margin-left: 0;
     padding: 2rem;
+    color: ${colors.darkGrey};
+    @media ${device.laptop} {
+    max-width: 650px;
+    }
     /* display: grid;
     grid-template-columns: 1fr 1fr; */
 `;
 
 const HeaderDiv = styled.div`
+    position: relative;
+    height: 1.5rem;
+    margin-bottom: 1rem;
     /* display: grid;
     grid-template-columns: 1fr 65px; */
     /* @media (max-width: ${mobileBreakPoint}) {
@@ -656,22 +688,24 @@ const HeaderWrapDiv = styled.div`
     margin-right: 0;
     margin-left: 0;
     max-width: 100%;
+    position: relative;
+    border-bottom: solid 2.5px ${colors.darkGrey};
+    /* max-width: 300px; */
+    margin-top: 3rem;
+    margin-bottom: 3rem;
 
     @media ${device.tablet} {
-        position: relative;
-        border-bottom: solid 1px #000000;
-        max-width: 300px;
-        margin-top: 3rem;
-        margin-bottom: 3rem;
+        max-width: 400px;
     }
 `;
 
 const AccountPageHeader = styled.h2`
-    font-size: 1.25rem;
+    /* font-size: 1.25rem; */
     font-weight: bold;
     position: absolute;
     top: -1.5rem;
     background-color: #fff;
+    color: ${colors.darkGrey};
     padding-right: 2rem;
     text-transform: uppercase;
     /* @media (max-width: ${mobileBreakPoint}) {
@@ -700,26 +734,28 @@ const LogoPositionDiv = styled.div`
 const CompanyLogoP = styled.p`
     margin: 0;
     margin-bottom: .5rem;
+    text-align: center
 `;
 
 const FileUploadContainer = styled.div`
 	width: 125px;
     border: solid 1px black;
-    /* position: absolute;
-    right: 3rem; */
+    border-radius: 5px;
     background-color: #ddd;
-    /* margin-bottom: 1rem; */
+    margin-bottom: 1.5rem;
     /* @media (max-width: ${mobileBreakPoint}) {
         position: inherit;
     } */
 `;
 
 const CompanyLogoContainer = styled.div`
+    text-align: right;
+    display: flex;
     justify-content: center;
+
 
     @media ${device.tablet} {
         display: flex;
-        text-align: right;
         justify-content: flex-end;
     }
     
@@ -773,12 +809,10 @@ const PhoneCityPostalDiv = styled.div`
 
 const EmployeeInformationDiv = styled.div`
     display: block;
+    margin-top: 3rem;
 
     @media ${device.tablet} {
         display: grid;
-        /* flex-direction: column;
-        grid-template-rows: 1fr 1fr 3fr; */
-        margin-top: 3rem;
     }
 `;
 
@@ -792,6 +826,10 @@ const EmployeeInfoHeader = styled.h3`
         margin-top: 3rem;
         margin-bottom: 2rem;
     } */
+`;
+
+const CSVUploadDiv = styled.div`
+    margin-bottom: 2rem;
 `;
 
 const CSVHeaderAndUploadDiv = styled.div`
@@ -836,9 +874,24 @@ const InvisibleInput = styled.input`
 const ChooseFilePElement = styled.p`
     width: 100%;
     margin-bottom: 1rem;
+    text-transform: uppercase;
+    font-size: .8rem;
+    padding: 0.5rem;
+    background-color: #ddd;
+    color: grey;
+    border: solid 1px #ccc;
+    border-radius: 3px;
+    text-align: center;
+    margin: 0 auto;
+    cursor: pointer;
+    &:focus {
+        outline: none;
+        box-shadow: none;
+    }
 
     @media ${device.tablet} {
-        text-transform: uppercase;
+        width: 40%;
+        /* text-transform: uppercase;
         font-size: .8rem;
         padding: 0.5rem;
         background-color: #ddd;
@@ -852,7 +905,7 @@ const ChooseFilePElement = styled.p`
         &:focus {
             outline: none;
             box-shadow: none;
-        }
+        } */
     }
 `;
 
@@ -860,24 +913,48 @@ const SelectedFilePElement = styled.p`
     margin: 0 auto;
     width: 100%;
     margin-bottom: 1rem;
+    padding: 0.5rem;
+    color: ${props => props.uploadCSV ? "black" : "#ccc"};
+    border: solid 1px #ccc;
+    border-radius: 5px;
+    width: 100%;
+    cursor: pointer;
+    box-sizing: border-box;
 
     @media ${device.tablet} {
-        padding: 0.5rem;
+        margin: 0 .5rem 0 0;
+        width: 45%;
+        /* padding: 0.5rem;
         color: ${props => props.uploadCSV ? "black" : "#ccc"};
         border: solid 1px #ccc;
         border-radius: 3px;
         margin: 0 .5rem;
         width: 100%;
-        cursor: pointer;
+        cursor: pointer; */
   }
 `;
 
 const UploadPElement = styled.p`
     width: 100%;
     margin-bottom: 1rem;
+    /* text-transform: uppercase; */
+    padding: 0.5rem;
+    background-color: ${colors.primaryViolet};
+    color: white;
+    /* font-weight: bold; */
+    border: solid 1px #ccc;
+    border-radius: 5px;
+    text-align: center;
+    margin: 0;
+    cursor: pointer;
+    box-sizing: border-box;
+    &:active {
+        opacity: .5;
+    }
 
     @media ${device.tablet} {
-        text-transform: uppercase;
+        width: 30%;
+        /* text-transform: uppercase;
         padding: 0.5rem;
         background-color: grey;
         color: white;
@@ -889,16 +966,19 @@ const UploadPElement = styled.p`
         cursor: pointer;
         &:active {
             opacity: .5;
-        }
+        } */
     }
 `;
 
 const InputEmployeesDiv = styled.div`
-    display: flex;
-    justify-content: space-between;
-    /* @media (max-width: ${mobileBreakPoint}) {
-        display: block;
-    } */
+    display: block;
+    /* display: flex;
+    flex-direction: column; */
+    
+    @media ${device.tablet} {
+        display: flex;
+        justify-content: space-between;
+    }
 `;
 
 const AddNewEmployeeElement = styled.div`
@@ -906,7 +986,7 @@ const AddNewEmployeeElement = styled.div`
     font-size: 1.5rem;
     color: white;
     padding: .5rem;
-    background-color: grey;
+    background-color: ${colors.primaryViolet};
     cursor: pointer;
     align-self: flex-end;
     margin: .25rem;
