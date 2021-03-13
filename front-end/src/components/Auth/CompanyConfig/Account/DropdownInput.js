@@ -5,6 +5,8 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import styled from "styled-components";
 
+import { apiUrl } from '../../../../services/apiUrl';
+
 import './DropdownInput.css';
 
 const useStyles = makeStyles((theme) => ({
@@ -42,7 +44,7 @@ export default function DropdownInput(props) {
   };
 
   useEffect( async()=>{
-    const departments = await fetch(`http://localhost:3000/api/v1/departments`).then(results => {
+    const departments = await fetch(`${apiUrl}/departments`).then(results => {
       return results.json();
     }).catch(error=> {
       console.log(error);
