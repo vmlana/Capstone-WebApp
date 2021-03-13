@@ -1,18 +1,20 @@
 import React from "react";
 import styled from "styled-components";
+import { PresignedPost } from "aws-sdk/clients/s3";
 
-const Button = ({ text, onClick, type, size, isActive }) =>
+const Button = ({ text, onClick, type, size, isActive, style }) =>
 	type === "modal" ? (
-		<ButtonElement onClick={onClick}>
+		<ButtonElement onClick={onClick} style={{...style}}>
 			{text}
 		</ButtonElement>
 	) : (
 			type === "add_lesson" ? (
-				<ButtonElement size={size} onClick={onClick} disabled={!isActive}>
+				<ButtonElement size={size} onClick={onClick} disabled={!isActive} style={{...style}}>
 					{text}
 				</ButtonElement>
 			) : (
-					<ButtonElement size={size} onClick={onClick}>
+					<ButtonElement
+						size={size} onClick={onClick} style={{...style}}>
 						{text}
 					</ButtonElement>
 				)
@@ -24,7 +26,7 @@ const ButtonElement = styled.button`
 	background-color: grey;
 	color: white;
 	border: none;
-	border-radius: 3px;
+	border-radius: 5px;
 	width: 40%;
 	/* text-transform: uppercase; */
 

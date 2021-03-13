@@ -5,6 +5,8 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import styled from "styled-components";
 
+import './DropdownInput.css';
+
 const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),
@@ -53,7 +55,7 @@ export default function DropdownInput(props) {
   }, [departmentName])
 
   return (
-    <Label>
+    <Label className="AccountDropdownInput">
       <LabelText>{props.labelText}</LabelText>
       <FormControl className={classes.formControl}>
         <Select
