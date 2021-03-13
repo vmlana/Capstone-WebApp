@@ -87,6 +87,14 @@ exports.addSchedule = (req, res) => {
             }
 
             let sScheduleDate    = pivotDb.escape(objLog.scheduleDate).replace(/['']+/g, '');
+            
+            // Convert from time zone to UTC 
+            if (sScheduleDate.length > 20 ) {
+                let sDate = sScheduleDate.substr(0,10);
+                let sTime = sScheduleDate.substr(11,8);            
+                sScheduleDate = sDate + ' ' + sTime;   
+            }
+          
             let sReminderMinutes = pivotDb.escape(objLog.reminderMinutes).replace(/['']+/g, '');            
 
             if (sMessageInfo == '') {
