@@ -73,24 +73,49 @@ exports.addSchedule = (req, res) => {
             }
 
             let sProgramId = pivotDb.escape(objLog.programId).replace(/['']+/g, '');
+            let sOperProg = " = ";
             if (sProgramId == "" || sProgramId.toLowerCase() == "null") {
                 sProgramId = 'null';
+                sOperProg  = " IS "
             }
 
             let sPlaylistId = pivotDb.escape(objLog.playlistId).replace(/['']+/g, '');
+            let sOperPlay = " = ";
             if (sPlaylistId == "" || sPlaylistId.toLowerCase() == "null") {
                 sPlaylistId = 'null';
+                sOperPlay   = " IS ";
             }
 
             let sScheduleDate    = pivotDb.escape(objLog.scheduleDate).replace(/['']+/g, '');
             let sReminderMinutes = pivotDb.escape(objLog.reminderMinutes).replace(/['']+/g, '');            
 
             if (sMessageInfo == '') {
-                qry = `INSERT INTO schedules (userId, programId, playlistId, scheduleDate, reminderMinutes) 
-                            VALUES (${sUserId}, ${sProgramId}, ${sPlaylistId}, "${sScheduleDate}", ${sReminderMinutes} ) `;
-    
+                qry = `SELECT *
+                         FROM schedules
+                        WHERE userId = ${sUserId}
+                          AND programId ${sOperProg} ${sProgramId}
+                          AND playlistId ${sOperPlay} ${sPlaylistId}
+                          AND CAST(scheduleDate AS char) = "${sScheduleDate}" `;
+
                 pivotPoolDb.then(pool => {
                     pool.query(qry)
+                        .then(results => {
+                            return results;
+                        })
+                        .then(results => {
+                            if (results.length == 0) {
+                                qry = `INSERT INTO schedules (userId, programId, playlistId, scheduleDate, reminderMinutes) 
+                                VALUES (${sUserId}, ${sProgramId}, ${sPlaylistId}, "${sScheduleDate}", ${sReminderMinutes} ) `;
+                            } else {
+                                qry = `UPDATE schedules SET reminderMinutes = ${sReminderMinutes}
+                                        WHERE userId = ${sUserId}
+                                          AND programId ${sOperProg} ${sProgramId}
+                                          AND playlistId ${sOperPlay} ${sPlaylistId}
+                                          AND CAST(scheduleDate AS char) = "${sScheduleDate}" `;                                 
+                            }
+
+                            return pool.query(qry);
+                        })
                         .then(results => {
                             if (results.affectedRows == 0) {
                                sMessageInfo = 'No Records found' 
@@ -103,7 +128,7 @@ exports.addSchedule = (req, res) => {
                                 sqlResult  : results
                             };
                             res.status(200).send(myResult);
-                        })
+                        })                        
                         .catch(error => {
                             console.log(error);
                             res.status(500).send(error);
