@@ -7,8 +7,8 @@ const { validationResult } = require("express-validator");
 exports.getSurvey = (req, res) => {
 
     let sSurveyId   = pivotDb.escape(req.query.surveyId).replace(/['']+/g, '');
-    if (sSurveyId != "" && sSurveyId.toLowerCase() != "null") {
-        sSurveyId = "-1";
+    if (sSurveyId == "" || sSurveyId.toLowerCase() == "null") {
+        sSurveyId = '-1';
     }
 
     let qry = `SELECT s.surveyId, s.name as surveyName,
@@ -19,7 +19,7 @@ exports.getSurvey = (req, res) => {
                  FROM surveys s
                       INNER JOIN questions q ON (q.surveyId = s.surveyId)
                       LEFT  JOIN questionOptions o ON (q.questionId = o.questionId)
-                WHERE s.surveyId = 1 
+                WHERE s.surveyId = ${sSurveyId} 
                 ORDER BY surveyName, surveyId, questionNumber, questionId, optionValue, optionId `;
 
     pivotPoolDb.then(pool => {

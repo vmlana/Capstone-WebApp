@@ -9,6 +9,7 @@ exports.getBlogs = (req, res) => {
     let sBlogId       = pivotDb.escape(req.query.blogId).replace(/['']+/g, '');
     let sInstructorId = pivotDb.escape(req.query.instructorId).replace(/['']+/g, '');
     let sUserId       = pivotDb.escape(req.query.userId).replace(/['']+/g, '');    
+    let sCategoryId   = pivotDb.escape(req.query.categoryId).replace(/['']+/g, '');    
 
     // sets the number of days to consider when searching the blogs for a user
     const numDays = 30;
@@ -20,6 +21,9 @@ exports.getBlogs = (req, res) => {
     }
     if (sInstructorId != "" && sInstructorId.toLowerCase() != "null") {
         sWhere = sWhere + ` AND b.instructorId = ${sInstructorId} `;
+    }
+    if (sCategoryId != "" && sCategoryId.toLowerCase() != "null") {
+        sWhere = sWhere + ` AND b.categoryId = ${sCategoryId} `;
     }
     if (sUserId != "" && sUserId.toLowerCase() != "null") {
         sWhere = sWhere + ` AND b.categoryId IN (SELECT p.categoryId
