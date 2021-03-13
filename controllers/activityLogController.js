@@ -18,7 +18,7 @@ exports.activityLog = (req, res) => {
 
             let sMessageInfo  = ''; 
             let objLog = req.body;
-            console.log(objLog);
+            //console.log(objLog);
     
             let sUserId = pivotDb.escape(objLog.userId).replace(/['']+/g, '');
             if (sUserId == "" || sUserId.toLowerCase() == "null") {
