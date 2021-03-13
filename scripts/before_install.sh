@@ -2,6 +2,7 @@
 
 # Kill node all node process
 sudo killall node
+# or sudo pm2 kill
 
 # Delete previous project
 rm -rf /home/ec2-user/Capstone-WebApp/

@@ -16,9 +16,77 @@ function App() {
   const [path, setPath] = useState("");
   const history = useHistory();
   const userInfo = useSelector(state => state.user.userInfo);
+  const [localStorageUserInfo, setLocalStorageUserInfo] = useState(JSON.parse(window.localStorage.getItem("PivotCareUser")))
   const { accessToken, accessExpiresIn, refreshExpiresIn} = userInfo;
 
+  useEffect(()=>{
+    if (localStorageUserInfo !== null) {
+        const localUserType = localStorageUserInfo.userType;
+        const localAuthId = localStorageUserInfo.authId;
+        const localAccessToken = localStorageUserInfo.accessToken;
+        const localRefreshToken = localStorageUserInfo.refreshToken;
+        const localAccessExpiresIn = localStorageUserInfo.accessExpiresIn;
+        const localRefreshExpiresIn = localStorageUserInfo.refreshExpiresIn;
+
+        dispatch(
+            userSigninSignup(
+                localUserType,
+                localAuthId,
+                localAccessToken,
+                localRefreshToken,
+                localAccessExpiresIn,
+                localRefreshExpiresIn
+            )
+        );
+    }
+}, [localStorageUserInfo, dispatch])
+
+  // useEffect(() => {
+    // const unregisterHistoryListener = history.listen((location, action) => {
+    //   // console.log(action, location.pathname, location.state)
+    //   setPath(location.pathname);
+
+    //   // Check Token expiry HERE!!!!
+    //   const now = new Date().getTime();
+    //   if(accessExpiresIn < now && now < refreshExpiresIn) {
+    //     refreshToken().then(response=>{
+    //       if(response){
+
+    //         const {
+    //           userType,
+    //           authId,
+    //           accessToken,
+    //           refreshToken,
+    //           accessExpiresIn,
+    //           refreshExpiresIn
+    //       } = response.body;
+  
+    //         dispatch(
+    //             userSigninSignup(
+    //               userType,
+    //               authId,
+    //               accessToken,
+    //               refreshToken,
+    //               accessExpiresIn,
+    //               refreshExpiresIn
+    //             )
+    //         );
+    //         }
+    //     })
+    //   }
+    // });
+    // return () => {
+    //   unregisterHistoryListener();
+    // }
+  // }, [accessToken, dispatch])
+
   useEffect(() => {
+    if (window.performance) {
+      if (performance.navigation.type == 1) {
+        setPath(history.location.pathname);
+      }
+    }
+
     const unregisterHistoryListener = history.listen((location, action) => {
       // console.log(action, location.pathname, location.state)
       setPath(location.pathname);
@@ -48,22 +116,14 @@ function App() {
                   refreshExpiresIn
                 )
             );
-            }
+          }
         })
       }
     });
     return () => {
       unregisterHistoryListener();
     }
-  }, [accessToken, dispatch])
-
-  useEffect(() => {
-    if (window.performance) {
-      if (performance.navigation.type == 1) {
-        setPath(history.location.pathname);
-      }
-    }
-  }, [window.performance])
+  }, [window.performance, accessToken, dispatch])
 
   return (
     <main className="App">
