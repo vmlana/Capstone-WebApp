@@ -14,6 +14,13 @@ exports.getSchedule = (req, res) => {
             sUserId = '-1';
         }
 
+        let sPlaylistId = pivotDb.escape(req.query.playlistId).replace(/['']+/g, '');
+        if (sPlaylistId == "" || sPlaylistId.toLowerCase() == "null") {
+            sPlaylistId = '';
+        } else {
+            sPlaylistId =  ` AND pl.playlistId = ${sPlaylistId} `;            
+        }
+
         let qry = `SELECT s.userId, s.scheduleDate, s.reminderMinutes,
                           s.programId, gb.name as programName,
                           s.playlistId, pl.name as playlistName
@@ -22,6 +29,7 @@ exports.getSchedule = (req, res) => {
                          LEFT JOIN groupBase gb ON (cp.groupBaseId = gb.groupBaseId)
                          LEFT JOIN playlists pl ON (s.playlistId = pl.playlistId)
                    WHERE s.userId = ${sUserId} 
+                         ${sPlaylistId}
                    ORDER BY scheduleDate DESC  `;
 
         pivotPoolDb.then(pool => {
