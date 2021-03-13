@@ -21,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
     "padding-top": ".075rem",
     "padding-bottom": ".075rem",
     "margin-top": 0,
+    height: 46,
     "&:before" : {
         content: "none", // Delete border when hoverover
     },

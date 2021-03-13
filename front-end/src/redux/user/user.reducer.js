@@ -44,12 +44,13 @@ const userReducer = (state = INITIAL_STATE, action) => {
           accessExpiresIn,
           refreshExpiresIn
         }
-        window.localStorage.setItem("PivotCareUser", JSON.stringify(pivotCareUser));
+        // window.localStorage.setItem("PivotCareUser", JSON.stringify(pivotCareUser));
         return {
           ...state,
           userInfo: action.payload,
         };
       case userActionTypes.USER_LOGOUT:
+        // localStorage.removeItem can be deleted when using logout function
         window.localStorage.removeItem("PivotCareUser");
         return {
           userInfo: {

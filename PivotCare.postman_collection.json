@@ -695,7 +695,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"userId\": 3,\r\n    \"programId\": 102,\r\n    \"playlistId\": null,\r\n    \"scheduleDate\": \"2021-03-25 09:00\",\r\n    \"reminderMinutes\": 5\r\n}",
+					"raw": "{\r\n    \"userId\": 3,\r\n    \"programId\": 102,\r\n    \"playlistId\": null,\r\n    \"scheduleDate\": \"2021-03-12 16:00:00\",\r\n    \"reminderMinutes\": 20\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
