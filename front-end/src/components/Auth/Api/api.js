@@ -14,6 +14,7 @@ export const getLessonsByInstructorId = async (instructorId) => {
     .catch((error) => console.error(error));
   return lessons;
 };
+
 export const getLessonsByCategoryId = async (categoryId) => {
   const lessons = await fetch(`${apiUrl}/lessons?categoryId=${categoryId}`)
     .then((response) => response.json())
@@ -72,4 +73,11 @@ export const createPlaylist = async (playlistData) => {
     .catch((error) => console.error(error));
 
   return newPlaylist;
+};
+
+export const getBlogsByInstructorId = async (instructorId) => {
+  const blogs = await fetch(`${apiUrl}/blogs?instructorId=${instructorId}`)
+    .then((response) => response.json())
+    .catch((error) => console.error(error));
+  return blogs;
 };
