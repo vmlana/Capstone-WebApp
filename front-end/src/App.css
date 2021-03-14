@@ -67,8 +67,28 @@
   src: local('Gotham'), url(./fonts/GothamMedium_1.ttf) format('truetype');
 }
 
+@font-face {
+  font-family: 'GothamRoundedBold';
+  src: local('GothamRoundedBold'), url(./fonts/GothamRoundedBold_21016.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'GothamRoundedMedium';
+  src: local('GothamRoundedMedium'), url(./fonts/GothamRoundedMedium_21022.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'GothamRoundedNormal';
+  src: local('GothamRoundedNormal'), url(./fonts/GothamRoundedBook_21018.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'GothamRoundedLight';
+  src: local('GothamRoundedLight'), url(./fonts/GothamRoundedLight_21020.ttf) format('truetype');
+}
+
 html {
-  font-family: Gotham;
+  font-family: 'Gotham';
   line-height: 1.2;
 }
 

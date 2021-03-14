@@ -11,6 +11,8 @@ import FileUploadThumbnail from 'file-upload-thumbnail'
 import Button from '../../../ReusableElement/Button';
 import InputWithLabel from '../../../ReusableElement/InputWithLabel';
 
+import { device } from '../../../StyleComponent/responsiveDevice';
+
 import 'react-dropzone-uploader/dist/styles.css'
 import './DragAndDrop.css';
 
@@ -254,7 +256,7 @@ const AddLessons = () => {
             <Form onSubmit={onSubmit}>
                 <div>
                     <InputWithLabel
-                        label="lessonName"
+                        label="Lesson Name"
                         type="text"
                         name="lessonName"
                         value={lesson.lessonName}
@@ -286,7 +288,7 @@ const AddLessons = () => {
                             required
                             value={lesson.description}
                             onChange={handleOnChange}
-                            placeholder="Start typing the description"
+                            placeholder="Start typing the description for your video"
                         />
                     </Label>
                 </div>
@@ -305,51 +307,71 @@ const AddLessons = () => {
                             submitButtonContent="UPLOAD VIDEO"
                         />
                     </div>
-                    <ButtonGroup>
-                        <Button text="Delete" />
-                        <Button text="Save" type="add_lesson" isActive={btnActive} />
-                    </ButtonGroup>
+
                 </div>
+                <ButtonGroup>
+                    <Button text="Save" type="add_lesson" isActive={btnActive} />
+                    <button text="Delete" className="deleteBtn">Delete</button>
+                </ButtonGroup>
             </Form>
         </PageContainer>
     )
 }
 
 const PageContainer = styled.div`
-    max-width: 1000px;
+    max-width: 1500px;
     margin: 0 auto;
     padding: 2rem;
+    padding-bottom: 2rem;
+    padding-top: 4.5rem;
+    color:#707070;
+    font-family: 'GothamRoundedNormal', sans-serif;
 `;
 
 const TitleContainer = styled.div`
     position: relative;
-    border-bottom: solid 1px #000000;
-    max-width: 275px;
-    margin-bottom: 2rem;
+    border-bottom: solid 2px #707070;
+    margin-bottom: 1rem;
+
+	@media ${device.mobileP} {
+		max-width: 400px;
+	}
 `;
 
 const PageHeader = styled.h2`
-    font-size: 1.25rem;
-    font-weight: normal;
+    font-size: 30px;
+	line-height: 36px;
     position: absolute;
-    top: -1.75rem;
+    top: -2.5rem;
     background-color: #fff;
     padding-right: 2rem;
     text-transform: uppercase;
+	font-family: GothamRoundedBold, sans-serif;
+	font-weight: 900;
+	color: #707070;
 `;
 
 const PageSubHeader = styled.h3`
-    font-size: 1rem;
+    font-size: 18px;
+    line-height: 30px;
+    font-family: 'Gotham', sans-serif;
+    font-weight: 300;
     margin: 0;
     padding: 0;
+    padding-top: 16px;
 `;
 
 const Form = styled.form`
 	display: grid;
-	grid-template-columns: repeat(2, 1fr);
-	grid-gap: 10rem;
+	grid-gap: 2rem;
     margin-top: 3rem;
     align-items: center;
+
+    @media ${device.laptop} {
+		grid-template-columns: repeat(2, 1fr);
+        grid-gap: 4rem;
+        align-items: center;
+	}
 `;
 
 const Label = styled.label`
@@ -360,33 +382,74 @@ const LabelText = styled.p`
     font-size: 1rem;
     margin: .5rem 0;
     text-align: left;
+    margin-top: 2rem;
 `;
 
 const TextArea = styled.textarea`
 	border: solid 1px #ccc;
 	border-radius: 5px;
-	font-size: 16px;
+	font-size: 18px;
+	line-height: 30px;
 	width: 100%;
-	padding: .25rem 0.5rem;
 	resize: none;
+	color: #333333;
+	padding: 20px;
+	box-sizing: border-box;
 `;
 
 const SelectOption = styled.select`
 	border: solid 1px #ccc;
 	border-radius: 5px;
-	font-size: 16px;
+	font-size: 18px;
+	line-height: 30px;
 	width: 100%;
 	padding: .25rem 0.5rem;
 	resize: none;
-    height: 36px;
+    height: 46px;
     margin-bottom: 0.5rem;
+    color: #333333;
 `;
 
 const ButtonGroup = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around
+    margin-bottom: 2rem;
+    display: grid;
+    grid-gap: 2rem;
+    justify-content: center;
 
+    @media ${device.tablet} {
+		grid-template-columns: 1fr 1fr;
+	}
+
+    .deleteBtn {
+        color: #707070;
+        font-size: 24px;
+        line-height: 28px;
+        font-family: 'GothamRoundedLight';
+        outline: none;
+        box-shadow: none;
+        border:none;
+        background-color: unset;
+        display: inline-block;
+        width: fit-content;
+        text-decoration: underline;
+        text-transform: capitalize;
+        margin: 0 auto;
+
+        @media ${device.tablet} {
+            font-size: 20px;
+            line-height: 24px;
+            background-color: #FFFFFF;
+            border: 4px solid #FBA76E;
+            border-radius: 5px;
+            width: 300px;
+            height: 70px;
+
+            &:focus {
+                outline: none;
+                box-shadow: none;
+            }
+        }
+    }
 `;
 
 export default AddLessons
