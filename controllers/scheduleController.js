@@ -21,7 +21,7 @@ exports.getSchedule = (req, res) => {
             sPlaylistId = ` AND pl.playlistId = ${sPlaylistId} `;
         }
 
-        let qry = `SELECT s.userId, s.scheduleDate, s.reminderMinutes,
+        let qry = `SELECT s.scheduleId, s.userId, s.scheduleDate, s.reminderMinutes,
                           s.programId, gb.name as programName,
                           s.playlistId, pl.name as playlistName
                     FROM schedules s
