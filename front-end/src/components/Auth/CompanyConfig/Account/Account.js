@@ -961,10 +961,10 @@ const UploadPElement = styled.p`
     height: 46px;
     margin-bottom: 1rem;
     /* text-transform: uppercase; */
-    padding: .75rem 0.5rem;
+    padding: 1.1rem 0.5rem;
     background-color: ${colors.UIViolet};
     color: white;
-    /* font-weight: bold; */
+    font-weight: bold;
     border: solid 1px #ccc;
     border-radius: 5px;
     text-align: center;
@@ -977,19 +977,6 @@ const UploadPElement = styled.p`
 
     @media ${device.tablet} {
         width: 30%;
-        /* text-transform: uppercase;
-        padding: 0.5rem;
-        background-color: grey;
-        color: white;
-        border: solid 1px #ccc;
-        border-radius: 3px;
-        text-align: center;
-        margin: 0;
-        width: 30%;
-        cursor: pointer;
-        &:active {
-            opacity: .5;
-        } */
     }
 `;
 

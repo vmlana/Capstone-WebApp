@@ -7,6 +7,8 @@ import { useDispatch } from 'react-redux';
 import { userLogout } from '../../../../redux/user/user.actions';
 import { BASE_URL } from '../../../../services/apiUrl';
 
+import { logout } from '../../../../services/tokenApi';
+
 const InstructorConfigHeader = (props) => {
     const dispatch = useDispatch()
     let { url } = useRouteMatch();
@@ -17,6 +19,14 @@ const InstructorConfigHeader = (props) => {
     const [windowWidth, setWindowWidth] = useState(0);
 
     const updateWindowWidth = () => setWindowWidth(window.innerWidth);
+
+    const logoutHandler = () => {
+        (async()=>{
+            await logout();
+            dispatch(userLogout());
+            props.history.replace(`/auth`);
+        })()
+    }
 
     const [scroll, setScroll] = useState(false);
     useEffect(() => {
@@ -65,8 +75,7 @@ const InstructorConfigHeader = (props) => {
                             <Link
                                 to="/auth"
                                 onClick={() => {
-                                    dispatch(userLogout());
-                                    props.history.replace(`/auth`);
+                                    logoutHandler();
                                 }}
                             >
                                 <FAIcons.FaSignOutAlt size={24} />
@@ -107,8 +116,7 @@ const InstructorConfigHeader = (props) => {
                                     <Link
                                         to="/auth"
                                         onClick={() => {
-                                            dispatch(userLogout());
-                                            props.history.replace(`/auth`);
+                                            logoutHandler();
                                         }}
                                     >
                                         Sign Out
