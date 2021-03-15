@@ -13,7 +13,7 @@ const {getLessons, updLesson} = require("../controllers/lessonController.js");
 const {getPlaylists, updPlaylist} = require("../controllers/playlistController.js");
 const {getPrograms} = require("../controllers/programController.js");
 const {getBlogs} = require("../controllers/blogController.js");
-const {getSurvey} = require("../controllers/surveyController.js");
+const {getSurvey, saveSurvey} = require("../controllers/surveyController.js");
 const {getSchedule, addSchedule, delSchedule} = require("../controllers/scheduleController.js");
 const {activityLog} = require("../controllers/activityLogController.js");
 const {postS3Storage, deleteS3Storage} = require("../controllers/s3StorageController");
@@ -55,7 +55,8 @@ router
     .post("/updcompany", tokenValidator, companyValidation, updCompany)  
     .post("/upduser", userValidation, updUser)   
     .post("/activitylog", activityLogValidation, activityLog)     
-    .post("/schedules", scheduleValidation, addSchedule)         
+    .post("/schedules", scheduleValidation, addSchedule)    
+    .post("/survey", saveSurvey)            
     .post("/s3storage", s3FileTypeValidator, postS3Storage)
     .post("/signup", userSignupValidator, register)
     .post("/login", login)
