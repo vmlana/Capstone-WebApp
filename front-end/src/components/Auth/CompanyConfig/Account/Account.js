@@ -559,20 +559,21 @@ const Account = () => {
                                     }}
                                 />
                             </UploadCSVLabel>
-                            <Button
+                            {/* <Button
                                 text="Upload"
                                 onClick={uploadCSVToList}
                                 style={
                                 {
                                     width: windowWidth < 768 ? "100%" : "30%",
-                                    backgroundColor: colors.primaryViolet
+                                    backgroundColor: colors.UIViolet,
+                                    padding: ".25rem"
                                 }}
-                            />
-                            {/* <UploadPElement
+                            /> */}
+                            <UploadPElement
                                 onClick={uploadCSVToList}
                             >
                                 Upload
-                            </UploadPElement> */}
+                            </UploadPElement>
                         </UploadCSVDiv>
                     </CSVUploadDiv>
 
@@ -690,7 +691,7 @@ const Account = () => {
                         style={
                             {
                                 width: windowWidth < 768 ? "100%" : "50%",
-                                backgroundColor: colors.primaryViolet
+                                backgroundColor: colors.UIViolet
                             }
                             } />
                 </SaveBtnDiv>
@@ -742,11 +743,13 @@ const AccountPageHeader = styled.h2`
     /* font-size: 1.25rem; */
     font-weight: bold;
     position: absolute;
-    top: -1.5rem;
+    top: -2.25rem;
     background-color: #fff;
     color: ${colors.darkGrey};
     padding-right: 2rem;
     text-transform: uppercase;
+    font-family: 'GothamRoundedBold', sans-serif;
+    font-size: 28px;
 `;
 
 const LogoPositionDiv = styled.div`
@@ -839,9 +842,11 @@ const EmployeeInformationDiv = styled.div`
 const EmployeeInfoHeader = styled.h3`
     text-align: left;
     font-weight: bold;
-    font-size: 1.5rem;
+    font-size: 28px;
     margin: 0;
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+    font-family: 'GothamRoundedBold', sans-serif;
 `;
 
 const CSVUploadDiv = styled.div`
@@ -929,13 +934,14 @@ const SelectedFilePElement = styled.p`
     margin: 0 auto;
     width: 100%;
     margin-bottom: 1rem;
-    padding: 0.5rem;
+    padding: .75rem 0.5rem;
     color: ${props => props.uploadCSV ? "black" : "#ccc"};
     border: solid 1px #ccc;
     border-radius: 5px;
     width: 100%;
     cursor: pointer;
     box-sizing: border-box;
+    height: 46px;
 
     @media ${device.tablet} {
         margin: 0 .5rem 0 0;
@@ -952,10 +958,11 @@ const SelectedFilePElement = styled.p`
 
 const UploadPElement = styled.p`
     width: 100%;
+    height: 46px;
     margin-bottom: 1rem;
     /* text-transform: uppercase; */
-    padding: 0.5rem;
-    background-color: ${colors.primaryViolet};
+    padding: .75rem 0.5rem;
+    background-color: ${colors.UIViolet};
     color: white;
     /* font-weight: bold; */
     border: solid 1px #ccc;
@@ -1010,7 +1017,7 @@ const AddNewEmployeeElement = styled.div`
     font-weight: 500;
     color: white;
     padding: .75rem;
-    background-color: ${colors.primaryViolet};
+    background-color: ${colors.UIViolet};
     cursor: pointer;
     align-self: flex-end;
     margin: .25rem;
@@ -1061,7 +1068,7 @@ const EmployeesList = styled.ul`
         border-radius: 20px;
         box-shadow: none;
         @media ${device.tablet} {
-            background: ${colors.primaryViolet};
+            background: ${colors.UIViolet};
             border: none;
         }
     }

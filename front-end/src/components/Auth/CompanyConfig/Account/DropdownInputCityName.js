@@ -99,4 +99,5 @@ const LabelText = styled.p`
     font-size: 1rem;
     margin: .5rem 0;
     text-align: left;
+    line-height: 1.9rem;
 `;
