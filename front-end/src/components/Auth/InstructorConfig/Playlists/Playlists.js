@@ -15,7 +15,7 @@ const Playlists = () => {
 
   let viewData = {
     userType: "Instructor",
-    instructorId: "2",
+    instructorId: authId,
     pageName: "Playlist",
     header: "Playlists",
     subHeader: "Click to see details or edit",
@@ -25,7 +25,7 @@ const Playlists = () => {
   //   I am passind insructor ID2 just to test data transaction bw front and back end. Pass authId as an argument to the fetch func when deploying.
   const [playlists, setPlaylists] = useState([]);
   useEffect(() => {
-    getPlaylistsByInstructorId(2).then((playlistArr) => {
+    getPlaylistsByInstructorId(authId).then((playlistArr) => {
       setPlaylists(playlistArr);
     });
   }, []);
