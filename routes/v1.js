@@ -17,7 +17,7 @@ const {getSurvey} = require("../controllers/surveyController.js");
 const {getSchedule, addSchedule, delSchedule} = require("../controllers/scheduleController.js");
 const {activityLog} = require("../controllers/activityLogController.js");
 const {postS3Storage, deleteS3Storage} = require("../controllers/s3StorageController");
-const { register, login, verify, refreshToken } = require("../controllers/authController");
+const { register, login, verify, refreshToken, logout } = require("../controllers/authController");
 
 // Import validator
 const {s3FileTypeValidator} = require("../validators/s3Validator");
@@ -30,6 +30,7 @@ const {scheduleValidation} = require("../validators/scheduleValidator");
 const {tokenValidator} = require("../validators/tokenValidator");
 const {activityLogValidation} = require("../validators/activityLogValidator");
 const {userSignupValidator} = require("../validators/userSignupValidator");
+const {refreshTokenValidator} = require("../validators/refreshTokenValidator");
 
 // Routes to capstone api - Version 1
 router
@@ -59,8 +60,9 @@ router
     .post("/s3storage", s3FileTypeValidator, postS3Storage)
     .post("/signup", userSignupValidator, register)
     .post("/login", login)
+    .post("/logout", refreshTokenValidator, logout)
     .post("/verify", tokenValidator, verify)
-    .post("/token", refreshToken)
+    .post("/token", refreshTokenValidator, refreshToken)
     .delete("/s3storage", deleteS3Storage)
     .delete("/schedules", delSchedule);    
 
