@@ -722,6 +722,36 @@
 			"response": []
 		},
 		{
+			"name": "surveys - save",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\": 3,\r\n    \"surveyId\": 1,\r\n    \"programId\": null,\r\n    \"answers\": [\r\n        {\r\n            \"questionId\": 1,\r\n            \"answerValue\": \"1\"\r\n        },\r\n        {\r\n            \"questionId\": 2,\r\n            \"answerValue\": \"4\"\r\n        },        \r\n        {\r\n            \"questionId\": 12,\r\n            \"answerValue\": \"This is the text answer for the edit question\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/v1/survey",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"survey"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "schedules - Delete",
 			"request": {
 				"method": "DELETE",
