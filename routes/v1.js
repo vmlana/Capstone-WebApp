@@ -14,7 +14,7 @@ const {getPlaylists, updPlaylist} = require("../controllers/playlistController.j
 const {getPrograms} = require("../controllers/programController.js");
 const {getBlogs} = require("../controllers/blogController.js");
 const {getSurvey} = require("../controllers/surveyController.js");
-const {getSchedule, addSchedule} = require("../controllers/scheduleController.js");
+const {getSchedule, addSchedule, delSchedule} = require("../controllers/scheduleController.js");
 const {activityLog} = require("../controllers/activityLogController.js");
 const {postS3Storage, deleteS3Storage} = require("../controllers/s3StorageController");
 const { register, login, verify, refreshToken } = require("../controllers/authController");
@@ -57,10 +57,12 @@ router
     .post("/activitylog", activityLogValidation, activityLog)     
     .post("/schedules", scheduleValidation, addSchedule)         
     .post("/s3storage", s3FileTypeValidator, postS3Storage)
-    .delete("/s3storage", deleteS3Storage)
     .post("/signup", userSignupValidator, register)
     .post("/login", login)
     .post("/verify", tokenValidator, verify)
-    .post("/token", refreshToken);
+    .post("/token", refreshToken)
+    .delete("/s3storage", deleteS3Storage)
+    .delete("/schedules", delSchedule);    
+
 
 module.exports = router;
