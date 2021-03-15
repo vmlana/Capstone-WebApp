@@ -1,5 +1,5 @@
 const { pivotDb, pivotPoolDb } = require("../connection.js");
-const { validationResult} = require("express-validator");
+const { validationResult } = require("express-validator");
 
 
 // ----------------------------------------------------------
@@ -18,7 +18,7 @@ exports.getSchedule = (req, res) => {
         if (sPlaylistId == "" || sPlaylistId.toLowerCase() == "null") {
             sPlaylistId = '';
         } else {
-            sPlaylistId =  ` AND pl.playlistId = ${sPlaylistId} `;            
+            sPlaylistId = ` AND pl.playlistId = ${sPlaylistId} `;
         }
 
         let qry = `SELECT s.userId, s.scheduleDate, s.reminderMinutes,
@@ -46,10 +46,10 @@ exports.getSchedule = (req, res) => {
                     res.status(500).send(error);
                 })
         })
-        .catch(error => {
-            console.log(error);
-            res.status(500).send(error);
-        });
+            .catch(error => {
+                console.log(error);
+                res.status(500).send(error);
+            });
     };
 
     scheduleSearch(req);
@@ -69,11 +69,11 @@ exports.addSchedule = (req, res) => {
 
         if (valError.length > 0) {
             res.status(500).send(valError);
-        } else { 
+        } else {
 
-            let sMessageInfo  = ''; 
+            let sMessageInfo = '';
             let objLog = req.body;
-    
+
             let sUserId = pivotDb.escape(objLog.userId).replace(/['']+/g, '');
             if (sUserId == "" || sUserId.toLowerCase() == "null") {
                 sUserId = '-1';
@@ -84,26 +84,26 @@ exports.addSchedule = (req, res) => {
             let sOperProg = " = ";
             if (sProgramId == "" || sProgramId.toLowerCase() == "null") {
                 sProgramId = 'null';
-                sOperProg  = " IS "
+                sOperProg = " IS "
             }
 
             let sPlaylistId = pivotDb.escape(objLog.playlistId).replace(/['']+/g, '');
             let sOperPlay = " = ";
             if (sPlaylistId == "" || sPlaylistId.toLowerCase() == "null") {
                 sPlaylistId = 'null';
-                sOperPlay   = " IS ";
+                sOperPlay = " IS ";
             }
 
-            let sScheduleDate    = pivotDb.escape(objLog.scheduleDate).replace(/['']+/g, '');
-            
+            let sScheduleDate = pivotDb.escape(objLog.scheduleDate).replace(/['']+/g, '');
+
             // Convert from time zone to UTC 
-            if (sScheduleDate.length > 20 ) {
-                let sDate = sScheduleDate.substr(0,10);
-                let sTime = sScheduleDate.substr(11,8);            
-                sScheduleDate = sDate + ' ' + sTime;   
+            if (sScheduleDate.length > 20) {
+                let sDate = sScheduleDate.substr(0, 10);
+                let sTime = sScheduleDate.substr(11, 8);
+                sScheduleDate = sDate + ' ' + sTime;
             }
-          
-            let sReminderMinutes = pivotDb.escape(objLog.reminderMinutes).replace(/['']+/g, '');            
+
+            let sReminderMinutes = pivotDb.escape(objLog.reminderMinutes).replace(/['']+/g, '');
 
             if (sMessageInfo == '') {
                 qry = `SELECT *
@@ -127,33 +127,33 @@ exports.addSchedule = (req, res) => {
                                         WHERE userId = ${sUserId}
                                           AND programId ${sOperProg} ${sProgramId}
                                           AND playlistId ${sOperPlay} ${sPlaylistId}
-                                          AND CAST(scheduleDate AS char) = "${sScheduleDate}" `;                                 
+                                          AND CAST(scheduleDate AS char) = "${sScheduleDate}" `;
                             }
 
                             return pool.query(qry);
                         })
                         .then(results => {
                             if (results.affectedRows == 0) {
-                               sMessageInfo = 'No Records found' 
+                                sMessageInfo = 'No Records found'
                             } else {
-                               sMessageInfo = 'Record Inserted'
+                                sMessageInfo = 'Record Inserted'
                             }
 
                             let myResult = {
                                 messageInfo: sMessageInfo,
-                                sqlResult  : results
+                                sqlResult: results
                             };
                             res.status(200).send(myResult);
-                        })                        
+                        })
                         .catch(error => {
                             console.log(error);
                             res.status(500).send(error);
                         })
                 })
-                .catch(error => {
-                    console.log(error);
-                    res.status(500).send(error);
-                });
+                    .catch(error => {
+                        console.log(error);
+                        res.status(500).send(error);
+                    });
             } else {
                 console.log(error);
                 res.status(500).send(sMessageInfo);
@@ -162,6 +162,61 @@ exports.addSchedule = (req, res) => {
     };
 
     fAddSchedule(req);
-}    
+}
+
+
+
+// ----------------------------------------------------------
+// Remove Schedule for users
+// ----------------------------------------------------------
+exports.delSchedule = (req, res) => {
+
+    let fDelSchedule = async (req) => {
+
+        let sScheduleId = pivotDb.escape(req.query.scheduleId).replace(/['']+/g, '');
+        if (sScheduleId == "" || sScheduleId.toLowerCase() == "null") {
+            sScheduleId = '-1';
+        }
+
+        if (sScheduleId == undefined || sScheduleId == '-1') {
+            res.status(500).send('Cannot identify property scheduleId');
+        } else {
+
+            qry = `DELETE FROM schedules 
+                    WHERE scheduleId = ${sScheduleId} `;
+
+            pivotPoolDb.then(pool => {
+                pool.query(qry)
+                    .then(results => {
+                        return results;
+                    })
+                    .then(results => {
+
+                        if (results.affectedRows == 0) {
+                            sMessageInfo = 'No Records found'
+                        } else {
+                            sMessageInfo = 'Record Deleted'
+                        }
+
+                        let myResult = {
+                            messageInfo: sMessageInfo,
+                            sqlResult: results
+                        };
+                        res.status(200).send(myResult);
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        res.status(500).send(error);
+                    })
+            })
+            .catch(error => {
+                console.log(error);
+                res.status(500).send(error);
+            });
+        }
+    };
+
+    fDelSchedule(req);
+}
 
 
