@@ -383,6 +383,7 @@ const Account = () => {
     }, [uploadImage])
 
     return (
+        <MaxWidthWrapper>
         <AccountPageContainer>
             <HeaderDiv>
                 <HeaderWrapDiv>
@@ -395,7 +396,7 @@ const Account = () => {
             </HeaderDiv>
                 <LogoPositionDiv>
                     {
-                        windowWidth < 768 ?
+                        windowWidth < 1024 ?
                         <CompanyLogoP>Company Logo</CompanyLogoP>
                         :
                         null
@@ -413,7 +414,11 @@ const Account = () => {
                                     }
                                     alt="company logo"
                                     style={{ width: "125px", height: "auto" }} />
-                                <FAIcons.FaUpload style={{ margin: "0.30rem" }} />
+                                    <div style={{ display: "flex", justifyContent: "space-between"}}>
+                                <FAIcons.FaUpload
+                                    style={{ margin: ".2rem 0.35rem", fontSize: ".8rem", color: `${colors.darkGrey}`}} />
+                                <FAIcons.FaPencilAlt style={{ margin: ".2rem 0.35rem", fontSize: ".8rem", color: `${colors.darkGrey}` }} />
+                                    </div>
                             </FileUploadContainer>
                             <InvisibleInput
                                 type="file"
@@ -697,22 +702,35 @@ const Account = () => {
                 </SaveBtnDiv>
             </Form>
         </AccountPageContainer>
+        </MaxWidthWrapper>
     );
 };
 
+const MaxWidthWrapper = styled.div`
+    width: 100%;
+    max-width: 1500px;
+    margin: 0 auto;
+    position: relative;
+
+`
 
 const AccountPageContainer = styled.div`
     max-width: 550px;
     /* margin: 0 auto; */
-    margin-left: 0;
     padding: 2rem;
     color: ${colors.darkGrey};
     @media ${device.laptop} {
+        margin: 0;
+        margin-left: 0;
+        /* margin-left: 5%; */
         max-width: 650px;
-        margin-left: 5%;
     }
-    /* display: grid;
-    grid-template-columns: 1fr 1fr; */
+    @media ${device.desktopM} {
+        max-width: 750px;
+    }
+    /* @media ${device.desktopL} {
+        max-width: 850px;
+    } */
 `;
 
 const HeaderDiv = styled.div`
@@ -755,9 +773,9 @@ const AccountPageHeader = styled.h2`
 const LogoPositionDiv = styled.div`
     position: inherit;
 
-    @media ${device.tablet} {
+    @media ${device.laptop} {
         position: absolute;
-        right: 5%;
+        right: 3rem;
         margin-bottom: 1rem;
     }
 `;
@@ -772,8 +790,9 @@ const FileUploadContainer = styled.div`
 	width: 125px;
     border: solid 1px ${colors.mediumGrey};
     border-radius: 5px;
-    background-color: #ddd;
+    background-color: ${colors.lightGrey};
     margin-bottom: 1.5rem;
+    /* display: flex; */
 `;
 
 const CompanyLogoContainer = styled.div`
@@ -782,7 +801,7 @@ const CompanyLogoContainer = styled.div`
     justify-content: center;
 
 
-    @media ${device.tablet} {
+    @media ${device.laptop} {
         display: flex;
         justify-content: flex-end;
     }
@@ -1079,11 +1098,13 @@ const DeleteButton = styled.span`
     }
 `;
 
-
-
 const SaveBtnDiv = styled.div`
     grid-column: span 2;
     justify-self: right;
+    margin-top: 2rem;
+    @media ${device.laptop} {
+        margin-top: 4rem;
+    }
 `;
 
 
