@@ -14,13 +14,34 @@ exports.getUser = (req, res) => {
             sUserId = '-1';
         }
 
+        // set TODAY as String
+        let d  = new Date();
+        let ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
+        let mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d);
+        let da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
+        let sToday = `${ye}-${mo}-${da}`;
+
+        // get last 7 days
+        d.setDate(d.getDate() - 7);
+        ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
+        mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d);
+        da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
+        let s7days = `${ye}-${mo}-${da}`;
+
+
         let qry = `SELECT u.userId, l.userLogin, l.name as userName, l.imageFile as imageFile, u.employeeId,
-                          c.companyId, lc.name as companyName
+                          c.companyId, lc.name as companyName,
+                          IFNULL(lw.qtd,0) AS weekWorkout
                      FROM users u
                           INNER JOIN login l ON (u.userId = l.loginId)
                           INNER JOIN employees e ON (u.companyId = e.companyId AND u.employeeId = e.employeeId)
                           INNER JOIN companies c ON (u.companyId = c.companyId)
                           INNER JOIN login lc ON (c.companyId = lc.loginId)
+                          LEFT JOIN ( SELECT userId, count(*) as qtd
+                                        FROM activityLog l
+                                       WHERE userId = ${sUserId}
+                                         AND DATE_FORMAT(l.logdate, '%Y-%m-%d') BETWEEN "${s7days}" AND "${sToday}"
+                                       GROUP BY userId ) lw ON (u.userId = lw.userId)  
                     WHERE u.userId = ${sUserId} `;
 
         pivotPoolDb.then(pool => {
@@ -58,11 +79,11 @@ exports.getDashboard = (req, res) => {
         let totalWork = 10;
 
         // set TODAY as String
-        const d  = new Date();
-        const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
-        const mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d);
-        const da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
-        const sToday = `${ye}-${mo}-${da}`;
+        let d  = new Date();
+        let ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
+        let mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d);
+        let da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
+        let sToday = `${ye}-${mo}-${da}`;
 
         let sUserId = pivotDb.escape(req.query.userId).replace(/['']+/g, '');
         if (sUserId == "" || sUserId.toLowerCase() == "null") {
@@ -78,15 +99,29 @@ exports.getDashboard = (req, res) => {
             sFinalDate = sToday;
         }
 
+        // get last 7 days
+        d.setDate(d.getDate() - 7);
+        ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
+        mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d);
+        da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
+        let s7days = `${ye}-${mo}-${da}`;
+
+
         let qry = `select u.userId, lg.userLogin, lg.name as userName, lg.imageFile as imageFile, u.employeeId,
                           c.companyId, lc.name as companyName, w.name AS department, e.employeeId,
-                          log2.selected_date, log2.total_work, log2.log_work, log2.percent
+                          log2.selected_date, log2.total_work, log2.log_work, log2.percent,
+                          IFNULL(lw.qtd,0) AS weekWorkout
                      FROM login lg
                           INNER JOIN users u ON (lg.loginId = u.userId)
                           INNER JOIN employees e ON (u.companyId = e.companyId AND u.employeeId = e.employeeId)
                           INNER JOIN companies c ON (u.companyId = c.companyId)
                           INNER JOIN login lc ON (c.companyId = lc.loginId)
-                          INNER JOIN workDepartments w ON (e.workDepartmentId = w.workDepartmentId)                     
+                          INNER JOIN workDepartments w ON (e.workDepartmentId = w.workDepartmentId)  
+                          LEFT JOIN ( SELECT userId, count(*) as qtd
+                                        FROM activityLog l
+                                       WHERE userId = ${sUserId}
+                                         AND DATE_FORMAT(l.logdate, '%Y-%m-%d') BETWEEN "${s7days}" AND "${sToday}"
+                                       GROUP BY userId ) lw ON (u.userId = lw.userId)                   
                           LEFT JOIN ( SELECT selected_date,
                                              ${totalWork} AS total_work,
                                              log.qtd AS log_work,
@@ -138,6 +173,7 @@ exports.getDashboard = (req, res) => {
                             department : results[0].department,
                             workInDay  : workInDay,
                             streakDay  : 20,
+                            weekWorkout : results[0].weekWorkout,
                             daysResult : vWeekDays
                         }
 
