@@ -61,7 +61,7 @@ const CreateContentList = ({ contentsType, type, data }) => {
   const [finalData, setFinalData] = useState([]);
   const [contentType, setContentType] = useState("");
 
-  console.log(deptArr);
+  // console.log(deptArr);
 
   const handleOpen = () => {
     setOpen(true);
@@ -150,7 +150,7 @@ const CreateContentList = ({ contentsType, type, data }) => {
     //   createPlaylist(dataToSend);
     //   console.log("datatisend", dataToSend);
     // }
-    console.log("called");
+    // console.log("called");
     createPlaylist(dataToSend);
   };
 
@@ -191,13 +191,13 @@ const CreateContentList = ({ contentsType, type, data }) => {
       }
     }
 
-    console.log(data);
+    // console.log(data);
 
     getCategories().then((result) => setCatLists(result));
   }, []);
 
   useEffect(() => {
-    console.log("cat", cat);
+    // console.log("cat", cat);
     contentsType === "playlist"
       ? getLessonsByCategoryId(cat).then((result) => setSearchResults(result))
       : getPlaylistsByCategoryId(cat).then((result) =>
@@ -312,7 +312,7 @@ const CreateContentList = ({ contentsType, type, data }) => {
                   ))
                   : selectedData.map((data) => (
                     <div style={styles.addedContentList}>
-                      {console.log('Latest: ', data)}
+                      {/* {console.log('Latest: ', data)} */}
                       <div>
                         <img
                           src={data.imageFile}
@@ -340,7 +340,7 @@ const CreateContentList = ({ contentsType, type, data }) => {
               purpose={"set"}
               type={"cat"}
             />
-            {console.log("levelset", levelSet)}
+            {/* {console.log("levelset", levelSet)} */}
             <Picker
               label={"Set Level"}
               option={levels}

@@ -2,7 +2,7 @@ import React from "react";
 import CreateContentList from "../../../ReusableComponents/CreateContentList";
 
 const EditProgram = (props) => {
-  console.log(props);
+  // console.log(props);
   // To access parameters paased: companyId and programId
   const companyId = props.match.params.companyId;
   const programId = props.match.params.programId;
