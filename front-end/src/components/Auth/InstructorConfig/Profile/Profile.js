@@ -30,8 +30,8 @@ const Profile = () => {
 		userLogin: "",
 		certifications: [
 			{
-				certificationImage: '1.jpg',
-				certificationName: 'Teacher of Hatha Yoga',
+				certificationImage: './media/images/Certificates-03.svg',
+				certificationName: 'Personal Trainer of the year',
 				issuingOrganization: '',
 				issueDate: '',
 				expirationdate: '',
@@ -39,14 +39,15 @@ const Profile = () => {
 				doesExpire: false
 			},
 			{
-				certificationImage: '2.jpg',
+				certificationImage: './media/images/Certificates-01.svg',
 				certificationName: 'Certified Personal Trainer',
 				issuingOrganization: '',
 				issueDate: '',
 				expirationdate: '',
 				credentialID: '2',
 				doesExpire: false
-			}
+			},
+
 		]
 	});
 
@@ -358,6 +359,11 @@ const TextArea = styled.textarea`
 const ButtonContainer = styled.div`
 	margin-top: 4rem;
 	margin-bottom: 2rem;
+	text-align: center;
+	
+	@media ${device.laptop} {
+		text-align: left;
+	}
 `;
 
 const Certification = styled.div`
@@ -385,6 +391,7 @@ const CertificationListItem = styled.li`
     grid-template-columns: 70px 1fr 20px;
 	grid-gap: 1rem;
     margin-bottom: 1rem;
+	align-items: center;
 `;
 
 const ProfilePictureContainer = styled.div`
