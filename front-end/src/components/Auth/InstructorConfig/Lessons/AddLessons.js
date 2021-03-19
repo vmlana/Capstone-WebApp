@@ -271,10 +271,10 @@ const AddLessons = () => {
                             required
                             onChange={handleOnChange}
                         >
-                            <option value="" selected={lesson.categoryId == '' ? true : false}>Select Category</option>
+                            <option value="">Select Category</option>
                             {
                                 categories.map((category) => {
-                                    return <option key={category.categoryId} value={category.categoryId} selected={lesson.categoryId == category.categoryId ? true : false}>{category.name}</option>
+                                    return <option key={category.categoryId} value={category.categoryId}>{category.name}</option>
                                 })
                             }
                         </SelectOption>
@@ -443,6 +443,7 @@ const ButtonGroup = styled.div`
             border-radius: 5px;
             width: 300px;
             height: 70px;
+            text-decoration: none;
 
             &:focus {
                 outline: none;
