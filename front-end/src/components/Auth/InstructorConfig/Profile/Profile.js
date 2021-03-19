@@ -94,7 +94,7 @@ const Profile = () => {
 			}).catch(err => {
 				throw err;
 			})
-			console.log('InstructorData', instructorData);
+			// console.log('InstructorData', instructorData);
 			let {
 				instructorId,
 				instructorName,
@@ -360,7 +360,7 @@ const ButtonContainer = styled.div`
 	margin-top: 4rem;
 	margin-bottom: 2rem;
 	text-align: center;
-	
+
 	@media ${device.laptop} {
 		text-align: left;
 	}

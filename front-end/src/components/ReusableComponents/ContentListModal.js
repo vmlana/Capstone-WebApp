@@ -36,7 +36,7 @@ const ContentListModal = ({
     // if (type === "playlist") {
     let checkedList = newLessonArr;
 
-    console.log(checked, e.target.alt);
+    // console.log(checked, e.target.alt);
 
     type === "playlist"
       ? checkedList.map((lesson) =>
@@ -75,7 +75,7 @@ const ContentListModal = ({
 
       setNewLessonArr(sortedLessonArr);
     } else {
-      console.log("exData", exData);
+      // console.log("exData", exData);
       let sortedPlaylistArr = results.map((result) => {
         let check = exData.some(
           (playlist) => result.playlistId === playlist.playlistId
@@ -88,7 +88,7 @@ const ContentListModal = ({
         }
       });
 
-      console.log("sortedPalylist", sortedPlaylistArr);
+      // console.log("sortedPalylist", sortedPlaylistArr);
       //   setNewPlaylistArr(sortedPlaylistArr);
       setNewLessonArr(sortedPlaylistArr);
     }
