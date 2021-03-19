@@ -92,11 +92,11 @@ const Signup = (props) => {
     return (
         <SigninPageContainer>
             <HeaderWrapDiv>
-            {
+                {
                     windowWidth < 768 ?
-                    <SigninPageHeader>Sign up</SigninPageHeader>
-                    :
-                    <SigninPageHeader>Sign up here !</SigninPageHeader>
+                        <SigninPageHeader>Sign up</SigninPageHeader>
+                        :
+                        <SigninPageHeader>Sign up here !</SigninPageHeader>
                 }
             </HeaderWrapDiv>
             <Form onSubmit={signUpHandler}>
@@ -149,12 +149,12 @@ const Signup = (props) => {
                 {/* <Button>SIGN UP</Button> */}
                 <ButtonDiv>
                     <Button
-                    text="Sign up" 
-                    type="submit" 
-                    style={{width: "100%"}}
-                    onClick={()=>{}}
+                        text="Sign up"
+                        type="submit"
+                        style={{ width: "100%" }}
+                        onClick={() => { }}
                     />
-                 </ButtonDiv>
+                </ButtonDiv>
                 <LinkToSignupText>
                     Already have an account?&nbsp;
                         <Link to="/auth">
@@ -171,6 +171,8 @@ const Signup = (props) => {
 const SigninPageContainer = styled.div`
     max-width: 1500px;
     margin: 2rem 3rem;
+    min-height: 75vh;
+    
     @media ${device.tablet} {
         padding: 0 2rem;
         margin: 2rem auto;
@@ -277,7 +279,7 @@ const Form = styled.form`
     width: 100%;
     
     @media ${device.tablet} {
-        width: 60%;
+        max-width: 768px;
         margin: 2rem auto;
     }
 `;

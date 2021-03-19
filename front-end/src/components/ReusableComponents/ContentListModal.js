@@ -40,15 +40,15 @@ const ContentListModal = ({
 
     type === "playlist"
       ? checkedList.map((lesson) =>
-          lesson.lessonId == e.target.alt
-            ? (lesson.isChecked = checked)
-            : lesson
-        )
+        lesson.lessonId == e.target.alt
+          ? (lesson.isChecked = checked)
+          : lesson
+      )
       : checkedList.map((playlist) =>
-          playlist.playlistId == e.target.alt
-            ? (playlist.isChecked = checked)
-            : playlist
-        );
+        playlist.playlistId == e.target.alt
+          ? (playlist.isChecked = checked)
+          : playlist
+      );
 
     if (checked === false) {
       renewData(checkedList, e.target.alt);
@@ -124,27 +124,27 @@ const ContentListModal = ({
               {newLessonArr
                 ? type === "playlist"
                   ? newLessonArr.map((video, index) => (
-                      <ContentImageTitle
-                        img={video.imageFile}
-                        title={video.lessonName}
-                        id={video.lessonId}
-                        onClick={handleCheckedElement}
-                        checked={video.isChecked}
-                        key={index}
-                        index={index}
-                      />
-                    ))
+                    <ContentImageTitle
+                      img={video.imageFile}
+                      title={video.lessonName}
+                      id={video.lessonId}
+                      onClick={handleCheckedElement}
+                      checked={video.isChecked}
+                      key={index}
+                      index={index}
+                    />
+                  ))
                   : newLessonArr.map((playlist, index) => (
-                      <ContentImageTitle
-                        img={playlist.playlistImageFile}
-                        title={playlist.playlistName}
-                        id={playlist.playlistId}
-                        onClick={handleCheckedElement}
-                        checked={playlist.isChecked}
-                        key={index}
-                        index={index}
-                      />
-                    ))
+                    <ContentImageTitle
+                      img={playlist.imageFile}
+                      title={playlist.playlistName}
+                      id={playlist.playlistId}
+                      onClick={handleCheckedElement}
+                      checked={playlist.isChecked}
+                      key={index}
+                      index={index}
+                    />
+                  ))
                 : null}
             </ContentList>
           </ModalContent>

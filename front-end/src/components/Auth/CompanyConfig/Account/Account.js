@@ -384,22 +384,22 @@ const Account = () => {
 
     return (
         <MaxWidthWrapper>
-        <AccountPageContainer>
-            <HeaderDiv>
-                <HeaderWrapDiv>
-                    {
-                        windowWidth < 768 ?
-                        <AccountPageHeader>Account</AccountPageHeader>:
-                        <AccountPageHeader>Company account</AccountPageHeader>
-                    }
-                </HeaderWrapDiv>
-            </HeaderDiv>
+            <AccountPageContainer>
+                <HeaderDiv>
+                    <HeaderWrapDiv>
+                        {
+                            windowWidth < 768 ?
+                                <AccountPageHeader>Account</AccountPageHeader> :
+                                <AccountPageHeader>Company account</AccountPageHeader>
+                        }
+                    </HeaderWrapDiv>
+                </HeaderDiv>
                 <LogoPositionDiv>
                     {
                         windowWidth < 1024 ?
-                        <CompanyLogoP>Company Logo</CompanyLogoP>
-                        :
-                        null
+                            <CompanyLogoP>Company Logo</CompanyLogoP>
+                            :
+                            null
                     }
                     <CompanyLogoContainer>
                         <label>
@@ -414,11 +414,11 @@ const Account = () => {
                                     }
                                     alt="company logo"
                                     style={{ width: "125px", height: "auto" }} />
-                                    <div style={{ display: "flex", justifyContent: "space-between"}}>
-                                <FAIcons.FaUpload
-                                    style={{ margin: ".2rem 0.35rem", fontSize: ".8rem", color: `${colors.darkGrey}`}} />
-                                <FAIcons.FaPencilAlt style={{ margin: ".2rem 0.35rem", fontSize: ".8rem", color: `${colors.darkGrey}` }} />
-                                    </div>
+                                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                    <FAIcons.FaUpload
+                                        style={{ margin: ".2rem 0.35rem", fontSize: ".8rem", color: `${colors.darkGrey}` }} />
+                                    <FAIcons.FaPencilAlt style={{ margin: ".2rem 0.35rem", fontSize: ".8rem", color: `${colors.darkGrey}` }} />
+                                </div>
                             </FileUploadContainer>
                             <InvisibleInput
                                 type="file"
@@ -457,114 +457,114 @@ const Account = () => {
                         />
                     </UploadLogoLabel>
                 </UploadLogoDiv> */}
-            {/* {
+                {/* {
                 windowWidth >= 767 ?
                     <EmployeeInfoHeader>
                         Employees Information
                 </EmployeeInfoHeader>
                     : null
             } */}
-            <Form>
-                <div>
-                    <InputWithLabel
-                        label="Company Name"
-                        type="text"
-                        name="companyName"
-                        required
-                        value={companyInfo.companyName}
-                        onChange={handleOnChange}
-                        inputStyle={{marginBottom: "1rem"}}
-                    />
-                    <InputWithLabel
-                        label="Name"
-                        type="text"
-                        name="accountResponsible"
-                        required
-                        value={companyInfo.accountResponsible}
-                        onChange={handleOnChange}
-                        inputStyle={{marginBottom: "1rem"}}
-                    />
-                    <InputWithLabel
-                        label="Email"
-                        type="email"
-                        name="contactEmail"
-                        required
-                        value={companyInfo.contactEmail}
-                        onChange={handleOnChange}
-                        inputStyle={{marginBottom: "1rem"}}
-                    />
-                    <InputWithLabel
-                        label="Company Address"
-                        type="text"
-                        name="address"
-                        required
-                        value={companyInfo.address}
-                        onChange={handleOnChange}
-                        inputStyle={{marginBottom: "1rem"}}
-                    />
-                    <PhoneCityPostalDiv>
+                <Form>
+                    <div>
                         <InputWithLabel
-                            label="Phone Number"
-                            type="tel"
-                            name="phoneNumber"
-                            required
-                            value={companyInfo.phoneNumber}
-                            onChange={handleOnChange}
-                            inputStyle={{marginBottom: "1rem"}}
-                        />
-                        <DropdownInputCityName
-                            labelText="city"
-                            onChange={cityIdUpdate}
-                            currentCityName={companyInfo.cityName}
-                        />
-                        <InputWithLabel
-                            label="Postal Code"
+                            label="Company Name"
                             type="text"
-                            name="postalCode"
+                            name="companyName"
                             required
-                            value={companyInfo.postalCode}
+                            value={companyInfo.companyName}
                             onChange={handleOnChange}
-                            inputStyle={{marginBottom: "1rem"}}
+                            inputStyle={{ marginBottom: "1rem" }}
                         />
-                    </PhoneCityPostalDiv>
-                </div>
-                <EmployeeInformationDiv>
-                    <EmployeeInfoHeader>
-                        Employees Information
+                        <InputWithLabel
+                            label="Name"
+                            type="text"
+                            name="accountResponsible"
+                            required
+                            value={companyInfo.accountResponsible}
+                            onChange={handleOnChange}
+                            inputStyle={{ marginBottom: "1rem" }}
+                        />
+                        <InputWithLabel
+                            label="Email"
+                            type="email"
+                            name="contactEmail"
+                            required
+                            value={companyInfo.contactEmail}
+                            onChange={handleOnChange}
+                            inputStyle={{ marginBottom: "1rem" }}
+                        />
+                        <InputWithLabel
+                            label="Company Address"
+                            type="text"
+                            name="address"
+                            required
+                            value={companyInfo.address}
+                            onChange={handleOnChange}
+                            inputStyle={{ marginBottom: "1rem" }}
+                        />
+                        <PhoneCityPostalDiv>
+                            <InputWithLabel
+                                label="Phone Number"
+                                type="tel"
+                                name="phoneNumber"
+                                required
+                                value={companyInfo.phoneNumber}
+                                onChange={handleOnChange}
+                                inputStyle={{ marginBottom: "1rem" }}
+                            />
+                            <DropdownInputCityName
+                                labelText="city"
+                                onChange={cityIdUpdate}
+                                currentCityName={companyInfo.cityName}
+                            />
+                            <InputWithLabel
+                                label="Postal Code"
+                                type="text"
+                                name="postalCode"
+                                required
+                                value={companyInfo.postalCode}
+                                onChange={handleOnChange}
+                                inputStyle={{ marginBottom: "1rem" }}
+                            />
+                        </PhoneCityPostalDiv>
+                    </div>
+                    <EmployeeInformationDiv>
+                        <EmployeeInfoHeader>
+                            Employees Information
                     </EmployeeInfoHeader>
-                    <CSVUploadDiv>
-                        <CSVHeaderAndUploadDiv>
-                            <UploadCSVHeader>
-                                Upload CSV file
+                        <CSVUploadDiv>
+                            <CSVHeaderAndUploadDiv>
+                                <UploadCSVHeader>
+                                    Upload CSV file
                             </UploadCSVHeader>
-                            <DownloadCSVLink href="https://pivotcare-s3.s3-us-west-2.amazonaws.com/others/employees_list" target="_blank">
-                                Download CSV format
+                                <DownloadCSVLink href="https://pivotcare-s3.s3-us-west-2.amazonaws.com/others/employees_list" target="_blank">
+                                    Download CSV format
                             </DownloadCSVLink>
-                        </CSVHeaderAndUploadDiv>
-                        <UploadCSVDiv>
-                            <UploadCSVLabel>
-                                {/* <ChooseFilePElement>
+                            </CSVHeaderAndUploadDiv>
+                            <UploadCSVDiv>
+                                <UploadCSVLabel>
+                                    {/* <ChooseFilePElement>
                                     Choose File
                                 </ChooseFilePElement> */}
-                                <SelectedFilePElement
-                                    uploadCSV={uploadCSV}
-                                >
-                                    {
-                                        uploadCSV.name ?
-                                            uploadCSV.name :
-                                            "No File chosen"
-                                    }
-                                </SelectedFilePElement>
-                                <InvisibleInput
-                                    type="file"
-                                    accept=".csv"
-                                    onChange={(e) => {
-                                        setUploadCSV(e.target.files[0])
-                                        e.target.value = ''
-                                    }}
-                                />
-                            </UploadCSVLabel>
-                            {/* <Button
+                                    <SelectedFilePElement
+                                        uploadCSV={uploadCSV}
+                                    >
+                                        {
+                                            uploadCSV.name ?
+                                                uploadCSV.name :
+                                                "No File chosen"
+                                        }
+                                    </SelectedFilePElement>
+                                    <InvisibleInput
+                                        type="file"
+                                        accept=".csv"
+                                        onChange={(e) => {
+                                            setUploadCSV(e.target.files[0])
+                                            e.target.value = ''
+                                        }}
+                                    />
+                                </UploadCSVLabel>
+                                {/* <Button
                                 text="Upload"
                                 onClick={uploadCSVToList}
                                 style={
@@ -574,134 +574,134 @@ const Account = () => {
                                     padding: ".25rem"
                                 }}
                             /> */}
-                            <UploadPElement
-                                onClick={uploadCSVToList}
-                            >
-                                Upload
+                                <UploadPElement
+                                    onClick={uploadCSVToList}
+                                >
+                                    Upload
                             </UploadPElement>
-                        </UploadCSVDiv>
-                    </CSVUploadDiv>
+                            </UploadCSVDiv>
+                        </CSVUploadDiv>
 
-                    <InputEmployeesDiv>
-                        <InputWithLabel
-                            label="Full Name"
-                            type="text"
-                            name="employeeName"
-                            labelStyle={
-                                windowWidth < 768 ?
-                                {width: "100%"}
-                                :
-                                { width: "33%" }
-                            }
-                            value={companyInfo.employeeName}
-                            onChange={handleOnChange}
-                        />
-
-                        {
-                            windowWidth < 768 ?
-                            <>
-                                <DepartmentWrapper>
-                                    <DropdownInput
-                                        labelText="Department"
-                                        onChange={departmentUpdate}
-                                    />
-                                </DepartmentWrapper>
-                                <AddEmployeeMobileDiv>
-                                    <InputWithLabel
-                                        label="ID"
-                                        type="text"
-                                        name="employeeId"
-                                        labelStyle={
-                                            windowWidth < 768 ?
-                                            {width: "100%"}
-                                            :
-                                            { width: "18%" }
-                                        }
-                                        value={companyInfo.employeeId}
-                                        onChange={handleOnChange}
-                                    />
-                                    <AddNewEmployeeElement
-                                        onClick={addNewEmployee}
-                                    >
-                                        +
-                                    </AddNewEmployeeElement>
-                                </AddEmployeeMobileDiv>
-                            </>
-                            :
-                            <>
-                                <InputWithLabel
-                                label="ID"
+                        <InputEmployeesDiv>
+                            <InputWithLabel
+                                label="Full Name"
                                 type="text"
-                                name="employeeId"
+                                name="employeeName"
                                 labelStyle={
                                     windowWidth < 768 ?
-                                    {width: "100%"}
-                                    :
-                                    { width: "18%" }
+                                        { width: "100%" }
+                                        :
+                                        { width: "33%" }
                                 }
-                                value={companyInfo.employeeId}
+                                value={companyInfo.employeeName}
                                 onChange={handleOnChange}
-                                />
-                                <DropdownInput
-                                    labelText="Department"
-                                    onChange={departmentUpdate}
-                                />
-                                <AddNewEmployeeElement
-                                    onClick={addNewEmployee}
-                                >
-                                    +
-                                </AddNewEmployeeElement>
-                            </>
-                        }
-                    </InputEmployeesDiv>
+                            />
 
-                    {
-                        companyInfo.employees.length === 0 ?
-                            <EmployeesList>
-                                No employees added
+                            {
+                                windowWidth < 768 ?
+                                    <>
+                                        <DepartmentWrapper>
+                                            <DropdownInput
+                                                labelText="Department"
+                                                onChange={departmentUpdate}
+                                            />
+                                        </DepartmentWrapper>
+                                        <AddEmployeeMobileDiv>
+                                            <InputWithLabel
+                                                label="ID"
+                                                type="text"
+                                                name="employeeId"
+                                                labelStyle={
+                                                    windowWidth < 768 ?
+                                                        { width: "100%" }
+                                                        :
+                                                        { width: "18%" }
+                                                }
+                                                value={companyInfo.employeeId}
+                                                onChange={handleOnChange}
+                                            />
+                                            <AddNewEmployeeElement
+                                                onClick={addNewEmployee}
+                                            >
+                                                +
+                                    </AddNewEmployeeElement>
+                                        </AddEmployeeMobileDiv>
+                                    </>
+                                    :
+                                    <>
+                                        <InputWithLabel
+                                            label="ID"
+                                            type="text"
+                                            name="employeeId"
+                                            labelStyle={
+                                                windowWidth < 768 ?
+                                                    { width: "100%" }
+                                                    :
+                                                    { width: "18%" }
+                                            }
+                                            value={companyInfo.employeeId}
+                                            onChange={handleOnChange}
+                                        />
+                                        <DropdownInput
+                                            labelText="Department"
+                                            onChange={departmentUpdate}
+                                        />
+                                        <AddNewEmployeeElement
+                                            onClick={addNewEmployee}
+                                        >
+                                            +
+                                </AddNewEmployeeElement>
+                                    </>
+                            }
+                        </InputEmployeesDiv>
+
+                        {
+                            companyInfo.employees.length === 0 ?
+                                <EmployeesList>
+                                    No employees added
                             </EmployeesList>
-                            :
-                            <>
-                            <EmployeesListLabel>Employees List</EmployeesListLabel>
-                            <EmployeesList>
-                                {companyInfo.employees.map(employee =>
-                                    <EmployeesListItem key={employee.employeeId}>
-                                        <span>{employee.employeeName}</span>
-                                        <span>{employee.employeeId}</span>
-                                        <span>{employee.departmentName}</span>
-                                        <DeleteButton
-                                            onClick={deleteEmployee}
-                                            id={employee.employeeId}
-                                        >x</DeleteButton>
-                                    </EmployeesListItem>
-                                )}
-                            </EmployeesList>
-                            </>
-                    }
-                </EmployeeInformationDiv>
-                <SaveBtnDiv>
-                    {/* <button
+                                :
+                                <>
+                                    <EmployeesListLabel>Employees List</EmployeesListLabel>
+                                    <EmployeesList>
+                                        {companyInfo.employees.map(employee =>
+                                            <EmployeesListItem key={employee.employeeId}>
+                                                <span>{employee.employeeName}</span>
+                                                <span>{employee.employeeId}</span>
+                                                <span>{employee.departmentName}</span>
+                                                <DeleteButton
+                                                    onClick={deleteEmployee}
+                                                    id={employee.employeeId}
+                                                >x</DeleteButton>
+                                            </EmployeesListItem>
+                                        )}
+                                    </EmployeesList>
+                                </>
+                        }
+                    </EmployeeInformationDiv>
+                    <SaveBtnDiv>
+                        {/* <button
                         onClick={e => {
                             e.preventDefault();
                             updateCompanyInfo();
                         }}
                     >Save</button> */}
-                    <Button
-                        size="med"
-                        onClick={e => {
-                            e.preventDefault();
-                            updateCompanyInfo();
-                        }}
-                        text="Save"
-                        style={
-                            {
-                                width: windowWidth < 768 ? "100%" : "50%",
-                                backgroundColor: colors.UIViolet
-                            }
+                        <Button
+                            size="med"
+                            onClick={e => {
+                                e.preventDefault();
+                                updateCompanyInfo();
+                            }}
+                            text="Save"
+                            style={
+                                {
+                                    width: windowWidth < 768 ? "100%" : "50%",
+                                    backgroundColor: colors.UIViolet
+                                }
                             } />
-                </SaveBtnDiv>
-            </Form>
-        </AccountPageContainer>
+                    </SaveBtnDiv>
+                </Form>
+            </AccountPageContainer>
         </MaxWidthWrapper>
     );
 };
@@ -718,6 +718,8 @@ const AccountPageContainer = styled.div`
     max-width: 550px;
     /* margin: 0 auto; */
     padding: 2rem;
+    margin: 0 auto;
+    
     color: ${colors.darkGrey};
     @media ${device.laptop} {
         margin: 0;
