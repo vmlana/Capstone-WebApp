@@ -12,8 +12,8 @@ const EditProgram = (props) => {
 
   return (
     <div style={styles.container}>
-      Edit Program: {programData.programName}
-      {console.log(programData)}
+      {/* Edit Program: {programData.programName}
+      {console.log(programData)} */}
       <CreateContentList
         type={"edit"}
         contentsType={"program"}

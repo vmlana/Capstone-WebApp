@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from "react-router-dom";
 import { userSigninSignup } from '../../../../redux/user/user.actions';
-import {login} from '../../../../services/tokenApi';
+import { login } from '../../../../services/tokenApi';
 import { apiUrl } from '../../../../services/apiUrl';
 
 import styled from "styled-components";
@@ -43,18 +43,18 @@ const Signin = (props) => {
         // const response = await { success: true }
 
         try {
-            const {email, password, userType} = userInput;
+            const { email, password, userType } = userInput;
             const response = await login(
                 `${apiUrl}/login`,
                 email,
                 password,
                 userType
-                )
-                .catch((error=>{
+            )
+                .catch((error => {
                     throw error;
                 }))
-            
-            if(!response || !response.body.success) {
+
+            if (!response || !response.body.success) {
                 alert("Your Email or Password is wrong!!!");
                 return;
             }
@@ -71,7 +71,7 @@ const Signin = (props) => {
 
                 dispatch(userSigninSignup(userType, authId, accessToken, refreshToken, accessExpiresIn, refreshExpiresIn));
             }
-        } catch(error){
+        } catch (error) {
             alert("Your Email or Password is wrong!!!");
         }
     };
@@ -89,9 +89,9 @@ const Signin = (props) => {
             <HeaderWrapDiv>
                 {
                     windowWidth < 768 ?
-                    <SigninPageHeader>Sign in</SigninPageHeader>
-                    :
-                    <SigninPageHeader>Sign in here !</SigninPageHeader>
+                        <SigninPageHeader>Sign in</SigninPageHeader>
+                        :
+                        <SigninPageHeader>Sign in here !</SigninPageHeader>
                 }
             </HeaderWrapDiv>
             <Form onSubmit={signInHandler}>
@@ -147,12 +147,12 @@ const Signin = (props) => {
                 {/* <Button type="submit" text="SIGN IN" /> */}
                 <ButtonDiv>
                     <Button
-                    text="Sign in" 
-                    type="submit" 
-                    style={{width: "100%"}}
-                    onClick={()=>{}}
+                        text="Sign in"
+                        type="submit"
+                        style={{ width: "100%" }}
+                        onClick={() => { }}
                     />
-                 </ButtonDiv>
+                </ButtonDiv>
                 <LinkToSignupText>
                     Don’t have an account?&nbsp;
                         <Link to="auth/signup">
@@ -169,6 +169,7 @@ const Signin = (props) => {
 const SigninPageContainer = styled.div`
     max-width: 1500px;
     margin: 2rem 3rem;
+    min-height: 75vh;
     @media ${device.tablet} {
         padding: 0 2rem;
         margin: 2rem auto;
@@ -275,7 +276,7 @@ const Form = styled.form`
     width: 100%;
 
     @media ${device.tablet} {
-        width: 60%;
+        max-width: 768px;
         margin: 2rem auto;
     }
 
