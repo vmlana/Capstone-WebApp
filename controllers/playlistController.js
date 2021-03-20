@@ -39,7 +39,7 @@ exports.getPlaylists = (req, res) => {
 
 
     let qry = `SELECT p.playlistId, p.name as playlistName, p.description as playlistDescription, log.qtd as playlistViews,
-                      c.categoryId, c.name as categoryName, lg.name as instructorName, i.instructorId as instructorID,
+                      c.categoryId, c.name as categoryName, lg.name as instructorName, i.instructorId as instructorID, l.videoDuration,
                       l.lessonId, l.name as lessonName, pl.order as lessonOrder, l.imageFile, l.videoFile, l.description as lessonDescription,
                       CASE WHEN p.level = "B" THEN "Begginer"
                            WHEN p.level = "I" THEN "Intermediate"
@@ -113,6 +113,7 @@ exports.getPlaylists = (req, res) => {
                                 lessonName: results[iLessonBase].lessonName,
                                 lessonOrder: results[iLessonBase].lessonOrder,
                                 lessonDescription: results[iLessonBase].lessonDescription,
+                                videoDuration: results[iLessonBase].videoDuration,
                                 imageFile: results[iLessonBase].imageFile,
                                 videoFile: results[iLessonBase].videoFile
                             });
