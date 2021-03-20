@@ -3,25 +3,28 @@
 }
 
 .dzu-dropzone {
-    height: 300px;
-    width: 300px;
+    height: 350px;
+    max-width: 350px;
     overflow: unset;
     margin: 0 auto;
     margin-bottom: 2rem;
-    border: 2px dashed #d9d9d9;
+    border: 2px dashed rgba(112, 112, 112, 0.2);
 }
 
 .dzu-inputLabel {
     padding: 1rem;
     text-align: center;
+    color: #707070;
+    font-size: 22px;
+    line-height: 40px;
 }
 
 .previewContainer {
-    height: 300px;
-    width: 300px;
+    height: 350px;
+    max-width: 350px;
     margin: 0 auto;
     margin-bottom: 2rem;
-    border: 2px dashed #d9d9d9;
+    border: 2px dashed rgba(112, 112, 112, 0.2);
 }
 
 .dzu-previewContainer {

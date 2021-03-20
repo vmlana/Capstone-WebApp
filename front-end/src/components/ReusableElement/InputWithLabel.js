@@ -30,11 +30,16 @@ const InputElement = styled.input`
   box-sizing: border-box;
   height: 46px;
   margin-bottom: 0.5rem;
-  color: ${colors.darkGrey}
+  color: ${colors.darkGrey};
+  color: #333333;
+	padding: 20px;
 `;
 
 const Label = styled.label`
   margin: 0rem 0rem 0.25rem 0;
+  font-size: 18px;
+	line-height: 30px;
+	color: #707070;
 `;
 
 const LabelText = styled.p`

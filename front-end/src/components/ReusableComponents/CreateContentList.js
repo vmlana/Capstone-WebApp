@@ -9,6 +9,8 @@ import Button from "../ReusableElement/Button";
 
 import TextField from "@material-ui/core/TextField";
 
+import styled from 'styled-components';
+
 import { levels, categories, depts } from "../../demoData";
 import {
   getCategories,
@@ -16,6 +18,8 @@ import {
   getLessonsByCategoryId,
   createPlaylist,
 } from "../Auth/Api/api";
+
+import { device } from '../StyleComponent/responsiveDevice';
 
 // {
 //     "action" : "upd",
@@ -57,7 +61,7 @@ const CreateContentList = ({ contentsType, type, data }) => {
   const [finalData, setFinalData] = useState([]);
   const [contentType, setContentType] = useState("");
 
-  console.log(deptArr);
+  // console.log(deptArr);
 
   const handleOpen = () => {
     setOpen(true);
@@ -77,15 +81,15 @@ const CreateContentList = ({ contentsType, type, data }) => {
     const uniqueLessons =
       contentType === "playlist"
         ? [
-            ...concatArr
-              .reduce((map, obj) => map.set(obj.lessonId, obj), new Map())
-              .values(),
-          ]
+          ...concatArr
+            .reduce((map, obj) => map.set(obj.lessonId, obj), new Map())
+            .values(),
+        ]
         : [
-            ...concatArr
-              .reduce((map, obj) => map.set(obj.playlistId, obj), new Map())
-              .values(),
-          ];
+          ...concatArr
+            .reduce((map, obj) => map.set(obj.playlistId, obj), new Map())
+            .values(),
+        ];
 
     const finalFilteredData =
       contentType === "playlist"
@@ -146,7 +150,7 @@ const CreateContentList = ({ contentsType, type, data }) => {
     //   createPlaylist(dataToSend);
     //   console.log("datatisend", dataToSend);
     // }
-    console.log("called");
+    // console.log("called");
     createPlaylist(dataToSend);
   };
 
@@ -187,18 +191,18 @@ const CreateContentList = ({ contentsType, type, data }) => {
       }
     }
 
-    console.log(data);
+    // console.log(data);
 
     getCategories().then((result) => setCatLists(result));
   }, []);
 
   useEffect(() => {
-    console.log("cat", cat);
+    // console.log("cat", cat);
     contentsType === "playlist"
       ? getLessonsByCategoryId(cat).then((result) => setSearchResults(result))
       : getPlaylistsByCategoryId(cat).then((result) =>
-          setSearchResults(result)
-        );
+        setSearchResults(result)
+      );
   }, [cat]);
 
   const filteredDeptArr =
@@ -207,34 +211,36 @@ const CreateContentList = ({ contentsType, type, data }) => {
       : null;
 
   return (
-    <div>
+    <ContentListContainer>
       {contentType === "playlist" ? (
         type === "add" ? (
           <div>
-            <h1>ADD PLAYLIST</h1>
-            <p>
-              Get started adding videos to your list. We will post after
-              reviewing the content.
-            </p>
+            <div className='titleContainer'>
+              <h1 className='pageHeader'>Add Playlist</h1>
+            </div>
+            <h3 className='pageSubHeader'>Get started adding videos to your list. We will post after reviewing the content.</h3>
           </div>
         ) : (
           <div>
-            <h1>EDIT PLAYLIST </h1>
-            <p>Click to see details or edit.</p>
+            <div className='titleContainer'>
+              <h1 className='pageHeader'>Edit Playlist</h1>
+            </div>
+            <h3 className='pageSubHeader'>Click to see details or edit.</h3>
           </div>
         )
       ) : type === "add" ? (
         <div>
-          <h1>ADD PROGRAM</h1>
-          <p>
-            Get started adding videos to your list. We will post after reviewing
-            the content.
-          </p>
+          <div className='titleContainer'>
+            <h1 className='pageHeader'>Add Program</h1>
+          </div>
+          <h3 className='pageSubHeader'>Get started adding videos to your list. We will post after reviewing the content.</h3>
         </div>
       ) : (
         <div>
-          <h1>EDIT PROGRAM </h1>
-          <p>Click to see details or edit.</p>
+          <div className='titleContainer'>
+            <h1 className='pageHeader'>Edit Program</h1>
+          </div>
+          <h3 className='pageSubHeader'>Click to see details or edit.</h3>
         </div>
       )}
       <div style={styles.biggerContainer}>
@@ -296,7 +302,7 @@ const CreateContentList = ({ contentsType, type, data }) => {
               {selectedData.length === 0
                 ? null
                 : contentType === "playlist"
-                ? selectedData.map((data) => (
+                  ? selectedData.map((data) => (
                     <div style={styles.addedContentList}>
                       <div>
                         <img src={data.imageFile} alt={data.lessonName} />
@@ -304,11 +310,12 @@ const CreateContentList = ({ contentsType, type, data }) => {
                       <span>{data.lessonName}</span>
                     </div>
                   ))
-                : selectedData.map((data) => (
+                  : selectedData.map((data) => (
                     <div style={styles.addedContentList}>
+                      {/* {console.log('Latest: ', data)} */}
                       <div>
                         <img
-                          src={data.playlistImageFile}
+                          src={data.imageFile}
                           alt={data.playlistName}
                         />
                       </div>
@@ -333,7 +340,7 @@ const CreateContentList = ({ contentsType, type, data }) => {
               purpose={"set"}
               type={"cat"}
             />
-            {console.log("levelset", levelSet)}
+            {/* {console.log("levelset", levelSet)} */}
             <Picker
               label={"Set Level"}
               option={levels}
@@ -382,22 +389,22 @@ const CreateContentList = ({ contentsType, type, data }) => {
             <div>
               {filteredDeptArr !== null
                 ? filteredDeptArr.map((dept, index) => (
-                    <div key={index}>
-                      <span style={{ marginRight: "1rem" }}>{dept}</span>
-                      <span
-                        style={{ cursor: "pointer" }}
-                        onClick={() => deleteDeptData(dept)}
-                      >
-                        x
+                  <div key={index}>
+                    <span style={{ marginRight: "1rem" }}>{dept}</span>
+                    <span
+                      style={{ cursor: "pointer" }}
+                      onClick={() => deleteDeptData(dept)}
+                    >
+                      x
                       </span>
-                    </div>
-                  ))
+                  </div>
+                ))
                 : null}
             </div>
           </div>
         )}
       </div>
-    </div>
+    </ContentListContainer>
   );
 };
 
@@ -443,5 +450,47 @@ const styles = {
     marginTop: "3rem",
   },
 };
+
+const ContentListContainer = styled.div`
+	/* max-width: 1500px;
+    margin: 0 auto; */
+    padding: 2rem;
+    padding-top: 4.5rem;
+    color:#707070;
+    font-family: 'GothamRoundedNormal', sans-serif;
+
+	.titleContainer {
+		position: relative;
+		border-bottom: solid 2px #707070;
+		margin-bottom: 1rem;
+
+		@media ${device.mobileP} {
+			max-width: 400px;
+		}
+	}
+
+	.pageHeader {
+		font-size: 30px;
+		line-height: 36px;
+		position: absolute;
+		top: -2.5rem;
+		background-color: #fff;
+		padding-right: 2rem;
+		text-transform: uppercase;
+		font-family: GothamRoundedBold, sans-serif;
+		font-weight: 900;
+		color: #707070;
+	}
+
+	.pageSubHeader {
+		font-size: 18px;
+		line-height: 30px;
+		font-family: 'Gotham', sans-serif;
+		font-weight: 300;
+		margin: 0;
+		padding: 0;
+		padding-top: 16px;
+	}
+`;
 
 export default CreateContentList;

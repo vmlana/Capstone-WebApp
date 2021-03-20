@@ -6,6 +6,8 @@ import { IconContext } from 'react-icons';
 import { useDispatch } from 'react-redux';
 import { userLogout } from '../../../../redux/user/user.actions';
 
+import { logout } from '../../../../services/tokenApi';
+
 const CompanyConfigHeader = (props) => {
     const dispatch = useDispatch()
     let { url } = useRouteMatch();
@@ -18,6 +20,15 @@ const CompanyConfigHeader = (props) => {
     const updateWindowWidth = () => setWindowWidth(window.innerWidth);
 
     const [scroll, setScroll] = useState(false);
+
+    const logoutHandler = () => {
+        (async()=>{
+            await logout();
+            dispatch(userLogout());
+            props.history.replace(`/auth`);
+        })()
+    }
+
     useEffect(() => {
         window.addEventListener("scroll", () => {
             setScroll(window.scrollY > 50);
@@ -60,8 +71,7 @@ const CompanyConfigHeader = (props) => {
                             <Link
                                 to="/auth"
                                 onClick={() => {
-                                    dispatch(userLogout());
-                                    props.history.replace(`/auth`);
+                                    logoutHandler();
                                 }}
                             >
                                 <FAIcons.FaSignOutAlt size={24} />
@@ -99,8 +109,9 @@ const CompanyConfigHeader = (props) => {
                                     <Link
                                         to="/auth"
                                         onClick={() => {
-                                            dispatch(userLogout());
-                                            props.history.replace(`/auth`);
+                                            logoutHandler();
+                                            // dispatch(userLogout());
+                                            // props.history.replace(`/auth`);
                                         }}
                                     >
                                         Sign Out

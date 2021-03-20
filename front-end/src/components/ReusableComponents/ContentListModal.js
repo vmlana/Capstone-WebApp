@@ -36,19 +36,19 @@ const ContentListModal = ({
     // if (type === "playlist") {
     let checkedList = newLessonArr;
 
-    console.log(checked, e.target.alt);
+    // console.log(checked, e.target.alt);
 
     type === "playlist"
       ? checkedList.map((lesson) =>
-          lesson.lessonId == e.target.alt
-            ? (lesson.isChecked = checked)
-            : lesson
-        )
+        lesson.lessonId == e.target.alt
+          ? (lesson.isChecked = checked)
+          : lesson
+      )
       : checkedList.map((playlist) =>
-          playlist.playlistId == e.target.alt
-            ? (playlist.isChecked = checked)
-            : playlist
-        );
+        playlist.playlistId == e.target.alt
+          ? (playlist.isChecked = checked)
+          : playlist
+      );
 
     if (checked === false) {
       renewData(checkedList, e.target.alt);
@@ -75,7 +75,7 @@ const ContentListModal = ({
 
       setNewLessonArr(sortedLessonArr);
     } else {
-      console.log("exData", exData);
+      // console.log("exData", exData);
       let sortedPlaylistArr = results.map((result) => {
         let check = exData.some(
           (playlist) => result.playlistId === playlist.playlistId
@@ -88,7 +88,7 @@ const ContentListModal = ({
         }
       });
 
-      console.log("sortedPalylist", sortedPlaylistArr);
+      // console.log("sortedPalylist", sortedPlaylistArr);
       //   setNewPlaylistArr(sortedPlaylistArr);
       setNewLessonArr(sortedPlaylistArr);
     }
@@ -124,27 +124,27 @@ const ContentListModal = ({
               {newLessonArr
                 ? type === "playlist"
                   ? newLessonArr.map((video, index) => (
-                      <ContentImageTitle
-                        img={video.imageFile}
-                        title={video.lessonName}
-                        id={video.lessonId}
-                        onClick={handleCheckedElement}
-                        checked={video.isChecked}
-                        key={index}
-                        index={index}
-                      />
-                    ))
+                    <ContentImageTitle
+                      img={video.imageFile}
+                      title={video.lessonName}
+                      id={video.lessonId}
+                      onClick={handleCheckedElement}
+                      checked={video.isChecked}
+                      key={index}
+                      index={index}
+                    />
+                  ))
                   : newLessonArr.map((playlist, index) => (
-                      <ContentImageTitle
-                        img={playlist.playlistImageFile}
-                        title={playlist.playlistName}
-                        id={playlist.playlistId}
-                        onClick={handleCheckedElement}
-                        checked={playlist.isChecked}
-                        key={index}
-                        index={index}
-                      />
-                    ))
+                    <ContentImageTitle
+                      img={playlist.imageFile}
+                      title={playlist.playlistName}
+                      id={playlist.playlistId}
+                      onClick={handleCheckedElement}
+                      checked={playlist.isChecked}
+                      key={index}
+                      index={index}
+                    />
+                  ))
                 : null}
             </ContentList>
           </ModalContent>

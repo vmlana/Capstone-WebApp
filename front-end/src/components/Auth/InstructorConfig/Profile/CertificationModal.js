@@ -5,6 +5,8 @@ import InputWithLabel from '../../../ReusableElement/InputWithLabel'
 import * as FAIcons from "react-icons/fa"
 import Button from '../../../ReusableElement/Button'
 
+import { device } from '../../../StyleComponent/responsiveDevice';
+
 const useStyles = makeStyles((theme) => ({
     modal: {
         display: 'flex',
@@ -34,7 +36,7 @@ const CertificationModal = ({ open, onClose }) => {
                 <Slide in={open}>
                     <ModalContent>
                         <ReactIcon>
-                            <FAIcons.FaTimesCircle onClick={onClose} style={{ cursor: 'pointer' }} size={20} />
+                            <FAIcons.FaRegTimesCircle onClick={onClose} style={{ cursor: 'pointer' }} size={30} />
                         </ReactIcon>
 
                         <InputWithLabel
@@ -86,16 +88,18 @@ const CertificationModal = ({ open, onClose }) => {
                             // onChange={handleOnChange}
                             />
                         </InputGroup>
-                        <InputWithLabel
-                            label="Credential ID"
-                            type="text"
-                            name="credentialID"
-                            // value={instructorInfo.instructorName}
-                            required
-                        // onChange={handleOnChange}
-                        />
+                        <InputGroup>
+                            <InputWithLabel
+                                label="Credential ID"
+                                type="text"
+                                name="credentialID"
+                                // value={instructorInfo.instructorName}
+                                required
+                            // onChange={handleOnChange}
+                            />
+                        </InputGroup>
                         <ModalButtonGroup>
-                            <Button text="Add Another" />
+                            {/* <Button text="Add Another" /> */}
                             <Button text="Save" />
                         </ModalButtonGroup>
                     </ModalContent>
@@ -110,7 +114,9 @@ const ModalContent = styled.div`
     border: 1px solid #555;
     border-radius: 1rem;
     padding: 3rem;
+    padding-top: 1rem;
     box-shadow: none;
+    max-width: 800px;
 
     :focus {
         outline: none;
@@ -123,8 +129,12 @@ const ReactIcon = styled.div`
 
 const InputGroup = styled.div`
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-gap: 3rem;
+    grid-gap: 1rem;
+
+    @media ${device.laptop} { 
+		grid-template-columns: repeat(2, 1fr);
+        grid-gap: 3rem;
+    }
 `;
 
 const CheckboxGroup = styled.div`
@@ -144,15 +154,15 @@ const CheckboxInput = styled.input.attrs({ type: 'checkbox' })`
 
 const CheckboxLabel = styled.label`
     margin-right: 2rem;
+    font-size: 18px;
+	line-height: 30px;
+	color: #707070;
 `;
 
 const ModalButtonGroup = styled.div`
     display: flex;
     justify-content: flex-end;
-
-    button:first-of-type {
-        margin-right: 1rem;
-    }
+    margin-top: 1rem;
 `;
 
 export default CertificationModal

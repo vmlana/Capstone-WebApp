@@ -9,6 +9,8 @@ import InputWithLabel from '../../../ReusableElement/InputWithLabel';
 import CertificationModal from './CertificationModal';
 import Image from '../../../ReusableElement/Image';
 
+import { device } from '../../../StyleComponent/responsiveDevice';
+
 import { apiUrl } from '../../../../services/apiUrl';
 
 const Profile = () => {
@@ -28,8 +30,8 @@ const Profile = () => {
 		userLogin: "",
 		certifications: [
 			{
-				certificationImage: '1.jpg',
-				certificationName: 'Teacher of Hatha Yoga',
+				certificationImage: './media/images/Certificates-03.svg',
+				certificationName: 'Personal Trainer of the year',
 				issuingOrganization: '',
 				issueDate: '',
 				expirationdate: '',
@@ -37,14 +39,15 @@ const Profile = () => {
 				doesExpire: false
 			},
 			{
-				certificationImage: '2.jpg',
+				certificationImage: './media/images/Certificates-01.svg',
 				certificationName: 'Certified Personal Trainer',
 				issuingOrganization: '',
 				issueDate: '',
 				expirationdate: '',
 				credentialID: '2',
 				doesExpire: false
-			}
+			},
+
 		]
 	});
 
@@ -91,7 +94,7 @@ const Profile = () => {
 			}).catch(err => {
 				throw err;
 			})
-			// console.log(instructorData);
+			// console.log('InstructorData', instructorData);
 			let {
 				instructorId,
 				instructorName,
@@ -105,7 +108,7 @@ const Profile = () => {
 				specializationArea,
 				imageFile,
 				userLogin
-			} = instructorData[0];
+			} = instructorData;
 
 			if (postalCode == null) {
 				postalCode = "";
@@ -134,19 +137,40 @@ const Profile = () => {
 			// console.log(instructorInfo);
 
 		} catch (err) {
-			console.log("No user data found")
+			console.log("No user data found", err)
 		}
 
 	}, [authId]);
 
 	return (
 		<PageContainer>
-
+			<TitleContainer>
+				<PageHeader>Profile</PageHeader>
+			</TitleContainer>
 			<Form onSubmit={onSubmit}>
-				<div>
-					<TitleContainer>
-						<PageHeader>Profile</PageHeader>
-					</TitleContainer>
+				<div className="pictureContainer">
+					<ProfilePictureContainer>
+						<label htmlFor="fileUpload" style={{ backgroundColor: "lightgrey", borderRadius: 20 }}>
+							{instructorInfo.imageFile ? (
+								<FileUploadContainer>
+									<div className="instImage"><img src={instructorInfo.imageFile} alt={instructorInfo.instructorName} style={{ width: "200px", height: "200px" }} /></div>
+									<div className="upload_icon"><FAIcons.FaUpload style={{ margin: "0.30rem" }} /></div>
+								</FileUploadContainer>
+							) : (
+								<>
+									<FAIcons.FaUpload />
+									<label style={{ marginLeft: "1rem" }}>Upload profile picture</label>
+								</>
+							)}
+						</label>
+						<UploadFile
+							type="file"
+							id="fileUpload"
+							onChange={handleChange}
+						/>
+					</ProfilePictureContainer>
+				</div>
+				<div className="formContainer">
 					<InputWithLabel
 						label="First Name, Last Name"
 						type="text"
@@ -198,29 +222,8 @@ const Profile = () => {
 						<TextArea name="resume" rows="7" required value={instructorInfo.resume} onChange={handleOnChange} />
 					</Label>
 				</div>
-				<div>
 
-					<ProfilePictureContainer>
-						<label htmlFor="fileUpload" style={{ backgroundColor: "lightgrey" }}>
-							{instructorInfo.imageFile ? (
-								<FileUploadContainer>
-									<img src={instructorInfo.imageFile} alt={instructorInfo.instructorName} style={{ width: "125px", height: "125px" }} />
-									<FAIcons.FaUpload style={{ margin: "0.30rem" }} />
-								</FileUploadContainer>
-							) : (
-								<>
-									<FAIcons.FaUpload />
-									<label style={{ marginLeft: "1rem" }}>Upload profile picture</label>
-								</>
-							)}
-						</label>
-						<UploadFile
-							type="file"
-							id="fileUpload"
-							onChange={handleChange}
-						/>
-					</ProfilePictureContainer>
-
+				<div className="certificationContainer">
 					<Certification>
 						<CertificationHeader>
 							<label>Licences & certifications</label>
@@ -249,43 +252,77 @@ const Profile = () => {
 
 						<CertificationModal open={open} onClose={handleClose} />
 					</Certification>
-					<ButtonContainer>
-						<Button text='save' />
-					</ButtonContainer>
 				</div>
 
 			</Form>
+
+			<ButtonContainer>
+				<Button text='save' />
+			</ButtonContainer>
 		</PageContainer>
 	);
 };
 
 const PageContainer = styled.div`
-    max-width: 1000px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 2rem;
+	padding-top: 4.5rem;
+	color:#707070;
 `;
 
 const TitleContainer = styled.div`
     position: relative;
-    border-bottom: solid 1px #000000;
-    max-width: 200px;
+    border-bottom: solid 2px #707070;
     margin-bottom: 3rem;
+
+	@media ${device.mobileP} {
+		max-width: 300px;
+	}
 `;
 
 const PageHeader = styled.h2`
-    font-size: 1.25rem;
-    font-weight: normal;
+    font-size: 30px;
+	line-height: 36px;
     position: absolute;
-    top: -1.75rem;
+    top: -2.5rem;
     background-color: #fff;
     padding-right: 2rem;
     text-transform: uppercase;
+	font-family: 'GothamRoundedBold', sans-serif;
+	font-weight: 900;
+	color: #707070;
 `;
 
 const Form = styled.form`
 	display: grid;
-	grid-template-columns: repeat(2, 1fr);
-	grid-gap: 10rem;
+	grid-gap: 2rem;
+
+	.pictureContainer {
+		margin: 0 auto;
+	}
+
+	@media ${device.laptop} { 
+		grid-gap: 7rem;
+		grid-template-columns: repeat(2, 1fr);
+		/* grid-template-rows: 1fr 1fr; */
+        .pictureContainer {
+			margin: 0;
+			grid-column: 2;
+			grid-row: 1;
+		}
+
+		.formContainer {
+			grid-column: 1;
+			grid-row: span 2;
+		}
+
+		.certificationContainer {
+			grid-column: 2;
+			grid-row: 1;
+			margin-top: 250px;
+		}
+    }
 `;
 
 const AddressWrapDiv = styled.div`
@@ -302,24 +339,37 @@ const LabelText = styled.p`
     font-size: 1rem;
     margin: .5rem 0;
     text-align: left;
+	font-size: 18px;
+	line-height: 30px;
+	color: #707070;
 `;
 
 const TextArea = styled.textarea`
 	border: solid 1px #ccc;
 	border-radius: 5px;
-	font-size: 16px;
+	font-size: 18px;
+	line-height: 30px;
 	width: 100%;
-	padding: .25rem 0.5rem;
 	resize: none;
+	color: #333333;
+	padding: 20px;
+	box-sizing: border-box;
 `;
 
 const ButtonContainer = styled.div`
-	display: flex;
-	justify-content: flex-end;
+	margin-top: 4rem;
+	margin-bottom: 2rem;
+	text-align: center;
+
+	@media ${device.laptop} {
+		text-align: left;
+	}
 `;
 
 const Certification = styled.div`
 	margin-top: 2rem;
+	font-size: 18px;
+	line-height: 30px;
 `;
 
 const CertificationHeader = styled.div`
@@ -341,6 +391,7 @@ const CertificationListItem = styled.li`
     grid-template-columns: 70px 1fr 20px;
 	grid-gap: 1rem;
     margin-bottom: 1rem;
+	align-items: center;
 `;
 
 const ProfilePictureContainer = styled.div`
@@ -350,7 +401,31 @@ const ProfilePictureContainer = styled.div`
 `;
 
 const FileUploadContainer = styled.div`
-	width: 125px;
+	position: relative;
+	
+
+	.instImage {
+		font-size: 0;
+
+		img {
+			border-radius: 20px;
+		}
+	}
+	.upload_icon {
+		position: absolute;
+		/* top: 0; */
+		bottom: 0;
+		background-color: rgba(232, 232, 232, 0.77);
+		left: 0;
+		right: 0;
+		color: #333333;
+		border-bottom-left-radius: 20px;
+		border-bottom-right-radius: 20px;
+
+		svg {
+			padding-right: 1rem;
+		}
+	}
 `;
 
 const UploadFile = styled.input.attrs({ type: 'file' })`

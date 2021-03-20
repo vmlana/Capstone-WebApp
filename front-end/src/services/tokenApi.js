@@ -21,7 +21,7 @@ const fetchJSONWithToken = async (url, options = {}) => {
   if (!storedTokens) {
       return;
   }
-  const { accessToken, refreshToken } = JSON.parse(storedTokens);  
+  const { accessToken, refreshToken, refreshExpiresIn } = JSON.parse(storedTokens);  
 
   let optionsWithToken = options;
   if (accessToken != null) {
@@ -31,6 +31,7 @@ const fetchJSONWithToken = async (url, options = {}) => {
         // "refresh-token": "no", // Test code
         "access-token": `${accessToken}`,
         "refresh-token": `${refreshToken}`,
+        "refresh-expiration-date": `${refreshExpiresIn}`  
       }
     })
   }
@@ -56,18 +57,23 @@ const login = async (url, email, password, userType) => {
     })
 }
 
-const logout = (url) => {
+const logout = () => {
     const storedTokens = retrieveToken();
     JSON.parse(storedTokens);
-    const { userType, authId, accessToken, refreshToken } = storedTokens;  
-    return fetchJSONWithToken(url, {
+    const { userType, authId, accessToken, refreshToken, refreshExpiresIn } = storedTokens;
+    return fetchJSONWithToken( `${apiUrl}/logout`, {
         method: 'POST',
         headers: {
-            "refresh-token": `${refreshToken}`,
+            // "refresh-token": `${refreshToken}`,
+            // "refresh-expiration-date": `${refreshExpiresIn}`
         }
     })
-    .then(() => {
-      clearToken()
+    .then((result) => {
+      clearToken();
+      return result;
+    })
+    .catch((error)=>{
+      return error;
     })
 }
 
@@ -80,15 +86,15 @@ const refreshToken = async () => {
     if (!storedTokens) {
         return;
     }
-    const { userType, authId, accessToken, refreshToken } = JSON.parse(storedTokens);  
+    const { userType, authId, accessToken, refreshToken, refreshExpiresIn } = JSON.parse(storedTokens);  
     // console.log(refreshToken);
     return fetchJSONWithToken(`${apiUrl}/token`, {
         method: 'POST',
         headers: {
-            "refresh-token": refreshToken,
-            // "refresh-token": "no token",
-        }
-    })
+          // "refresh-token": `${refreshToken}`,
+          // "refresh-expiration-date": `${refreshExpiresIn}`
+      }
+  })
     .then(response => {
         saveToken(JSON.stringify(response.body));
         // console.log(response)

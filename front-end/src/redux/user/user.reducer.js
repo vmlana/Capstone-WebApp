@@ -51,7 +51,7 @@ const userReducer = (state = INITIAL_STATE, action) => {
         };
       case userActionTypes.USER_LOGOUT:
         // localStorage.removeItem can be deleted when using logout function
-        window.localStorage.removeItem("PivotCareUser");
+        // window.localStorage.removeItem("PivotCareUser");
         return {
           userInfo: {
             userType: "guest",
