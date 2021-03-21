@@ -42,16 +42,16 @@ const buttonBackToHome = {
 
 const Contact = () => {
   const history = useHistory();
-  const [status, setStatus] = useState({
-    submitted: true,
-    submitting: false,
-    info: { error: false, msg: "We will answer you as soon as possible." },
-  });
   // const [status, setStatus] = useState({
-  //   submitted: false,
+  //   submitted: true,
   //   submitting: false,
-  //   info: { error: false, msg: null },
+  //   info: { error: false, msg: "We will answer you as soon as possible." },
   // });
+  const [status, setStatus] = useState({
+    submitted: false,
+    submitting: false,
+    info: { error: false, msg: null },
+  });
 
   const [inputs, setInputs] = useState({
     name: "",
@@ -196,7 +196,7 @@ const Contact = () => {
                 text={"Submit"}
                 style={
                   windowWidth < 1024 ? buttonStyle : buttonStyleLaptop}
-                onClick={() => history.push("/")}
+                onClick={()=>{}}
               >
                 {!status.submitting
                   ? !status.submitted
