@@ -5,9 +5,24 @@ import styled from "styled-components";
 // Reusable Component
 import Button from "../ReusableElement/Button";
 import Image from "../ReusableElement/Image";
+import InputWithLabel from '../ReusableElement/InputWithLabel';
 
 // images
-import dummyImg from "../../assets/dummy.jpg";
+// import dummyImg from "../../assets/dummy.jpg";
+import contactImage from "../../assets/contact-illustration.png";
+
+// responsive 
+import { device } from '../StyleComponent/responsiveDevice';
+
+import { colors } from '../StyleComponent/colors';
+
+
+const buttonStyle = {
+  width: "100%",
+  height: "auto",
+  fontFamily: 'GothamRoundedLight'
+}
+
 
 const Contact = () => {
   const [status, setStatus] = useState({
@@ -73,15 +88,16 @@ const Contact = () => {
   };
   return (
     <ContactPageContainer>
-      <Image src={dummyImg} alt={"contact"} style={{ display: "flex" }} />
+      <ImageWrapperDiv>
+        <Image src={contactImage} alt={"contact"} style={{ display: "flex" }} />
+      </ImageWrapperDiv>
       <div>
-        <h3 style={{ textAlign: "left" }}>
+        <ContactHeader>
           We'd love to hear from you.
-          <br />
-          Our team is ready to answer all your questions.
-        </h3>
+        </ContactHeader>
+        <ContactP>Our team is ready to answer all your questions.</ContactP>
         <Form onSubmit={handleOnSubmit}>
-          <label htmlFor="name" style={{ textAlign: "left" }}>
+          {/* <label htmlFor="name" style={{ textAlign: "left" }}>
             Name
           </label>
           <Input
@@ -91,8 +107,24 @@ const Contact = () => {
             onChange={handleOnChange}
             required
             value={inputs.name}
+          /> */}
+          <InputWithLabel
+              label="Name"
+              type="text"
+              name="name"
+              value={inputs.name}
+              required
+              onChange={handleOnChange}
           />
-          <label htmlFor="email" style={{ textAlign: "left" }}>
+          <InputWithLabel
+              label="Email"
+              type="email"
+              name="_replyto"
+              value={inputs.email}
+              required
+              onChange={handleOnChange}
+          />
+          {/* <label htmlFor="email" style={{ textAlign: "left" }}>
             Email
           </label>
           <Input
@@ -102,7 +134,7 @@ const Contact = () => {
             onChange={handleOnChange}
             required
             value={inputs.email}
-          />
+          /> */}
           <label htmlFor="message" style={{ textAlign: "left" }}>
             Message
           </label>
@@ -118,7 +150,8 @@ const Contact = () => {
             type="submit"
             disabled={status.submitting}
             text={"Submit"}
-            width
+            style={buttonStyle}
+            onClick={()=>{}}
           >
             {!status.submitting
               ? !status.submitted
@@ -137,11 +170,48 @@ const Contact = () => {
 };
 
 const ContactPageContainer = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-gap: 5rem;
-  margin: 10rem;
   height: 100%;
+  margin: 3rem auto;
+  padding: 0 3rem;
+  /* @media ${device.mobileM} {
+    padding: 0 2rem;
+  } */
+  /* @media ${device.mobileL} {
+    padding: 0 3rem;
+  } */
+  @media ${device.laptop} {
+    /* margin: 10rem; */
+    padding: 0 5rem;
+    max-width: 1500px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 5rem;
+    align-items: flex-end;
+  }
+  @media ${device.desktopM} {
+    /* margin: 10rem; */
+    grid-gap: 10rem;
+
+  }
+`;
+
+const ContactHeader = styled.h3`
+  font-family: 'GothamRoundedLight', sans-serif;
+  text-align: center;
+  font-size: 1.5rem;
+  padding: 0 1rem;
+  color: ${colors.darkGrey};
+  text-transform: capitalize;
+`;
+
+const ContactP = styled.p`
+  font-family: 'GothamRoundedLight', sans-serif;
+  text-align: center;
+  margin: 2rem 0;
+`;
+
+const ImageWrapperDiv = styled.div`
+  margin: 2rem;
 `;
 
 const Form = styled.form`
