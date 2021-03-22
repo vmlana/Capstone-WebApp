@@ -24,28 +24,6 @@ import {
 
 import { device } from "../StyleComponent/responsiveDevice";
 
-// {
-//     "action" : "upd",
-//     "playlistId": 2,
-//     "playlistName": "Stretch for Beginners",
-//     "playlistDescription": "This is another daily sequences for intermediate level",
-//     "playlistLevel": "B",
-//     "categoryId": 3,
-//     "instructorId": 2,
-//     "active": 1,
-//     "lessons": [
-//         {
-//             "lessonId": 1
-//         },
-//         {
-//             "lessonId": 2
-//         },
-//         {
-//             "lessonId": 3
-//         }
-//     ]
-// }
-
 const CreateContentList = ({ contentsType, type, data }) => {
   const [open, setOpen] = useState(false);
   const [selectedData, setSelectedData] = useState([]);
