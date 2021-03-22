@@ -1,5 +1,5 @@
 // const API_URL = `http://localhost:3000/api/v1`;
-import { apiUrl } from '../../../services/apiUrl';
+import { apiUrl } from "../../../services/apiUrl";
 
 export const getCategories = async () => {
   const categories = await fetch(`${apiUrl}/categories`)
@@ -20,6 +20,18 @@ export const getLessonsByCategoryId = async (categoryId) => {
     .then((response) => response.json())
     .catch((error) => console.error(error));
   return lessons;
+};
+
+export const getLessonsByCategoryIdandInstructorId = async (
+  categoryId,
+  instructorId
+) => {
+  const sortedlessons = await fetch(
+    `${apiUrl}/lessons?categoryId=${categoryId}&instructorId=${instructorId}`
+  )
+    .then((response) => response.json())
+    .catch((error) => console.error(error));
+  return sortedlessons;
 };
 
 export const getPlaylistsByInstructorId = async (instructorId) => {
