@@ -31,6 +31,7 @@ const Picker = ({ label, option, onChange, exValue, purpose, type }) => {
       setValue(event.target.value);
     }
 
+    console.log("dept", event.target.value);
     onChange(event.target.value);
   };
 
@@ -41,6 +42,8 @@ const Picker = ({ label, option, onChange, exValue, purpose, type }) => {
       setLevValue(exValue);
     }
   }, []);
+
+  console.log("dept options", option);
 
   return (
     <FormControl className={classes.formControl}>
@@ -76,6 +79,23 @@ const Picker = ({ label, option, onChange, exValue, purpose, type }) => {
           {option
             ? option.map((item, key) => (
                 <MenuItem key={key} value={item.categoryId}>
+                  {item.name}
+                </MenuItem>
+              ))
+            : null}
+        </Select>
+      ) : label === "" ? (
+        <Select
+          labelId="demo-simple-select-placeholder-label-label"
+          id="demo-simple-select-placeholder-label"
+          value={value}
+          onChange={handleChange}
+          displayEmpty
+          className={classes.selectEmpty}
+        >
+          {option
+            ? option.map((item, key) => (
+                <MenuItem key={key} value={item.name}>
                   {item.name}
                 </MenuItem>
               ))
