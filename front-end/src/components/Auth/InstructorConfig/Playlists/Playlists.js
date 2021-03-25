@@ -11,7 +11,6 @@ const Playlists = () => {
   const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.user.userInfo);
   const { userType, authId, accessToken, accessExpiresIn } = userInfo;
-  console.log("instructorId", authId);
 
   let viewData = {
     userType: "Instructor",
