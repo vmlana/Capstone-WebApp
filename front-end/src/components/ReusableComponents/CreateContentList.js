@@ -253,37 +253,39 @@ const CreateContentList = ({ contentsType, type, data }) => {
               value={listName}
             />
           )}
-          <div style={styles.picker}>
-            {catLists.length > 0 ? (
+          <div>
+            <p>Filter</p>
+            <div style={styles.picker}>
+              {catLists.length > 0 ? (
+                <Picker
+                  label={"Category"}
+                  option={catLists}
+                  onChange={onCatClick}
+                  purpose={"search"}
+                  type={"cat"}
+                />
+              ) : null}
               <Picker
-                label={"Category"}
-                option={catLists}
-                onChange={onCatClick}
+                label={"Level"}
+                option={levels}
+                onChange={onLevelClick}
                 purpose={"search"}
-                type={"cat"}
+                type={"level"}
               />
-            ) : null}
-
-            <Picker
-              label={"Level"}
-              option={levels}
-              onChange={onLevelClick}
-              purpose={"search"}
-              type={"level"}
-            />
-            {contentType === "playlist" ? (
-              <Button
-                text={"See available Lessons"}
-                type={"modal"}
-                onClick={handleOpen}
-              />
-            ) : (
-              <Button
-                text={"See available Playlists"}
-                type={"modal"}
-                onClick={handleOpen}
-              />
-            )}
+              {contentType === "playlist" ? (
+                <Button
+                  text={"See available Lessons"}
+                  type={"modal"}
+                  onClick={handleOpen}
+                />
+              ) : (
+                <Button
+                  text={"See available Playlists"}
+                  type={"modal"}
+                  onClick={handleOpen}
+                />
+              )}
+            </div>
           </div>
 
           {searchResults !== undefined ? (
@@ -325,8 +327,18 @@ const CreateContentList = ({ contentsType, type, data }) => {
             </div>
           </div>
           <div style={styles.actionBtns}>
-            <Button text={"Save"} size={"med"} onClick={sendDataToServer} />
-            <Button text={"Delete"} size={"med"} />
+            <Button
+              text={"Save"}
+              size={"med"}
+              type={"edit"}
+              onClick={sendDataToServer}
+            />
+            <Button
+              text={"Delete"}
+              size={"med"}
+              type={"edit"}
+              purpose={"delete"}
+            />
           </div>
         </div>
 
@@ -354,7 +366,14 @@ const CreateContentList = ({ contentsType, type, data }) => {
               value={listDescription}
               onChange={listDescChange}
               rows={20}
-              cols={60}
+              cols={40}
+              style={{
+                padding: "20px",
+                color: "gray",
+                boxSizing: "border-box",
+
+                width: "100%",
+              }}
             />
           </div>
         ) : (
@@ -412,13 +431,12 @@ const styles = {
   biggerContainer: {
     display: "grid",
     gridTemplateColumns: "1fr 1fr",
-    gap: "3rem",
   },
   contentList: {
     display: "grid",
     gridTemplateColumns: "repeat(3, 1fr)",
     gap: "1rem",
-    border: "1px solid black",
+    border: ".5px solid gray",
     minHeight: "300px",
     padding: "1rem",
     overFlow: "hidden",

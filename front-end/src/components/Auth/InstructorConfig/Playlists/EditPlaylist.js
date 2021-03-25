@@ -23,8 +23,8 @@ const EditPlaylist = (props) => {
 
 const styles = {
   container: {
-    width: "80%",
-    margin: "0 auto",
+    width: "100%",
+    margin: "0 4rem",
   },
 };
 
