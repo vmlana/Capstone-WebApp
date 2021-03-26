@@ -274,21 +274,21 @@ const deleteOldRefreshTokenInBlacklist = () => {
     }
 }
 
-// Add refresh token to blacklist **********************
-const addRefreshTokenToBlacklist = (refreshToken, refreshExpiresIn) => {
+// Add token to blacklist **********************
+const addTokenToBlacklist = async (blackToken, blackTokenExpiresIn) => {
     try {
 
-        pivotPoolDb
+        return pivotPoolDb
             .then(async (pool) => {
 
-                    pool.query(
+                    return pool.query(
                         `
                         INSERT INTO tokenBlacklist (token, expirationDate)
-                        VALUES (${promise_mysql.escape(refreshToken)}, ${promise_mysql.escape(refreshExpiresIn)});
+                        VALUES (${promise_mysql.escape(blackToken)}, ${promise_mysql.escape(blackTokenExpiresIn)});
                         `
                     )
                     .then((results)=>{
-                        return;
+                        return results;
                     })
                     .catch((error) => {
                         throw error;
@@ -307,17 +307,17 @@ const addRefreshTokenToBlacklist = (refreshToken, refreshExpiresIn) => {
 
 
 exports.refreshToken = (req, res) => {
+    const accessToken = req.headers["access-token"] || req.body.accessToken || req.query.accessToken;
+    const accessExpiresIn = req.headers["access-expiration-date"] || req.body.accessExpiresIn;
     const refreshToken = req.headers["refresh-token"] || req.body.refreshToken || req.query.refreshToken;
     const refreshExpiresIn = req.headers["refresh-expiration-date"] || req.body.refreshExpiresIn;
-
-    // console.log(refreshToken);
-    // console.log(refreshExpiresIn);
 
     // Dlete old refresh tokens
     deleteOldRefreshTokenInBlacklist();
 
     // Add this token to the Blacklist in order not to be used again
-    addRefreshTokenToBlacklist(refreshToken, refreshExpiresIn);
+    addTokenToBlacklist(accessToken, accessExpiresIn);
+    addTokenToBlacklist(refreshToken, refreshExpiresIn);
 
     jwt.verify(refreshToken, app.get("refreshSecretKey"), (err, user) => {
         if (err) {
@@ -358,40 +358,20 @@ exports.refreshToken = (req, res) => {
 
 // logout **********************************
 
-exports.logout = (req, res) => {
+exports.logout = async (req, res) => {
+    const accessToken = req.headers["access-token"] || req.body.accessToken || req.query.accessToken;
+    const accessExpiresIn = req.headers["access-expiration-date"] || req.body.accessExpiresIn;
     const refreshToken = req.headers["refresh-token"] || req.body.refreshToken || req.query.refreshToken;
     const refreshExpiresIn = req.headers["refresh-expiration-date"] || req.body.refreshExpiresIn;
 
-    // console.log(refreshToken);
-    // console.log(refreshExpiresIn);
+    deleteOldRefreshTokenInBlacklist();
 
     try {
 
-        pivotPoolDb
-            .then(async (pool) => {
+        await addTokenToBlacklist(accessToken, accessExpiresIn);
+        await addTokenToBlacklist(refreshToken, refreshExpiresIn);
 
-                    pool.query(
-                        `
-                        INSERT INTO tokenBlacklist (token, expirationDate)
-                        VALUES (${promise_mysql.escape(refreshToken)}, ${promise_mysql.escape(refreshExpiresIn)});
-                        `
-                    )
-                    .then((results)=>{
-                        // console.log(results);
-                        // refreshTokensList.push(refreshToken);
-                        res.status(200).send({
-                            success: true,
-                            message: "Logout"
-                        });
-                    })
-                    .catch((error) => {
-                        throw error;
-                    });
-
-            })
-            .catch((error) => {
-                throw error;
-            });
+        res.status(200).send({ success: true, message: "Logout" });
 
     } catch (error) {
         // console.log(error);
