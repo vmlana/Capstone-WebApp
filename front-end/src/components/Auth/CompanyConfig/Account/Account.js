@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import * as FAIcons from "react-icons/fa";
 
@@ -8,6 +9,7 @@ import DropdownInput from './DropdownInput';
 import DropdownInputCityName from './DropdownInputCityName';
 
 import dummyImg from '../../../../assets/dummy.jpg';
+import csv from '../../../../assets/employee_list.csv';
 
 import { readFileURL } from '../../../../services/readFileURL';
 import { customFetch } from '../../../../services/tokenApi';
@@ -537,9 +539,9 @@ const Account = () => {
                                 <UploadCSVHeader>
                                     Upload CSV file
                             </UploadCSVHeader>
-                                <DownloadCSVLink href="https://pivotcare-s3.s3-us-west-2.amazonaws.com/others/employees_list" target="_blank">
+                                <DownloadCSVLink href={csv} download="employees_list">
                                     Download CSV format
-                            </DownloadCSVLink>
+                                </DownloadCSVLink>
                             </CSVHeaderAndUploadDiv>
                             <UploadCSVDiv>
                                 <UploadCSVLabel>
