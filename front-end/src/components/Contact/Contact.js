@@ -343,6 +343,7 @@ const TextArea = styled.textarea`
   margin: 0.3rem 0 2rem;
   width: 100%;
   padding: 1rem;
+  box-sizing:  border-box;
 `;
 
 const ThankYouMessageDiv = styled.div`
