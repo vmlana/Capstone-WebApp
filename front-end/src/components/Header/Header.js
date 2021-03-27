@@ -40,6 +40,7 @@ const Header = () => {
                 <nav className='nav-menu'>
                     <div className='site-logo'>
                         <Link to="/"><img src='./media/images/pivotcare-logo.svg' /></Link>
+                        <h1>Pivot Care</h1>
                     </div>
                     <ul className='nav-menu-items'>
                         {ToggleMenu.map((menuItem, index) => {
@@ -62,6 +63,7 @@ const Header = () => {
 
                             <div className='site-logo'>
                                 <Link to="/"><img src='./media/images/pivotcare-logo.svg' /></Link>
+                                <h1>Pivot Care</h1>
                             </div>
                             <Link to="#" className='hamburger-menu'>
                                 <FAIcons.FaBars onClick={showSidebar} />
