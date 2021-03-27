@@ -2,6 +2,7 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { device } from '../../StyleComponent/responsiveDevice';
+import { colors } from '../../StyleComponent/colors';
 
 const AboutPivot = () => {
     const history = useHistory();
@@ -32,10 +33,10 @@ const AboutPivot = () => {
 };
 
 const AboutSection = styled.div`
-    padding: 0 1rem;
+    padding: 0 2rem;
+    background-image: url('./media/images/Intro-MockupsPile.png');
 
-    @media ${device.laptop} { 
-        background-image: url('./media/images/Intro-MockupsPile.png');
+    @media ${device.laptop} {
         background-size: cover;
         background-repeat: no-repeat;
         background-position: 500px;
@@ -53,8 +54,13 @@ const AboutSection = styled.div`
 const PivotCare = styled.div`
     max-width: 1500px;
     margin: 0 auto;
-    padding-top: 8rem;
-    padding-bottom: 7rem;
+    padding-top: 2.5rem;
+    padding-bottom: 3rem;
+
+    @media ${device.tablet} { 
+        padding-top: 8rem;
+        padding-bottom: 7rem;
+    }
 `;
 
 const AboutPivotCare = styled.div`
@@ -62,30 +68,52 @@ const AboutPivotCare = styled.div`
 `;
 
 const H2 = styled.h2`
-    font-size: 30px;
-    line-height: 36px;
+    font-size: 20px;
+    line-height: 30px;
+    color: ${colors.darkGrey};
+    font-weight: 500;
+
+    @media ${device.tablet} { 
+        font-size: 30px;
+        line-height: 42px;
+    }
 `;
 
 const PivotCareDescription = styled.div`
-    margin-top: 5rem;
+    margin-top: 2rem;
+
+    @media ${device.tablet} { 
+        margin-top: 5rem;
+    }
 `;
 
 const Para = styled.p`
-    font-size: 18px;
-    line-height: 30px;
+    font-size: 14px;
+    line-height: 22px;
     margin: 0;
+
+    @media ${device.tablet} { 
+        font-size: 18px;
+        line-height: 30px;
+    }
 `;
 
 const Button = styled.button`
-    width: 300px;
-    height: 70px;
+    width: 250px;
+    height: 60px;
     background-color: #7662A5;
     color: #FFFFFF;
     line-height: 24px;
     font-size: 20px;
     border-radius: 5px;
     border: none;
-    margin-top: 5rem;
+    margin-top: 2.5rem;
+
+    @media ${device.tablet} { 
+        background-position: 300px;
+        height: 70px;
+        margin-top: 5rem;
+    }
 `;
 
 export default AboutPivot;

@@ -21,11 +21,13 @@ const FooterSection = styled.footer`
     p {
         margin: 0;
         padding: 0;
+        font-family: 'GothamRoundedMedium';
+        font-size: 12px;
+        line-height: 20px;
 
         span {
             display: block;
             line-height: 24px;
-
 
             @media ${device.tablet} { 
                 display: inline-block;
