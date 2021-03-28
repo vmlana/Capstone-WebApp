@@ -13,6 +13,8 @@ import { device } from '../../../StyleComponent/responsiveDevice';
 
 import { apiUrl } from '../../../../services/apiUrl';
 
+import { customFetch } from '../../../../services/tokenApi';
+
 const Profile = () => {
 	const dispatch = useDispatch();
 	const [instructorInfo, setInstructorInfo] = useState({
@@ -89,8 +91,9 @@ const Profile = () => {
 	useEffect(async () => {
 
 		try {
-			const instructorData = await fetch(`${apiUrl}/instructor?instructorId=${authId}`).then(results => {
-				return results.json();
+			const instructorData = await customFetch(`${apiUrl}/instructor?instructorId=${authId}`).then(results => {
+				return results.body;
+				// return results.json();
 			}).catch(err => {
 				throw err;
 			})
