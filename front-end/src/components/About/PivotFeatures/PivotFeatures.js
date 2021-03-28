@@ -56,10 +56,10 @@ const PivotFeatures = () => {
 };
 
 const PivotFeatureSection = styled.div`
-    /* background-image: url('./media/images/Gradient.png'); */
-    /* background-size: cover; */
+    /* background-image: url('./media/images/Gradient.png');
     background-repeat: no-repeat;
-    background-position: center;
+    background-position: center; */
+    background: transparent linear-gradient(180deg, rgba(98, 74, 153, 0.15) 0%, rgba(79, 153, 206, 0.15) 58%, rgba(255, 157, 90, 0.15) 100%) 0% 0% no-repeat padding-box;
     padding: 2rem 2rem;
     padding-bottom: 4rem;
 
@@ -68,8 +68,8 @@ const PivotFeatureSection = styled.div`
     }
 
     @media ${device.laptop} { 
-        background-image: url('./media/images/Gradient.png');
-        background-position: center;
+        /* background-image: url('./media/images/Gradient.png');
+        background-position: center; */
         padding: 12rem 2rem;
     }
 
