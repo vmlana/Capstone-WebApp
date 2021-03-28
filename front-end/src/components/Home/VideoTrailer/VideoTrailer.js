@@ -56,7 +56,7 @@ const VideoTrailer = () => {
         <div className="widthContainer">
             <div className="container" onClick={playVideo}>
                 {isSafari ?
-                    <video id="responsive-video" controls controlsList="nodownload" playsInline className="responsive-video" src="./media/videos/Script2-draft.mp4" type="video/mp4" poster='' />
+                    <video id="responsive-video" controls controlsList="nodownload" muted autoPlay playsInline className="responsive-video" src="./media/videos/Script2-draft.mp4" type="video/mp4" poster='' />
                     :
                     <video id="responsive-video" controlsList="nodownload" muted autoPlay playsInline className="responsive-video" src="./media/videos/Script2-draft.mp4" type="video/mp4" poster='' />
                 }
