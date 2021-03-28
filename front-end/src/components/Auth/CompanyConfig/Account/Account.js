@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 import * as FAIcons from "react-icons/fa";
 
