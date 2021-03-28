@@ -41,6 +41,7 @@ exports.getPlaylists = (req, res) => {
     let qry = `SELECT p.playlistId, p.name as playlistName, p.description as playlistDescription, log.qtd as playlistViews,
                       c.categoryId, c.name as categoryName, lg.name as instructorName, i.instructorId as instructorID, l.videoDuration,
                       l.lessonId, l.name as lessonName, pl.order as lessonOrder, l.imageFile, l.videoFile, l.description as lessonDescription,
+                      p.publishedDate,
                       CASE WHEN p.level = "B" THEN "Begginer"
                            WHEN p.level = "I" THEN "Intermediate"
                            WHEN p.level = "A" THEN "Advanced"
@@ -131,6 +132,7 @@ exports.getPlaylists = (req, res) => {
                             categoryName: results[iPlaylistBase].categoryName,
                             instructorName: results[iPlaylistBase].instructorName,
                             instructorID: results[iPlaylistBase].instructorID,
+                            publishedDate: results[iPlaylistBase].publishedDate,
                             lessons: vLessons,
                             relatedPlaylists: vRelatedPlaylists
                         };
