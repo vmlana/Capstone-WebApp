@@ -69,6 +69,74 @@
 			"response": []
 		},
 		{
+			"name": "blogs",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/blogs?userId=3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"blogs"
+					],
+					"query": [
+						{
+							"key": "blogId",
+							"value": "2",
+							"disabled": true
+						},
+						{
+							"key": "instructorId",
+							"value": "2",
+							"disabled": true
+						},
+						{
+							"key": "userId",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "schedules",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/schedules?userId=3&playlistId=",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"schedules"
+					],
+					"query": [
+						{
+							"key": "userId",
+							"value": "3"
+						},
+						{
+							"key": "playlistId",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "cities",
 			"request": {
 				"method": "GET",
@@ -197,7 +265,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/api/v1/playlists?instructorId=2&categoryId=3&playlistId=2&mostViewed=true",
+					"raw": "http://localhost:3000/api/v1/playlists?instructorId=2&categoryId=3&playlistId=2&mostViewed=true&orderby=playlistLevel, categoryName",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -224,6 +292,10 @@
 						{
 							"key": "mostViewed",
 							"value": "true"
+						},
+						{
+							"key": "orderby",
+							"value": "playlistLevel, categoryName"
 						}
 					]
 				}
@@ -334,6 +406,112 @@
 			"response": []
 		},
 		{
+			"name": "survey",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/survey?surveyId=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"survey"
+					],
+					"query": [
+						{
+							"key": "surveyId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "dashboard",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/dashboard?userId=3&initialDate=2021-02-28&finalDate=2021-03-06",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"dashboard"
+					],
+					"query": [
+						{
+							"key": "userId",
+							"value": "3"
+						},
+						{
+							"key": "initialDate",
+							"value": "2021-02-28"
+						},
+						{
+							"key": "finalDate",
+							"value": "2021-03-06"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "content-type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "access-token",
+						"value": "dPyyz4agUzPPKE3zvbGHivfg2EOhuj0w",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "refresh-token",
+						"value": "kod4CavdiIsVLBSM9V6YEaS7Bbhrl09m",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\r\n        \"email\": \"changizi_yogaandwellness@gmail.com\",\r\n        \"password\": \"123456\",\r\n        \"userType\": \"instructor\"\r\n    }"
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/v1/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "updInstructor",
 			"request": {
 				"method": "POST",
@@ -400,7 +578,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"action\" : \"upd\",        \r\n    \"playlistId\": 2,\r\n    \"playlistName\": \"Stretch for Beginners\",\r\n    \"playlistDescription\": \"This is another daily sequences for intermediate level\",\r\n    \"playlistLevel\": \"B\",\r\n    \"categoryId\": 3,\r\n    \"instructorId\": 2,\r\n    \"active\": 1,\r\n    \"lessons\": [\r\n        {\r\n            \"lessonId\": 1\r\n        },\r\n        {\r\n            \"lessonId\": 2\r\n        },        \r\n        {\r\n            \"lessonId\": 3\r\n        }\r\n    ]\r\n}\r\n\r\n",
+					"raw": "{\r\n    \"action\" : \"upd\",        \r\n    \"playlistId\": 2,\r\n    \"playlistName\": \"Stretch for Beginners vini\",\r\n    \"playlistDescription\": \"This is another daily sequences for intermediate level \",\r\n    \"playlistLevel\": \"Beg\",\r\n    \"categoryId\": 3,\r\n    \"instructorId\": 2,\r\n    \"active\": 1,\r\n    \"lessons\": [\r\n        {\r\n            \"lessonId\": 1\r\n        },\r\n        {\r\n            \"lessonId\": 3\r\n        }\r\n    ]\r\n}\r\n\r\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -478,6 +656,132 @@
 						"api",
 						"v1",
 						"updcompany"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "activityLog",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\": 3,\r\n    \"programId\": 101,\r\n    \"playlistId\": 104,\r\n    \"lessonId\": 114\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/v1/activitylog",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"activitylog"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "schedules - Add",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\": 3,\r\n    \"programId\": 102,\r\n    \"playlistId\": null,\r\n    \"scheduleDate\": \"2021-03-12 16:00:00\",\r\n    \"reminderMinutes\": 20\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/v1/schedules",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"schedules"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "surveys - save",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\": 3,\r\n    \"surveyId\": 1,\r\n    \"programId\": null,\r\n    \"answers\": [\r\n        {\r\n            \"questionId\": 1,\r\n            \"answerValue\": \"1\"\r\n        },\r\n        {\r\n            \"questionId\": 2,\r\n            \"answerValue\": \"4\"\r\n        },        \r\n        {\r\n            \"questionId\": 12,\r\n            \"answerValue\": \"This is the text answer for the edit question\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/v1/survey",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"survey"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "schedules - Delete",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/v1/schedules?scheduleId=56",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"schedules"
+					],
+					"query": [
+						{
+							"key": "scheduleId",
+							"value": "56"
+						}
 					]
 				}
 			},

@@ -8,9 +8,9 @@ export const userActionTypes = {
     type: userActionTypes.USER_INITIALIZE,
   });
   
-  export const userSigninSignup = (userType, authId, token) => ({
+  export const userSigninSignup = (userType, authId, accessToken, refreshToken, accessExpiresIn, refreshExpiresIn) => ({
     type: userActionTypes.USER_SIGNIN_SIGNUP,
-    payload: {userType: userType, authId: authId, token: token}
+    payload: {userType: userType, authId: authId, accessToken: accessToken, refreshToken: refreshToken, accessExpiresIn: accessExpiresIn, refreshExpiresIn: refreshExpiresIn}
   });
   
   export const userLogout = () => ({

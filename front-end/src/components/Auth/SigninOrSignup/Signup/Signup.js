@@ -1,49 +1,103 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { userSigninSignup } from '../../../../redux/user/user.actions';
+import { login } from '../../../../services/tokenApi';
+import { apiUrl } from '../../../../services/apiUrl';
 
 import styled from "styled-components";
 
-// Reusable Component
-// import Button from "../../../ReusableElement/Button";
+import { device } from '../../../StyleComponent/responsiveDevice';
+import { colors } from '../../../StyleComponent/colors';
+
+import Button from "../../../ReusableElement/Button";
+
 import InputWithLabel from "../../../ReusableElement/InputWithLabel";
 
 const Signup = (props) => {
+    const history = useHistory();
     const dispatch = useDispatch();
     const [userInput, setUserInput] = useState({
         userType: "company",
-        email: "test@email.com",
-        password: "123456",
-        confirmPassword: "123456",
+        email: "",
+        password: "",
+        confirmPassword: "",
     });
+    const [windowWidth, setwindowWidth] = useState(window.innerWidth);
+
+    const displaySizeListener = () => {
+        const newWindowWidth = window.innerWidth;
+        // console.log(newWindowWidth);
+        setwindowWidth(newWindowWidth);
+    };
 
     const handleOnChange = (e) => {
         e.persist();
         setUserInput((prev) => ({
-          ...prev,
-          [e.target.name]: e.target.value,
+            ...prev,
+            [e.target.name]: e.target.value,
         }));
     };
-    
+
     const signUpHandler = async (e) => {
         e.preventDefault();
         if (userInput.password === userInput.confirmPassword) {
             // Call authentication API Here to get token
-            const response = await {success: true}
+            // const response = await {success: true}
 
-            if (response.success) {
-                dispatch(userSigninSignup(userInput.userType, 123456, "ThisIsDummyToken"));
-            } else {
-                alert("Your Email or Password is wrong!!!");
+            try {
+                const { email, password, userType } = userInput;
+                const response = await login(
+                    `${apiUrl}/signup`,
+                    email,
+                    password,
+                    userType
+                )
+                    .catch((error => {
+                        throw error;
+                    }))
+
+                // console.log(response.body.success);
+
+                if (!response || !response.body.success) {
+                    alert("Something is wrong!!!");
+                    return;
+                }
+
+                const {
+                    authId,
+                    accessToken,
+                    refreshToken,
+                    accessExpiresIn,
+                    refreshExpiresIn
+                } = response.body;
+
+                dispatch(userSigninSignup(userType, authId, accessToken, refreshToken, accessExpiresIn, refreshExpiresIn));
+                history.push("/auth");
+
+            } catch (error) {
+                alert("Something is wrong!!!");
             }
         }
     };
 
+    useEffect(() => {
+        window.addEventListener("resize", displaySizeListener);
+
+        return () => {
+            window.removeEventListener("resize", displaySizeListener);
+        };
+    }, []);
+
     return (
         <SigninPageContainer>
             <HeaderWrapDiv>
-                <SigninPageHeader>Sign up here !</SigninPageHeader>
+                {
+                    windowWidth < 768 ?
+                        <SigninPageHeader>Sign up</SigninPageHeader>
+                        :
+                        <SigninPageHeader>Sign up here !</SigninPageHeader>
+                }
             </HeaderWrapDiv>
             <Form onSubmit={signUpHandler}>
                 <RadioDiv>
@@ -92,12 +146,20 @@ const Signup = (props) => {
                     required
                     onChange={handleOnChange}
                 />
-                <Button>SIGN UP</Button>
+                {/* <Button>SIGN UP</Button> */}
+                <ButtonDiv>
+                    <Button
+                        text="Sign up"
+                        type="submit"
+                        style={{ width: "100%" }}
+                        onClick={() => { }}
+                    />
+                </ButtonDiv>
                 <LinkToSignupText>
                     Already have an account?&nbsp;
                         <Link to="/auth">
-                            <UnderlineSpan>Sign in</UnderlineSpan>
-                        </Link>
+                        <UnderlineSpan>Sign in</UnderlineSpan>
+                    </Link>
                     &nbsp;here
                 </LinkToSignupText>
             </Form>
@@ -105,25 +167,30 @@ const Signup = (props) => {
     );
 };
 
-const mobileBreakPoint = "576px";
 
 const SigninPageContainer = styled.div`
-    max-width: 800px;
-    margin: 2rem auto;
-    @media (max-width: ${mobileBreakPoint}) {
-        margin: 2rem 3rem;
+    max-width: 1500px;
+    margin: 2rem 3rem;
+    min-height: 75vh;
+    
+    @media ${device.tablet} {
+        padding: 0 2rem;
+        margin: 2rem auto;
     }
 `;
 
 const HeaderWrapDiv = styled.div`
     position: relative;
-    border-bottom: solid 1px #000000;
-    max-width: 250px;
+    border-bottom: solid 2.5px ${colors.darkGrey};
     margin-bottom: 3rem;
-    @media (max-width: ${mobileBreakPoint}) {
-        margin-right: 0;
-        margin-left: 0;
-        max-width: 100%;
+    margin-top: 4rem;
+    max-width: 100%;
+
+    margin-right: 0;
+    margin-left: 0;
+
+    @media ${device.tablet} {
+        max-width: 300px;
     }
 `;
 
@@ -131,46 +198,102 @@ const SigninPageHeader = styled.h2`
     font-size: 1.25rem;
     font-weight: normal;
     position: absolute;
-    top: -1.75rem;
+    top: -2.25rem;
     background-color: #fff;
     padding-right: 2rem;
     text-transform: uppercase;
+    color: ${colors.darkGrey};
+    font-family: 'GothamRoundedBold', sans-serif;
+    font-size: 28px;
+    font-weight: 400;
 `;
 
 const RadioDiv = styled.div`
+    font-family: 'GothamRoundedMedium', sans-serif;
+    font-weight: 300;
+    color: ${colors.darkGrey};
+
+    margin: 0 0 1.5rem;
+
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    @media (max-width: ${mobileBreakPoint}) {
-      width: 100%;
-  }
+    grid-template-columns: 1fr;
+    grid-row-gap: 1rem;
+
+    @media ${device.tablet} {
+        grid-template-columns: 1fr 1fr;
+        margin-top: 1.5rem;
+    }
 `;
 
 const RadioLabel = styled.label`
   display: flex;
-  flex-flow: column;
-  justify-content: center;
+  flex-flow: row;
+  justify-content: space-between;
   align-items: center;
   text-transform: uppercase;
+
+  @media ${device.tablet} {
+        flex-flow: column;
+        justify-content: center;
+    }
 `;
 
 const RadioButton = styled.input`
     margin: 1rem;
+
+    :after {
+        width: 15px;
+        height: 15px;
+        border-radius: 15px;
+        top: -2px;
+        left: -1px;
+        position: relative;
+        /* background-color: #d1d3d1; */
+        content: '';
+        /* display: "inline-block"; */
+        visibility: visible;
+        border: 0px solid white;
+    }
+
+    :checked:after {
+        width: 15px;
+        height: 15px;
+        border-radius: 15px;
+        top: -2px;
+        left: -1px;
+        position: relative;
+        background-color: ${colors.UIViolet};
+        
+        content: '';
+        display: inline-block;
+        visibility: visible;
+        border: 0px solid white;
+    }
 `;
 
 const Form = styled.form`
-  display: flex;
-  flex-flow: column;
-  width: 60%;
-  margin: 2rem auto;
-  text-align: center;
-  @media (max-width: ${mobileBreakPoint}) {
-      margin: 0;
-      width: 100%;
-  }
+    display: flex;
+    flex-flow: column;
+    text-align: center;
+    margin: 0;
+    width: 100%;
+    
+    @media ${device.tablet} {
+        max-width: 768px;
+        margin: 2rem auto;
+    }
 `;
 
-const Button = styled.button`
-    margin: 4rem auto 0rem;
+// const Button = styled.button`
+//     margin: 4rem auto 0rem;
+// `;
+
+const ButtonDiv = styled.div`
+    margin: 4rem auto 1.5rem;
+    width: 100%;
+    @media ${device.tablet} {
+       width: 50%;
+    }
 `;
 
 const LinkToSignupText = styled.p`
@@ -181,6 +304,8 @@ const LinkToSignupText = styled.p`
 
 const UnderlineSpan = styled.span`
     text-decoration: underline;
+    color: ${colors.darkGrey};
+    font-weight: 600;
 `;
 
 

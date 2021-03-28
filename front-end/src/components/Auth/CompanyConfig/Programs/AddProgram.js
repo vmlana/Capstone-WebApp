@@ -5,15 +5,14 @@ import CreateContentList from "../../../ReusableComponents/CreateContentList";
 const AddProgram = () => {
   return (
     <div style={styles.container}>
-      <CreateContentList type={"add"} contentType={"program"} />
+      <CreateContentList type={"add"} contentsType={"program"} />
     </div>
   );
 };
 
 const styles = {
   container: {
-    width: "80%",
-    margin: "0 auto",
+    margin: "0 4rem",
   },
 };
 

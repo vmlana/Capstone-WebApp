@@ -32,6 +32,7 @@ exports.getPrograms = (req, res) => {
                       p.playlistId, p.name as playlistName, p.description as playlistDescription, gp.order as playlistOrder,
                       c.categoryId, c.name as categoryName, lg.name as instructorName,
                       l.lessonId, l.name as lessonName, pl.order as lessonOrder, l.imageFile, l.videoFile, l.description as lessonDescription,
+                      s.surveyId, s.name as surveyName,
                  CASE WHEN p.level = "B" THEN "Begginer"
                       WHEN p.level = "I" THEN "Intermediate"
                       WHEN p.level = "A" THEN "Advanced"
@@ -49,6 +50,7 @@ exports.getPrograms = (req, res) => {
                       INNER JOIN users u ON (e.companyId = u.companyId AND e.employeeId = u.employeeId)
                       INNER JOIN workDepartments w ON (e.workDepartmentId = w.workDepartmentId)
                       INNER JOIN companyProgramXworkDepartment pw ON (pw.groupBaseId = gb.groupBaseId AND pw.workDepartmentId = e.workDepartmentId)
+                      LEFT  JOIN surveys s ON (cp.surveyId = s.surveyId)
                       ${sWhere}   
                 ORDER BY programName, playlistOrder, lessonOrder `;
 
@@ -106,7 +108,7 @@ exports.getPrograms = (req, res) => {
                                 playlistName: results[iPlaylistBase].playlistName,
                                 playlistDescription: results[iPlaylistBase].playlistDescription,
                                 playlistLevel: results[iPlaylistBase].playlistLevel,
-                                playlistImageFile: sdefaultPlaylistImage,
+                                imageFile: sdefaultPlaylistImage,
                                 categoryName: results[iPlaylistBase].categoryName,
                                 instructorName: results[iPlaylistBase].instructorName,
                                 lessons: vLessons
@@ -118,11 +120,13 @@ exports.getPrograms = (req, res) => {
                         vProgram = {
                             programId: results[iProgramBase].programId,
                             programName: results[iProgramBase].programName,
-                            programImageFile: sdefaultProgramImage,
+                            imageFile: sdefaultProgramImage,
                             initialDate: results[iProgramBase].initialDate,
                             endDate: results[iProgramBase].endDate,
                             dayOfWeek: results[iProgramBase].dayOfWeek,
-                            frequency: results[iProgramBase].frequency,                                                                                    
+                            frequency: results[iProgramBase].frequency, 
+                            surveyId: results[iProgramBase].surveyId, 
+                            surveyName: results[iProgramBase].surveyName,                             
                             playlists: vPlaylists
                         };
 

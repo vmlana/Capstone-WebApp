@@ -5,6 +5,10 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import styled from "styled-components";
 
+import { apiUrl } from '../../../../services/apiUrl';
+
+import './DropdownInput.css';
+
 const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),
@@ -20,7 +24,8 @@ const useStyles = makeStyles((theme) => ({
     "padding-top": ".075rem",
     "padding-bottom": ".075rem",
     "margin-top": 0,
-    "&:before" : {
+    height: 46,
+        "&:before" : {
         content: "none", // Delete border when hoverover
     },
     "&:after": {
@@ -39,7 +44,7 @@ export default function DropdownInput(props) {
   };
 
   useEffect( async()=>{
-    const departments = await fetch(`http://localhost:3000/api/v1/departments`).then(results => {
+    const departments = await fetch(`${apiUrl}/departments`).then(results => {
       return results.json();
     }).catch(error=> {
       console.log(error);
@@ -53,7 +58,7 @@ export default function DropdownInput(props) {
   }, [departmentName])
 
   return (
-    <Label>
+    <Label className="AccountDropdownInput">
       <LabelText>{props.labelText}</LabelText>
       <FormControl className={classes.formControl}>
         <Select
@@ -87,4 +92,5 @@ const LabelText = styled.p`
     font-size: 1rem;
     margin: .5rem 0;
     text-align: left;
+    line-height: 1.9rem;
 `;

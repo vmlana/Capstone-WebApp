@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux';
 import styled from "styled-components";
 import Dropzone, { defaultClassNames } from 'react-dropzone-uploader'
 import { s3UploadHandlerListeningProgress } from '../../../../services/s3Handler';
 import { getCategories, createLesson } from '../../Api/api'
+import { useHistory } from "react-router-dom";
+import FileUploadThumbnail from 'file-upload-thumbnail'
 
 // Reusable Components
 import Button from '../../../ReusableElement/Button';
 import InputWithLabel from '../../../ReusableElement/InputWithLabel';
+
+import { device } from '../../../StyleComponent/responsiveDevice';
 
 import 'react-dropzone-uploader/dist/styles.css'
 import './DragAndDrop.css';
@@ -27,6 +32,12 @@ const Layout = ({ input, previews, submitButton, dropzoneProps, files, extra: { 
 }
 
 const AddLessons = () => {
+    const history = useHistory();
+    const dispatch = useDispatch();
+
+    const userInfo = useSelector(state => state.user.userInfo);
+    const { userType, authId, token } = userInfo;
+
     const [categories, setCategories] = useState([]);
     const [lesson, setLesson] = useState({
         action: 'add',
@@ -35,15 +46,30 @@ const AddLessons = () => {
         description: '',
         imageFile: '',
         videoFile: '',
-        instructorId: 2
+        videoDuration: 0,
+        instructorId: authId
     });
 
     // File Upload
+    const [btnActive, setBtnActive] = useState(false);
     const [success, setSuccess] = useState(false);
     const [urls, setUrls] = useState('');
     const [uploadInput, setUploadInput] = useState([]);
+    const [imageFileInput, setImageFile] = useState('')
     const [isUploading, setIsUploading] = useState(false);
     const [uploadingProgress, setUploadingProgress] = useState(0);
+
+    function dataURItoBlob(dataURI) {
+        var mime = dataURI.split(',')[0].split(':')[1].split(';')[0];
+        var binary = atob(dataURI.split(',')[1]);
+        var array = [];
+        for (var i = 0; i < binary.length; i++) {
+            array.push(binary.charCodeAt(i));
+        }
+
+        var toFile = new File([new Uint8Array(array)], lesson.instructorId + '.png', { type: mime, lastModifiedDate: Date.now() });
+        return toFile;
+    }
 
     const handleChange = (ev) => {
         setSuccess(false);
@@ -53,7 +79,7 @@ const AddLessons = () => {
     const Success_message = () => (
         <div style={{ padding: 15 }}>
             <h3 style={{ color: 'green' }}>SUCCESSFUL UPLOAD</h3>
-            <div><a href={urls} target="_blank">{urls}</a></div>
+            {/* <div><a href={urls} target="_blank">{urls}</a></div> */}
             <br />
         </div>
     )
@@ -93,14 +119,12 @@ const AddLessons = () => {
 
     const onSubmit = async (e) => {
         e.preventDefault();
-        console.log('uploadinput', uploadInput);
         const uploadTracker = async (percent, fileName) => {
-            // console.log(percent);
-            // console.log(fileName);
             setUploadingProgress(Math.floor(percent));
             if (percent === 100) {
                 setSuccess(true);
                 setUploadInput([]);
+                setImageFile('')
                 setIsUploading(false);
                 setUploadingProgress(0);
             }
@@ -111,58 +135,67 @@ const AddLessons = () => {
         try {
             for (let i = 0; i < 1; i++) {
                 const dataURL = await s3UploadHandlerListeningProgress(uploadInput[i], "dummyToken", uploadTracker);
-                // console.log(dataURL);
-                // setUrls(dataURL)
-                // console.log(urls);
-
+                setUrls(dataURL);
                 setLesson(lesson => ({
                     ...lesson,
                     videoFile: dataURL
                 }));
 
+                const imageURL = await s3UploadHandlerListeningProgress(imageFileInput, "dummyToken", uploadTracker);
+                setLesson(lesson => ({
+                    ...lesson,
+                    imageFile: imageURL
+                }));
             }
             setSuccess(true);
-
             // console.log(lesson)
         } catch (err) {
             setSuccess(false);
         }
-
-        createLesson(lesson).then(
-            result => {
-                // console.log(result)
-                // return null
-                setLesson({
-                    action: 'add',
-                    lessonName: '',
-                    categoryId: '',
-                    description: '',
-                    imageFile: '',
-                    videoFile: '',
-                    instructorId: 2
-                })
-            }
-        )
     }
 
-    // DropZOne Uploader
+    // DropZone Uploader
     // specify upload params and url for your files
     const getUploadParams = ({ file, meta }) => {
         handleChange();
-        // console.log(file);
+
         if (!file) {
             return;
         }
         setUploadInput(state => [...state, file]);
+        setLesson(lesson => ({
+            ...lesson,
+            videoDuration: meta.duration
+        }));
 
         return { url: 'https://httpbin.org/post' }
     }
 
     // called every time a file's `status` changes
-    // const handleChangeStatus = ({ meta, file }, status) => { /* console.log(status, meta, file) */ }
+    const handleChangeStatus = ({ meta, file }, status) => {
+        // console.log(status, meta, file)
+        if (status == 'removed') {
+            setUploadInput([])
+            setImageFile('')
+        }
+
+        if (status == 'preparing') {
+            new FileUploadThumbnail({
+                maxWidth: 1024,
+                maxHeight: 768,
+                file: file,
+                onSuccess: function (src) {
+                    // console.log('src', src)
+                    var fileObject = dataURItoBlob(src);
+                    // console.log('fileObject', fileObject)
+                    setImageFile(fileObject);
+                }
+            }).createThumbnailFromVideoFile();
+        }
+    }
 
     const handleSubmit = (files, allFiles) => {
-        console.log(files.map(f => f.meta))
+        // console.log(files.map(f => f.meta))
         allFiles.forEach(f => f.remove())
     }
     //  DropZoe Uploader
@@ -175,10 +208,41 @@ const AddLessons = () => {
         )
     }, [])
 
+    useEffect(() => {
+        // console.log('input', imageFileInput);
+        // console.log(imageFileInput.name);
+
+        if (imageFileInput.name != undefined && imageFileInput != '') {
+            setBtnActive(true)
+        } else {
+            setBtnActive(false)
+        }
+    }, [imageFileInput])
 
     useEffect(() => {
-        console.log(lesson)
-    }, [lesson])
+        if (success === true) {
+            createLesson(lesson).then(
+                result => {
+                    // console.log(result)
+
+                    setLesson({
+                        action: 'add',
+                        lessonName: '',
+                        categoryId: '',
+                        description: '',
+                        imageFile: '',
+                        videoFile: '',
+                        videoDuration: 0,
+                        instructorId: authId
+                    })
+
+                    // history.go(0)
+
+                }
+            )
+        }
+
+    }, [success])
 
     return (
         <PageContainer>
@@ -192,7 +256,7 @@ const AddLessons = () => {
             <Form onSubmit={onSubmit}>
                 <div>
                     <InputWithLabel
-                        label="lessonName"
+                        label="Lesson Name"
                         type="text"
                         name="lessonName"
                         value={lesson.lessonName}
@@ -224,7 +288,7 @@ const AddLessons = () => {
                             required
                             value={lesson.description}
                             onChange={handleOnChange}
-                            placeholder="Start typing the description"
+                            placeholder="Start typing the description for your video"
                         />
                     </Label>
                 </div>
@@ -232,7 +296,7 @@ const AddLessons = () => {
                     <div>
                         <Dropzone
                             getUploadParams={getUploadParams}
-                            // onChangeStatus={handleChangeStatus}
+                            onChangeStatus={handleChangeStatus}
                             LayoutComponent={Layout}
                             onSubmit={handleSubmit}
                             classNames={{ inputLabelWithFiles: defaultClassNames.inputLabel }}
@@ -243,51 +307,71 @@ const AddLessons = () => {
                             submitButtonContent="UPLOAD VIDEO"
                         />
                     </div>
-                    <ButtonGroup>
-                        <Button text="Delete" />
-                        <Button text="Save" />
-                    </ButtonGroup>
+
                 </div>
+                <ButtonGroup>
+                    <Button text="Save" type="add_lesson" isActive={btnActive} />
+                    <button text="Delete" className="deleteBtn">Delete</button>
+                </ButtonGroup>
             </Form>
         </PageContainer>
     )
 }
 
 const PageContainer = styled.div`
-    max-width: 1000px;
+    max-width: 1500px;
     margin: 0 auto;
     padding: 2rem;
+    padding-bottom: 2rem;
+    padding-top: 4.5rem;
+    color:#707070;
+    font-family: 'GothamRoundedNormal', sans-serif;
 `;
 
 const TitleContainer = styled.div`
     position: relative;
-    border-bottom: solid 1px #000000;
-    max-width: 275px;
-    margin-bottom: 2rem;
+    border-bottom: solid 2px #707070;
+    margin-bottom: 1rem;
+
+	@media ${device.mobileP} {
+		max-width: 400px;
+	}
 `;
 
 const PageHeader = styled.h2`
-    font-size: 1.25rem;
-    font-weight: normal;
+    font-size: 30px;
+	line-height: 36px;
     position: absolute;
-    top: -1.75rem;
+    top: -2.5rem;
     background-color: #fff;
     padding-right: 2rem;
     text-transform: uppercase;
+	font-family: GothamRoundedBold, sans-serif;
+	font-weight: 900;
+	color: #707070;
 `;
 
 const PageSubHeader = styled.h3`
-    font-size: 1rem;
+    font-size: 18px;
+    line-height: 30px;
+    font-family: 'Gotham', sans-serif;
+    font-weight: 300;
     margin: 0;
     padding: 0;
+    padding-top: 16px;
 `;
 
 const Form = styled.form`
 	display: grid;
-	grid-template-columns: repeat(2, 1fr);
-	grid-gap: 10rem;
+	grid-gap: 2rem;
     margin-top: 3rem;
     align-items: center;
+
+    @media ${device.laptop} {
+		grid-template-columns: repeat(2, 1fr);
+        grid-gap: 4rem;
+        align-items: center;
+	}
 `;
 
 const Label = styled.label`
@@ -298,33 +382,75 @@ const LabelText = styled.p`
     font-size: 1rem;
     margin: .5rem 0;
     text-align: left;
+    margin-top: 2rem;
 `;
 
 const TextArea = styled.textarea`
 	border: solid 1px #ccc;
 	border-radius: 5px;
-	font-size: 16px;
+	font-size: 18px;
+	line-height: 30px;
 	width: 100%;
-	padding: .25rem 0.5rem;
 	resize: none;
+	color: #333333;
+	padding: 20px;
+	box-sizing: border-box;
 `;
 
 const SelectOption = styled.select`
 	border: solid 1px #ccc;
 	border-radius: 5px;
-	font-size: 16px;
+	font-size: 18px;
+	line-height: 30px;
 	width: 100%;
 	padding: .25rem 0.5rem;
 	resize: none;
-    height: 36px;
+    height: 46px;
     margin-bottom: 0.5rem;
+    color: #333333;
 `;
 
 const ButtonGroup = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around
+    margin-bottom: 2rem;
+    display: grid;
+    grid-gap: 2rem;
+    justify-content: center;
 
+    @media ${device.tablet} {
+		grid-template-columns: 1fr 1fr;
+	}
+
+    .deleteBtn {
+        color: #707070;
+        font-size: 24px;
+        line-height: 28px;
+        font-family: 'GothamRoundedLight';
+        outline: none;
+        box-shadow: none;
+        border:none;
+        background-color: unset;
+        display: inline-block;
+        width: fit-content;
+        text-decoration: underline;
+        text-transform: capitalize;
+        margin: 0 auto;
+
+        @media ${device.tablet} {
+            font-size: 20px;
+            line-height: 24px;
+            background-color: #FFFFFF;
+            border: 4px solid #FBA76E;
+            border-radius: 5px;
+            width: 300px;
+            height: 70px;
+            text-decoration: none;
+
+            &:focus {
+                outline: none;
+                box-shadow: none;
+            }
+        }
+    }
 `;
 
 export default AddLessons

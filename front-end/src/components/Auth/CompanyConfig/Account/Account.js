@@ -1,14 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from "styled-components";
+import * as FAIcons from "react-icons/fa";
 
 import InputWithLabel from '../../../ReusableElement/InputWithLabel';
 import DropdownInput from './DropdownInput';
 import DropdownInputCityName from './DropdownInputCityName';
 
 import dummyImg from '../../../../assets/dummy.jpg';
+import csv from '../../../../assets/employee_list.csv';
 
 import { readFileURL } from '../../../../services/readFileURL';
+import { customFetch } from '../../../../services/tokenApi';
+import { s3UploadHandler } from '../../../../services/s3Handler';
+
+import { apiUrl } from '../../../../services/apiUrl';
+
+import { device } from '../../../StyleComponent/responsiveDevice';
+import { colors } from '../../../StyleComponent/colors';
+
+import Button from "../../../ReusableElement/Button";
 
 const Account = () => {
     const dispatch = useDispatch();
@@ -30,7 +41,11 @@ const Account = () => {
     const [uploadImage, setUploadImage] = useState("");
     const [uploadCSV, setUploadCSV] = useState("");
     const userInfo = useSelector(state => state.user.userInfo);
-    const { userType, authId, token } = userInfo;
+    const { userType, authId, accessToken } = userInfo;
+    const [imageUrl, setImageUrl] = useState("");
+    const [logo, setLogo] = useState("");
+    const [saveSuccess, setSaveSuccess] = useState(false);
+
 
     const addNewEmployee = (e) => {
         e.persist();
@@ -176,47 +191,119 @@ const Account = () => {
 
     const updateCompanyInfo = async () => {
 
-        console.log({
-            companyId: authId,
-            companyName: companyInfo.companyName,
-            accountResponsible: companyInfo.accountResponsible,
-            contactEmail: companyInfo.contactEmail,
-            phoneNumber: companyInfo.phoneNumber,
-            address: companyInfo.address,
-            cityName: companyInfo.cityName,
-            postalCode: companyInfo.postalCode,
-            employees: companyInfo.employees,
-        });
+        // console.log({
+        //     companyId: authId,
+        //     companyName: companyInfo.companyName,
+        //     accountResponsible: companyInfo.accountResponsible,
+        //     contactEmail: companyInfo.contactEmail,
+        //     phoneNumber: companyInfo.phoneNumber,
+        //     address: companyInfo.address,
+        //     cityName: companyInfo.cityName,
+        //     postalCode: companyInfo.postalCode,
+        //     employees: companyInfo.employees,
+        // });
 
-        try {
-            const resultData = await fetch("http://localhost:3000/api/v1/updcompany",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(
-                        {
-                            companyId: authId,
-                            companyName: companyInfo.companyName,
-                            accountResponsible: companyInfo.accountResponsible,
-                            contactEmail: companyInfo.contactEmail,
-                            phoneNumber: companyInfo.phoneNumber,
-                            address: companyInfo.address,
-                            // cityName: companyInfo.cityName,
-                            cityId: companyInfo.cityId,
-                            postalCode: companyInfo.postalCode,
-                            employees: companyInfo.employees,
-                        }
-                    ),
-                }).then(response => {
-                    return response.json();
-                });
-            console.log(resultData);
-        } catch (error) {
-            console.log(error);
+        if (
+            !companyInfo.companyName ||
+            !companyInfo.accountResponsible ||
+            !companyInfo.contactEmail ||
+            !companyInfo.phoneNumber ||
+            !companyInfo.address ||
+            !companyInfo.cityName ||
+            !companyInfo.postalCode ||
+            companyInfo.employees.length === 0
+        ) {
+            alert("You are missing something");
+            return;
         }
+
+        if (uploadImage !== "") {
+            try {
+                const url = await s3UploadHandler(uploadImage);
+                setImageUrl(url);
+                setSaveSuccess(true);
+            } catch (error) {
+                alert("Image Upload failed.")
+                setSaveSuccess(false);
+            }
+        } else {
+            setSaveSuccess(true);
+        }
+
+        // try {
+        //     const resultData = await customFetch(`${apiUrl}/updcompany`,
+        //         {
+        //             method: "POST",
+        //             headers: {
+        //                 "Content-Type": "application/json",
+        //             },
+        //             body: JSON.stringify(
+        //                 {
+        //                     companyId: authId,
+        //                     companyName: companyInfo.companyName,
+        //                     accountResponsible: companyInfo.accountResponsible,
+        //                     contactEmail: companyInfo.contactEmail,
+        //                     phoneNumber: companyInfo.phoneNumber,
+        //                     address: companyInfo.address,
+        //                     // cityName: companyInfo.cityName,
+        //                     cityId: companyInfo.cityId,
+        //                     postalCode: companyInfo.postalCode,
+        //                     employees: companyInfo.employees,
+        //                 }
+        //             ),
+        //         }).then(response => {
+        //             alert("Successfully Uploaded!!!");
+        //             // return response.json();
+        //             return response.body;
+        //         });
+        //     // console.log(resultData);
+        // } catch (error) {
+        //     alert("Error happnes")
+        //     console.log(error);
+        // }
     }
+
+    useEffect(() => {
+        if (saveSuccess === false) {
+            return;
+        }
+        (async () => {
+            try {
+                await customFetch(`${apiUrl}/updcompany`,
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(
+                            {
+                                companyId: authId,
+                                companyName: companyInfo.companyName,
+                                accountResponsible: companyInfo.accountResponsible,
+                                contactEmail: companyInfo.contactEmail,
+                                phoneNumber: companyInfo.phoneNumber,
+                                address: companyInfo.address,
+                                // cityName: companyInfo.cityName,
+                                cityId: companyInfo.cityId,
+                                postalCode: companyInfo.postalCode,
+                                employees: companyInfo.employees,
+                                imageFile: imageUrl
+                            }
+                        ),
+                    }).then(response => {
+                        setSaveSuccess(false);
+                        setImageUrl("");
+                        alert("Successfully Updated!!!");
+                        // return response.json();
+                        return response.body;
+                    });
+                // console.log(resultData);
+            } catch (error) {
+                alert("Error happnes")
+                console.log(error);
+            }
+        })()
+    }, [saveSuccess])
 
     // Listen window width ********************************************
     useEffect(() => {
@@ -228,13 +315,31 @@ const Account = () => {
     }, []);
 
     useEffect(() => {
+
         (async () => {
+            // Validation TESE Code ====================
+            // const companyData = await customFetch(`${apiUrl}/verify`,{
+            //     method: "POST",
+            //     headers: {
+            //         "Content-Type": "application/json",
+            //     }}).then(results => {
+            //         console.log(results)
+            //         return results;
+            //     }).catch(err => {
+            //         console.log(err)
+            //         throw err;
+            //     })
+
             try {
-                const companyData = await fetch(`http://localhost:3000/api/v1/company?companyId=1`).then(results => {
-                    return results.json();
-                }).catch(err => {
-                    throw err;
-                })
+                const companyData = await customFetch(`${apiUrl}/company?companyId=${authId}`, { method: "GET", })
+                    .then(results => {
+                        // console.log("results",results)
+                        // return results.json(); // returns error
+                        return results.body;
+                    }).catch(err => {
+                        console.log("err", err)
+                        throw err;
+                    })
 
                 // console.log(companyData);
 
@@ -246,7 +351,8 @@ const Account = () => {
                     address,
                     cityName,
                     postalCode,
-                    employees
+                    employees,
+                    imageFile
                 } = companyData;
 
                 if (postalCode == null) {
@@ -265,19 +371,73 @@ const Account = () => {
                     employees
                 }))
 
+                setLogo(imageFile ? imageFile : "")
+
             } catch (err) {
                 console.log("No user data found")
             }
         })();
     }, [authId]);
 
+    useEffect(() => {
+        console.log(uploadImage);
+    }, [uploadImage])
+
     return (
-        <AccountPageContainer>
-            <HeaderDiv>
-                <HeaderWrapDiv>
-                    <AccountPageHeader>Company account</AccountPageHeader>
-                </HeaderWrapDiv>
-                <UploadLogoDiv>
+        <MaxWidthWrapper>
+            <AccountPageContainer>
+                <HeaderDiv>
+                    <HeaderWrapDiv>
+                        {
+                            windowWidth < 768 ?
+                                <AccountPageHeader>Account</AccountPageHeader> :
+                                <AccountPageHeader>Company account</AccountPageHeader>
+                        }
+                    </HeaderWrapDiv>
+                </HeaderDiv>
+                <LogoPositionDiv>
+                    {
+                        windowWidth < 1024 ?
+                            <CompanyLogoP>Company Logo</CompanyLogoP>
+                            :
+                            null
+                    }
+                    <CompanyLogoContainer>
+                        <label>
+                            <FileUploadContainer>
+                                <img
+                                    src={
+                                        uploadImage ?
+                                            readFileURL(uploadImage)
+                                            : logo ?
+                                                logo :
+                                                dummyImg
+                                    }
+                                    alt="company logo"
+                                    style={{ width: "125px", height: "auto" }} />
+                                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                    <FAIcons.FaUpload
+                                        style={{ margin: ".2rem 0.35rem", fontSize: ".8rem", color: `${colors.darkGrey}` }} />
+                                    <FAIcons.FaPencilAlt style={{ margin: ".2rem 0.35rem", fontSize: ".8rem", color: `${colors.darkGrey}` }} />
+                                </div>
+                            </FileUploadContainer>
+                            <InvisibleInput
+                                type="file"
+                                accept=".jpg,.jpeg,.png"
+                                onChange={(e) => {
+                                    setUploadImage(e.target.files[0]);
+                                    e.target.value = '';
+                                }}
+                            />
+                        </label>
+                        <UploadFile
+                            type="file"
+                            id="fileUpload"
+                        // onChange={}
+                        />
+                    </CompanyLogoContainer>
+                </LogoPositionDiv>
+                {/* <UploadLogoDiv>
                     <UploadLogoLabel>
                         <img
                             src={
@@ -288,13 +448,6 @@ const Account = () => {
                                     dummyImg
                             }
                             alt="logo" />
-                        {/* {
-                                uploadImage
-                                ?
-                                null
-                                :
-                                <small>Upload Logo</small>
-                            } */}
                         <InvisibleInput
                             type="file"
                             accept=".jpg,.jpeg,.png"
@@ -304,297 +457,422 @@ const Account = () => {
                             }}
                         />
                     </UploadLogoLabel>
-                </UploadLogoDiv>
-            </HeaderDiv>
-            {
+                </UploadLogoDiv> */}
+                {/* {
                 windowWidth >= 767 ?
                     <EmployeeInfoHeader>
                         Employees Information
                 </EmployeeInfoHeader>
                     : null
-            }
-            <Form>
-                <div>
-                    <InputWithLabel
-                        label="Company Name"
-                        type="text"
-                        name="companyName"
-                        required
-                        value={companyInfo.companyName}
-                        // value={undefined}
-                        onChange={handleOnChange}
-                    />
-                    <InputWithLabel
-                        label="Name"
-                        type="text"
-                        name="accountResponsible"
-                        required
-                        value={companyInfo.accountResponsible}
-                        onChange={handleOnChange}
-                    />
-                    <InputWithLabel
-                        label="Email"
-                        type="email"
-                        name="contactEmail"
-                        required
-                        value={companyInfo.contactEmail}
-                        onChange={handleOnChange}
-                    />
-                    <InputWithLabel
-                        label="Company Address"
-                        type="text"
-                        name="address"
-                        required
-                        value={companyInfo.address}
-                        onChange={handleOnChange}
-                    />
-                    <PhoneCityPostalDiv>
+            } */}
+                <Form>
+                    <div>
                         <InputWithLabel
-                            label="Phone Number"
-                            type="tel"
-                            name="phoneNumber"
-                            required
-                            value={companyInfo.phoneNumber}
-                            onChange={handleOnChange}
-                        />
-                        {/* <InputWithLabel
-                        label="City"
-                        type="text"
-                        name="cityName"
-                        required
-                        value={companyInfo.cityName}
-                        onChange={handleOnChange}
-                    /> */}
-                        <DropdownInputCityName
-                            labelText="city"
-                            onChange={cityIdUpdate}
-                            currentCityName={companyInfo.cityName}
-                        />
-                        <InputWithLabel
-                            label="Postal Code"
+                            label="Company Name"
                             type="text"
-                            name="postalCode"
+                            name="companyName"
                             required
-                            value={companyInfo.postalCode}
+                            value={companyInfo.companyName}
                             onChange={handleOnChange}
+                            inputStyle={{ marginBottom: "1rem" }}
                         />
-                    </PhoneCityPostalDiv>
-                </div>
-                {
-                    windowWidth >= 767 ?
-                        null :
+                        <InputWithLabel
+                            label="Name"
+                            type="text"
+                            name="accountResponsible"
+                            required
+                            value={companyInfo.accountResponsible}
+                            onChange={handleOnChange}
+                            inputStyle={{ marginBottom: "1rem" }}
+                        />
+                        <InputWithLabel
+                            label="Email"
+                            type="email"
+                            name="contactEmail"
+                            required
+                            value={companyInfo.contactEmail}
+                            onChange={handleOnChange}
+                            inputStyle={{ marginBottom: "1rem" }}
+                        />
+                        <InputWithLabel
+                            label="Company Address"
+                            type="text"
+                            name="address"
+                            required
+                            value={companyInfo.address}
+                            onChange={handleOnChange}
+                            inputStyle={{ marginBottom: "1rem" }}
+                        />
+                        <PhoneCityPostalDiv>
+                            <InputWithLabel
+                                label="Phone Number"
+                                type="tel"
+                                name="phoneNumber"
+                                required
+                                value={companyInfo.phoneNumber}
+                                onChange={handleOnChange}
+                                inputStyle={{ marginBottom: "1rem" }}
+                            />
+                            <DropdownInputCityName
+                                labelText="city"
+                                onChange={cityIdUpdate}
+                                currentCityName={companyInfo.cityName}
+                            />
+                            <InputWithLabel
+                                label="Postal Code"
+                                type="text"
+                                name="postalCode"
+                                required
+                                value={companyInfo.postalCode}
+                                onChange={handleOnChange}
+                                inputStyle={{ marginBottom: "1rem" }}
+                            />
+                        </PhoneCityPostalDiv>
+                    </div>
+                    <EmployeeInformationDiv>
                         <EmployeeInfoHeader>
                             Employees Information
                     </EmployeeInfoHeader>
-                }
-                <EmployeeInformationDiv>
-                    <div>
-                        <CSVHeaderAndUploadDiv>
-                            <UploadCSVHeader>
-                                Upload CSV file
+                        <CSVUploadDiv>
+                            <CSVHeaderAndUploadDiv>
+                                <UploadCSVHeader>
+                                    Upload CSV file
                             </UploadCSVHeader>
-                            <DownloadCSVLink href="https://pivotcare-s3.s3-us-west-2.amazonaws.com/others/employees_list" target="_blank">
-                                Download CSV format
-                            </DownloadCSVLink>
-                        </CSVHeaderAndUploadDiv>
-                        <UploadCSVDiv>
-                            <UploadCSVLabel>
-                                <ChooseFilePElement>
+                                <DownloadCSVLink href={csv} download="employees_list">
+                                    Download CSV format
+                                </DownloadCSVLink>
+                            </CSVHeaderAndUploadDiv>
+                            <UploadCSVDiv>
+                                <UploadCSVLabel>
+                                    {/* <ChooseFilePElement>
                                     Choose File
-                                </ChooseFilePElement>
-                                <SelectedFilePElement
-                                    uploadCSV={uploadCSV}
-                                >
-                                    {
-                                        uploadCSV.name ?
-                                            uploadCSV.name :
-                                            "No File chosen"
-                                    }
-                                </SelectedFilePElement>
-                                <InvisibleInput
-                                    type="file"
-                                    accept=".csv"
-                                    onChange={(e) => {
-                                        setUploadCSV(e.target.files[0])
-                                        e.target.value = ''
-                                    }}
-                                />
-                            </UploadCSVLabel>
-                            <UploadPElement
+                                </ChooseFilePElement> */}
+                                    <SelectedFilePElement
+                                        uploadCSV={uploadCSV}
+                                    >
+                                        {
+                                            uploadCSV.name ?
+                                                uploadCSV.name :
+                                                "No File chosen"
+                                        }
+                                    </SelectedFilePElement>
+                                    <InvisibleInput
+                                        type="file"
+                                        accept=".csv"
+                                        onChange={(e) => {
+                                            setUploadCSV(e.target.files[0])
+                                            e.target.value = ''
+                                        }}
+                                    />
+                                </UploadCSVLabel>
+                                {/* <Button
+                                text="Upload"
                                 onClick={uploadCSVToList}
-                            >
-                                Upload
+                                style={
+                                {
+                                    width: windowWidth < 768 ? "100%" : "30%",
+                                    backgroundColor: colors.UIViolet,
+                                    padding: ".25rem"
+                                }}
+                            /> */}
+                                <UploadPElement
+                                    onClick={uploadCSVToList}
+                                >
+                                    Upload
                             </UploadPElement>
-                        </UploadCSVDiv>
-                    </div>
-                    <InputEmployeesDiv>
-                        <InputWithLabel
-                            label="Full Name"
-                            type="text"
-                            name="employeeName"
-                            labelStyle={{ width: "33%" }}
-                            value={companyInfo.employeeName}
-                            onChange={handleOnChange}
-                        />
-                        <InputWithLabel
-                            label="ID"
-                            type="text"
-                            name="employeeId"
-                            labelStyle={{ width: "18%" }}
-                            value={companyInfo.employeeId}
-                            onChange={handleOnChange}
-                        />
-                        {/* <InputWithLabel
-                            label="Department"
-                            type="text"
-                            name="departmentName"
-                            labelStyle={{width:"33%"}}
-                            value={companyInfo.departmentName}
-                            onChange={handleOnChange}
-                        /> */}
-                        <DropdownInput
-                            labelText="Department"
-                            onChange={departmentUpdate}
-                        />
-                        <AddNewEmployeeElement
-                            onClick={addNewEmployee}
-                        >
-                            +
-                        </AddNewEmployeeElement>
-                    </InputEmployeesDiv>
-                    {
-                        companyInfo.employees.length === 0 ?
-                            <EmployeesList>
-                                No employees added
-                        </EmployeesList>
-                            :
-                            <EmployeesList>
-                                {companyInfo.employees.map(employee =>
-                                    <EmployeesListItem key={employee.employeeId}>
-                                        <span>{employee.employeeName}</span>
-                                        <span>{employee.employeeId}</span>
-                                        <span>{employee.departmentName}</span>
-                                        <span
-                                            onClick={deleteEmployee}
-                                            id={employee.employeeId}
-                                        >x</span>
-                                    </EmployeesListItem>
-                                )}
+                            </UploadCSVDiv>
+                        </CSVUploadDiv>
+
+                        <InputEmployeesDiv>
+                            <InputWithLabel
+                                label="Full Name"
+                                type="text"
+                                name="employeeName"
+                                labelStyle={
+                                    windowWidth < 768 ?
+                                        { width: "100%" }
+                                        :
+                                        { width: "33%" }
+                                }
+                                value={companyInfo.employeeName}
+                                onChange={handleOnChange}
+                            />
+
+                            {
+                                windowWidth < 768 ?
+                                    <>
+                                        <DepartmentWrapper>
+                                            <DropdownInput
+                                                labelText="Department"
+                                                onChange={departmentUpdate}
+                                            />
+                                        </DepartmentWrapper>
+                                        <AddEmployeeMobileDiv>
+                                            <InputWithLabel
+                                                label="ID"
+                                                type="text"
+                                                name="employeeId"
+                                                labelStyle={
+                                                    windowWidth < 768 ?
+                                                        { width: "100%" }
+                                                        :
+                                                        { width: "18%" }
+                                                }
+                                                value={companyInfo.employeeId}
+                                                onChange={handleOnChange}
+                                            />
+                                            <AddNewEmployeeElement
+                                                onClick={addNewEmployee}
+                                            >
+                                                +
+                                    </AddNewEmployeeElement>
+                                        </AddEmployeeMobileDiv>
+                                    </>
+                                    :
+                                    <>
+                                        <InputWithLabel
+                                            label="ID"
+                                            type="text"
+                                            name="employeeId"
+                                            labelStyle={
+                                                windowWidth < 768 ?
+                                                    { width: "100%" }
+                                                    :
+                                                    { width: "18%" }
+                                            }
+                                            value={companyInfo.employeeId}
+                                            onChange={handleOnChange}
+                                        />
+                                        <DropdownInput
+                                            labelText="Department"
+                                            onChange={departmentUpdate}
+                                        />
+                                        <AddNewEmployeeElement
+                                            onClick={addNewEmployee}
+                                        >
+                                            +
+                                </AddNewEmployeeElement>
+                                    </>
+                            }
+                        </InputEmployeesDiv>
+
+                        {
+                            companyInfo.employees.length === 0 ?
+                                <EmployeesList>
+                                    No employees added
                             </EmployeesList>
-                    }
-                </EmployeeInformationDiv>
-                <SaveBtnDiv>
-                    <button
+                                :
+                                <>
+                                    <EmployeesListLabel>Employees List</EmployeesListLabel>
+                                    <EmployeesList>
+                                        {companyInfo.employees.map(employee =>
+                                            <EmployeesListItem key={employee.employeeId}>
+                                                <span>{employee.employeeName}</span>
+                                                <span>{employee.employeeId}</span>
+                                                <span>{employee.departmentName}</span>
+                                                <DeleteButton
+                                                    onClick={deleteEmployee}
+                                                    id={employee.employeeId}
+                                                >x</DeleteButton>
+                                            </EmployeesListItem>
+                                        )}
+                                    </EmployeesList>
+                                </>
+                        }
+                    </EmployeeInformationDiv>
+                    <SaveBtnDiv>
+                        {/* <button
                         onClick={e => {
                             e.preventDefault();
                             updateCompanyInfo();
                         }}
-                    >Save</button>
-                </SaveBtnDiv>
-            </Form>
-        </AccountPageContainer>
+                    >Save</button> */}
+                        <Button
+                            size="med"
+                            onClick={e => {
+                                e.preventDefault();
+                                updateCompanyInfo();
+                            }}
+                            text="Save"
+                            style={
+                                {
+                                    width: windowWidth < 768 ? "100%" : "50%",
+                                    backgroundColor: colors.UIViolet
+                                }
+                            } />
+                    </SaveBtnDiv>
+                </Form>
+            </AccountPageContainer>
+        </MaxWidthWrapper>
     );
 };
 
-const mobileBreakPoint = "767px";
+const MaxWidthWrapper = styled.div`
+    width: 100%;
+    max-width: 1500px;
+    margin: 0 auto;
+    position: relative;
+
+`
 
 const AccountPageContainer = styled.div`
-    max-width: 1300px;
-    margin: 0 auto;
+    max-width: 550px;
+    /* margin: 0 auto; */
     padding: 2rem;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    margin: 0 auto;
+    
+    color: ${colors.darkGrey};
+    @media ${device.laptop} {
+        margin: 0;
+        margin-left: 0;
+        /* margin-left: 5%; */
+        max-width: 650px;
+    }
+    @media ${device.desktopM} {
+        max-width: 750px;
+    }
+    /* @media ${device.desktopL} {
+        max-width: 850px;
+    } */
 `;
 
 const HeaderDiv = styled.div`
-    display: grid;
-    grid-template-columns: 1fr 65px;
-    @media (max-width: ${mobileBreakPoint}) {
-        display: block;
+    position: relative;
+    height: 1.5rem;
+    margin-bottom: 1rem;
+    @media ${device.tablet} {
+        margin-bottom: 3.5rem;
     }
 `;
 
 const HeaderWrapDiv = styled.div`
+    margin-right: 0;
+    margin-left: 0;
+    max-width: 100%;
     position: relative;
-    border-bottom: solid 1px #000000;
-    max-width: 300px;
+    border-bottom: solid 2.5px ${colors.darkGrey};
+    /* max-width: 300px; */
+    margin-top: 3rem;
     margin-bottom: 3rem;
-    @media (max-width: ${mobileBreakPoint}) {
-        margin-right: 0;
-        margin-left: 0;
-        max-width: 100%;
+
+    @media ${device.tablet} {
+        max-width: 400px;
     }
 `;
 
 const AccountPageHeader = styled.h2`
-    font-size: 1.25rem;
-    font-weight: normal;
+    /* font-size: 1.25rem; */
+    font-weight: bold;
     position: absolute;
-    top: -1.75rem;
+    top: -2.25rem;
     background-color: #fff;
+    color: ${colors.darkGrey};
     padding-right: 2rem;
     text-transform: uppercase;
-    /* @media (max-width: ${mobileBreakPoint}) {
-        top: -1.75rem;
-    } */
+    font-family: 'GothamRoundedBold', sans-serif;
+    font-size: 28px;
 `;
 
+const LogoPositionDiv = styled.div`
+    position: inherit;
+
+    @media ${device.laptop} {
+        position: absolute;
+        right: 3rem;
+        margin-bottom: 1rem;
+    }
+`;
+
+const CompanyLogoP = styled.p`
+    margin: 0;
+    margin-bottom: .5rem;
+    text-align: center
+`;
+
+const FileUploadContainer = styled.div`
+	width: 125px;
+    border: solid 1px ${colors.mediumGrey};
+    border-radius: 5px;
+    background-color: ${colors.lightGrey};
+    margin-bottom: 1.5rem;
+    /* display: flex; */
+`;
+
+const CompanyLogoContainer = styled.div`
+    text-align: right;
+    display: flex;
+    justify-content: center;
+
+
+    @media ${device.laptop} {
+        display: flex;
+        justify-content: flex-end;
+    }
+    
+`;
+
+const UploadFile = styled.input.attrs({ type: 'file' })`
+	display: none;
+`;
+
+// *****************************
 const UploadLogoDiv = styled.div`
-    position: relative;
-    @media (max-width: ${mobileBreakPoint}) {
-        width: 100px;
-        height: auto;
+    width: 100px;
+    height: auto;
+
+    @media ${device.tablet} {
+        position: relative;
     }
 `;
 
 const UploadLogoLabel = styled.label`
-    position: absolute;
-    top: -1rem;
-    cursor: pointer;
-    @media (max-width: ${mobileBreakPoint}) {
-        position: initial;
+    position: initial;
+
+    @media ${device.tablet} {
+        position: absolute;
+        top: -1rem;
+        cursor: pointer;
     }
 `;
+// *******************************
 
 const Form = styled.form`
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-    grid-gap: 1rem;
-    height: 440px;
-    grid-column: span 2;
-    @media (max-width: ${mobileBreakPoint}) {
-        display: block;
-        height: auto;
-    }
+    display: block;
+    height: auto;
 `;
 
 const PhoneCityPostalDiv = styled.div`
-    display: grid;
-    grid-column-gap: .5rem;
-    grid-template-columns: 1.5fr 2fr 2fr;
-    align-items: flex-end;
-    @media (max-width: ${mobileBreakPoint}) {
-        display: block;
-    }
-`;
+    display: block;
 
-const EmployeeInfoHeader = styled.h3`
-    text-align: center;
-    font-weight: normal;
-    margin: 0;
-    @media (max-width: ${mobileBreakPoint}) {
-        margin-top: 3rem;
-        margin-bottom: 2rem;
+    @media ${device.tablet} {
+        display: grid;
+        grid-column-gap: .5rem;
+        grid-template-columns: 1.5fr 2fr 2fr;
+        align-items: flex-end;
     }
 `;
 
 const EmployeeInformationDiv = styled.div`
-    display: grid;
-    flex-direction: column;
-    grid-template-rows: 1fr 1fr 3fr;
-    @media (max-width: ${mobileBreakPoint}) {
-        display: block;
+    display: block;
+    margin-top: 3rem;
+
+    @media ${device.tablet} {
+        display: grid;
     }
+`;
+
+const EmployeeInfoHeader = styled.h3`
+    text-align: left;
+    font-weight: bold;
+    font-size: 28px;
+    margin: 0;
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+    font-family: 'GothamRoundedBold', sans-serif;
+`;
+
+const CSVUploadDiv = styled.div`
+    margin-bottom: 2rem;
 `;
 
 const CSVHeaderAndUploadDiv = styled.div`
@@ -615,18 +893,20 @@ const DownloadCSVLink = styled.a`
 `;
 
 const UploadCSVDiv = styled.div`
-    display: flex;
-    @media (max-width: ${mobileBreakPoint}) {
-        display: block;
+    display: block;
+
+    @media ${device.tablet} {
+        display: flex;
     }
 `;
 
 const UploadCSVLabel = styled.label`
-    display: flex;
-    width: 70%;
-    @media (max-width: ${mobileBreakPoint}) {
-        display: block;
-        width: 100%;
+    display: block;
+    width: 100%;
+
+    @media ${device.tablet} {
+        display: flex;
+        width: 70%;
     }
 `;
 
@@ -635,97 +915,152 @@ const InvisibleInput = styled.input`
 `;
 
 const ChooseFilePElement = styled.p`
-  text-transform: uppercase;
-  font-size: .8rem;
-  padding: 0.5rem;
-  background-color: #ddd;
-  color: grey;
-  border: solid 1px #ccc;
-  border-radius: 3px;
-  text-align: center;
-  margin: 0 auto;
-  width: 40%;
-  cursor: pointer;
-  &:focus {
-    outline: none;
-    box-shadow: none;
-  }
-  @media (max-width: ${mobileBreakPoint}) {
-        width: 100%;
-        margin-bottom: 1rem;
+    width: 100%;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    font-size: .8rem;
+    padding: 0.5rem;
+    background-color: #ddd;
+    color: grey;
+    border: solid 1px #ccc;
+    border-radius: 3px;
+    text-align: center;
+    margin: 0 auto;
+    cursor: pointer;
+    &:focus {
+        outline: none;
+        box-shadow: none;
+    }
+
+    @media ${device.tablet} {
+        width: 40%;
+        /* text-transform: uppercase;
+        font-size: .8rem;
+        padding: 0.5rem;
+        background-color: #ddd;
+        color: grey;
+        border: solid 1px #ccc;
+        border-radius: 3px;
+        text-align: center;
+        margin: 0 auto;
+        width: 40%;
+        cursor: pointer;
+        &:focus {
+            outline: none;
+            box-shadow: none;
+        } */
     }
 `;
 
 const SelectedFilePElement = styled.p`
-  padding: 0.5rem;
-  color: ${props => props.uploadCSV ? "black" : "#ccc"};
-  border: solid 1px #ccc;
-  border-radius: 3px;
-  margin: 0 .5rem;
-  width: 100%;
-  cursor: pointer;
-  @media (max-width: ${mobileBreakPoint}) {
     margin: 0 auto;
     width: 100%;
     margin-bottom: 1rem;
+    padding: .75rem 0.5rem;
+    color: ${props => props.uploadCSV ? "black" : "#ccc"};
+    border: solid 1px #ccc;
+    border-radius: 5px;
+    width: 100%;
+    cursor: pointer;
+    box-sizing: border-box;
+    height: 46px;
+
+    @media ${device.tablet} {
+        margin: 0 .5rem 0 0;
+        width: 45%;
+        /* padding: 0.5rem;
+        color: ${props => props.uploadCSV ? "black" : "#ccc"};
+        border: solid 1px #ccc;
+        border-radius: 3px;
+        margin: 0 .5rem;
+        width: 100%;
+        cursor: pointer; */
   }
 `;
 
 const UploadPElement = styled.p`
-    text-transform: uppercase;
-    padding: 0.5rem;
-    background-color: grey;
+    width: 100%;
+    height: 46px;
+    margin-bottom: 1rem;
+    /* text-transform: uppercase; */
+    padding: 1.1rem 0.5rem;
+    background-color: ${colors.UIViolet};
     color: white;
+    font-weight: bold;
     border: solid 1px #ccc;
-    border-radius: 3px;
+    border-radius: 5px;
     text-align: center;
     margin: 0;
-    width: 30%;
     cursor: pointer;
+    box-sizing: border-box;
     &:active {
         opacity: .5;
     }
-    @media (max-width: ${mobileBreakPoint}) {
-        width: 100%;
-        margin-bottom: 1rem;
+
+    @media ${device.tablet} {
+        width: 30%;
     }
 `;
 
 const InputEmployeesDiv = styled.div`
-    display: flex;
-    justify-content: space-between;
-    @media (max-width: ${mobileBreakPoint}) {
-        display: block;
+    display: block;
+    /* display: flex;
+    flex-direction: column; */
+    
+    @media ${device.tablet} {
+        display: flex;
+        justify-content: space-between;
     }
 `;
 
+const DepartmentWrapper = styled.div`
+    margin-bottom: 1rem;
+    @media ${device.tablet} {
+        margin-bottom: 0rem;
+    }
+`
+
 const AddNewEmployeeElement = styled.div`
     border-radius: 50%;
-    font-size: 1.5rem;
+    font-size: 2rem;
+    font-weight: 500;
     color: white;
-    padding: .5rem;
-    background-color: grey;
+    padding: .75rem;
+    background-color: ${colors.UIViolet};
     cursor: pointer;
     align-self: flex-end;
     margin: .25rem;
     margin-bottom: .75rem;
+    margin-left: 2rem;
     height: 1rem;
     width: 1rem;
     display: flex;
     justify-content: center;
     align-items: center;
+    /* align-items: flex-start; */
     &:active {
         opacity: .5;
     }
+    @media ${device.tablet} {
+        margin-left: .25rem;
+    }`;
+
+const AddEmployeeMobileDiv = styled.div`
+    display: flex;
+`;
+
+const EmployeesListLabel = styled.p`
+    margin-bottom: 0
 `;
 
 const EmployeesList = styled.ul`
     border: solid 1px #ccc;
-    border-radius: 3px;
-    padding: .5rem;
-    overflow: scroll;
+    border-radius: 5px;
+    padding: 1rem;
+    overflow-x: scroll;
     overflow-y: scroll;
     height: 175px;
+    margin-top: .75rem;
     ::-webkit-scrollbar{
         width: 10px;
         height: 10px;
@@ -733,26 +1068,46 @@ const EmployeesList = styled.ul`
     ::-webkit-scrollbar-track{
         /* background: #ddd; */
         border: none;
+        /* border: solid 1px #ddd; */
         border-radius: 20px;
     }
     ::-webkit-scrollbar-thumb{
-        background: #ddd;
+        background: ${colors.white};
+        border: solid 1px ${colors.mediumGrey};
         border-radius: 20px;
         box-shadow: none;
+        @media ${device.tablet} {
+            background: ${colors.UIViolet};
+            border: none;
+        }
     }
+    @media ${device.tablet} {
+            overflow-x: hidden;
+        }
+
 `;
 
 const EmployeesListItem = styled.li`
     display: grid;
     grid-column-gap: .5rem;
-    grid-template-columns: 35% 20% 35% 10%;
+    grid-template-columns: 35% 25% 30% 10%;
     margin-bottom: .75rem;
     min-width: 450px;
+`;
+
+const DeleteButton = styled.span`
+    &:hover {
+        cursor: pointer;
+    }
 `;
 
 const SaveBtnDiv = styled.div`
     grid-column: span 2;
     justify-self: right;
+    margin-top: 2rem;
+    @media ${device.laptop} {
+        margin-top: 4rem;
+    }
 `;
 
 

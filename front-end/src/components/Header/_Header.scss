@@ -1,12 +1,190 @@
-#globalHeader {
-    ul {
-        list-style-type: none;
-        padding: 0;
-        display: flex;
-        justify-content: flex-end
+// #globalHeader {
+//     ul {
+//         list-style-type: none;
+//         padding: 0;
+//         display: flex;
+//         justify-content: flex-end
+//     }
+
+//     li {
+//         margin-right: 1rem;
+//     }
+// }
+
+header {
+    .site-logo {
+        display: grid;
+        grid-template-columns: 60px 1fr;
+        grid-gap: 0.5rem;
+
+        h1 {
+            font-size: 1.2rem;
+            font-weight: normal;
+            line-height: 0;
+            margin: 0;
+            padding: 0;
+            align-self: center;
+        }
     }
 
-    li {
-        margin-right: 1rem;
+    .site-logo a {
+        img {
+            max-width: 60px;
+        }
+    }
+
+    @media screen and (max-width: 875px) {
+        border-bottom: 0.5px solid #E6E6E6;
+    }
+
+    // Mobile Menu CSS
+    &.mobile-menu {
+        .navbar {
+            background-color: $white;
+            display: grid;
+            grid-template-columns: 200px auto;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+        }
+
+        .hamburger-menu {
+            font-size: 2rem;
+            background: none;
+
+            svg {
+                color: $gray-100 !important;
+            }
+        }
+
+        .nav-menu {
+            background-color: $primary-color;
+            width: 250px;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            position: fixed;
+            top: 0;
+            right: -100%;
+            z-index: 9;
+            transition: 850ms;
+
+            &.active {
+                right: 0;
+                transition: 350ms;
+                box-shadow: 0px 3px 6px #00000029;
+            }
+
+            .nav-menu-items {
+                width: 100%;
+                margin: 0;
+                padding: 0;
+
+                .navbar-toggle {
+                    background-color: $primary-color;
+                    width: 100%;
+                    padding-top: 1rem;
+                    display: flex;
+                    justify-content: start;
+                    align-items: center;
+
+                    .close-menu {
+                        font-size: 2rem;
+                        padding-bottom: 2rem;
+                        padding-left: 1.5rem;
+                    }
+                }
+
+                .nav-item {
+                    display: flex;
+                    justify-content: start;
+                    align-items: center;
+                    list-style: none;
+                    height: 60px;
+                    padding: 0;
+                    border-bottom: 1px solid $primary-color;
+
+                    a {
+                        text-decoration: none;
+                        color: $white;
+                        width: 95%;
+                        display: flex;
+                        align-items: center;
+                        padding: 0 1.5rem;
+                        // border-radius: 4px;
+                        height: 100%;
+
+                        &:hover,
+                        &.active {
+                            background-color: rgba(255, 255, 255, 0.8);
+                            color: $primary-color;
+                            font-weight: 600;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Desktop Menu CSS
+    &.desktop-menu {
+        padding: 0.5rem 0;
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        background: $white;
+        box-shadow: 0px 3px 6px #00000029;
+
+        &.active {
+            box-shadow: 0px 3px 6px #00000029;
+            transition: all 0.5s linear;
+        }
+
+        .nav-menu {
+            max-width: $max-width;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+
+            @include mq-medium {
+                display: grid;
+                grid-template-columns: 200px auto;
+                align-items: center;
+            }
+
+            .nav-menu-items {
+                padding: 0;
+
+                @include mq-medium {
+                    display: flex;
+                    justify-content: flex-end;
+                    align-items: center;
+                }
+
+                .nav-item {
+                    list-style: none;
+
+                    a {
+                        text-decoration: none;
+                        color: $gray-100;
+                        padding: 0 1rem;
+
+                        &:hover,
+                        &.active {
+                            color: $primary-color;
+                        }
+
+                        &.active {
+                            font-weight: 600;
+                        }
+                    }
+
+                    &:last-of-type {
+                        a {
+                            padding-right: 0;
+                        }
+                    }
+                }
+            }
+        }
     }
 }

@@ -4,6 +4,7 @@ import DateFnsUtils from "@date-io/date-fns";
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
+  DatePicker as DatePickerOriginal,
 } from "@material-ui/pickers";
 import InputLabel from "@material-ui/core/InputLabel";
 
@@ -21,17 +22,19 @@ const DatePicker = ({ id, label }) => {
         <InputLabel shrink id="demo-simple-select-placeholder-label-label">
           {label}
         </InputLabel>
-        <KeyboardDatePicker
-          disableToolbar
-          variant="inline"
+        <DatePickerOriginal
+          //   disableToolbar
+          inputVariant="outlined"
+          //   variant="inline"
           format="MM/dd/yyyy"
-          margin="normal"
+          //   margin="normal"
           id={id}
           value={selectedDate}
           onChange={handleDateChange}
           KeyboardButtonProps={{
             "aria-label": "change date",
           }}
+          //   style={{ pdding: 0 }}
         />
       </MuiPickersUtilsProvider>
     </div>

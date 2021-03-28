@@ -6,10 +6,12 @@ const { validationResult } = require("express-validator");
 // ----------------------------------------------------------
 exports.getPlaylists = (req, res) => {
 
-    let sPlaylistId = pivotDb.escape(req.query.playlistId).replace(/['']+/g, '');
-    let sCategoryId = pivotDb.escape(req.query.categoryId).replace(/['']+/g, '');
+    let sPlaylistId   = pivotDb.escape(req.query.playlistId).replace(/['']+/g, '');
+    let sCategoryId   = pivotDb.escape(req.query.categoryId).replace(/['']+/g, '');
     let sInstructorId = pivotDb.escape(req.query.instructorId).replace(/['']+/g, '');
-    let sMostViewed = pivotDb.escape(req.query.mostViewed).replace(/['']+/g, '');
+    let sMostViewed   = pivotDb.escape(req.query.mostViewed).replace(/['']+/g, '');
+    let sOrderBy      = pivotDb.escape(req.query.orderby).replace(/['']+/g, '');    
+
 
     // Set filters
     let sWhere = " WHERE p.active = 1 ";
@@ -23,19 +25,27 @@ exports.getPlaylists = (req, res) => {
         sWhere = sWhere + ` AND p.instructorId = ${sInstructorId} `;
     }
 
-    let sOrderBy = 'ORDER BY playlistName, playlistId, lessonOrder';
-    if (sMostViewed != "" && sMostViewed.toLowerCase() == "true") {
-        sOrderBy = 'ORDER BY playlistViews DESC, playlistId, lessonOrder';
+    let sMyOrderBy = '';
+    if (sOrderBy != "" && sOrderBy.toLowerCase() != "null") {
+        sMyOrderBy = sOrderBy + `, `;
     }
+
+    let sMyMostViewed = '';
+    if (sMostViewed != "" && sMostViewed.toLowerCase() == "true") {
+        sMyMostViewed = 'playlistViews DESC, ';
+    }
+
+    let sQryOrderBy = `ORDER BY ${sMyMostViewed} ${sMyOrderBy} playlistName, playlistId, lessonOrder, lessonId, otherPlaylistName `;
 
 
     let qry = `SELECT p.playlistId, p.name as playlistName, p.description as playlistDescription, log.qtd as playlistViews,
-                      c.categoryId, c.name as categoryName, lg.name as instructorName, i.instructorId as instructorID,
+                      c.categoryId, c.name as categoryName, lg.name as instructorName, i.instructorId as instructorID, l.videoDuration,
                       l.lessonId, l.name as lessonName, pl.order as lessonOrder, l.imageFile, l.videoFile, l.description as lessonDescription,
                       CASE WHEN p.level = "B" THEN "Begginer"
                            WHEN p.level = "I" THEN "Intermediate"
                            WHEN p.level = "A" THEN "Advanced"
-                      ELSE "All Levels" END AS playlistLevel
+                      ELSE "All Levels" END AS playlistLevel,
+                      opl.playlistId AS otherPlaylistId, opl.name as otherPlaylistName, opl.imageFile as otherImageFile
                  FROM playlists p
                       INNER JOIN playlistLessons pl ON (p.playlistId = pl.playlistId)
                       INNER JOIN lessons l ON (pl.lessonId = l.lessonId)
@@ -46,9 +56,14 @@ exports.getPlaylists = (req, res) => {
                                     FROM (SELECT DISTINCT userId, DATE(logDate) as logDate, playlistId
                                             FROM activityLog ) a
                                    GROUP BY playlistId 
-                                 ) log ON ( p.playlistId = log.playlistId )                      
+                                 ) log ON ( p.playlistId = log.playlistId )  
+                      LEFT JOIN ( SELECT p2.playlistId, p2.name, p2.instructorId, l2.imageFile
+                                    FROM playlists p2
+                                         INNER JOIN playlistLessons pl2 ON (pl2.playlistId = p2.playlistId AND pl2.order = 1)
+                                         INNER JOIN lessons l2 ON (l2.lessonId = pl2.lessonId)                                    
+                                   WHERE active = 1 ) opl ON (opl.instructorId = p.instructorId AND opl.playlistId <> p.playlistId)                                                     
                 ${sWhere}                           
-                ${sOrderBy} `;
+                ${sQryOrderBy} `;
 
     pivotPoolDb.then(pool => {
         pool.query(qry)
@@ -64,20 +79,45 @@ exports.getPlaylists = (req, res) => {
                     while (i < results.length) {
                         let vPlaylist = {};
                         let vLessons = [];
+                        let vRelatedPlaylists = [];
                         let iPlaylistBase = i;
+                        let iImageBase = -1;
                         iPlaylistId = results[iPlaylistBase].playlistId;
 
                         // Creates array of all the lessons for the playlist
                         while (i < results.length && iPlaylistId == results[i].playlistId) {
+
+                            vRelatedPlaylists = [];
+                            let iLessonBase = i;
+                            let iLessonId = results[iLessonBase].lessonId;
+
+                            // Creates array of all the other playlists related to the same instructor
+                            while (i < results.length && iPlaylistId == results[i].playlistId && iLessonId == results[i].lessonId) {
+
+                                if (iImageBase == -1) {
+                                    iImageBase = i;
+                                }
+                                if (results[i].otherPlaylistId > 0 && results[i].otherPlaylistId != undefined) {
+                                    vRelatedPlaylists.push({
+                                        playlistId: results[i].otherPlaylistId,
+                                        playlistName: results[i].otherPlaylistName,
+                                        imageFile: results[i].otherImageFile
+                                    });
+                                }
+
+                                i++;
+                            }
+
                             vLessons.push({
-                                lessonId: results[i].lessonId,
-                                lessonName: results[i].lessonName,
-                                lessonOrder: results[i].lessonOrder,
-                                lessonDescription: results[i].lessonDescription,
-                                imageFile: results[i].imageFile,
-                                videoFile: results[i].videoFile
+                                lessonId: results[iLessonBase].lessonId,
+                                lessonName: results[iLessonBase].lessonName,
+                                lessonOrder: results[iLessonBase].lessonOrder,
+                                lessonDescription: results[iLessonBase].lessonDescription,
+                                videoDuration: results[iLessonBase].videoDuration,
+                                imageFile: results[iLessonBase].imageFile,
+                                videoFile: results[iLessonBase].videoFile
                             });
-                            i++;
+
                         }
 
                         vPlaylist = {
@@ -86,11 +126,13 @@ exports.getPlaylists = (req, res) => {
                             playlistDescription: results[iPlaylistBase].playlistDescription,
                             playlistLevel: results[iPlaylistBase].playlistLevel,
                             playlistViews: results[iPlaylistBase].playlistViews,
+                            imageFile: results[iImageBase].imageFile,                            
                             categoryId: results[iPlaylistBase].categoryId,
                             categoryName: results[iPlaylistBase].categoryName,
                             instructorName: results[iPlaylistBase].instructorName,
                             instructorID: results[iPlaylistBase].instructorID,
-                            lessons: vLessons
+                            lessons: vLessons,
+                            relatedPlaylists: vRelatedPlaylists
                         };
 
                         vPlaylists.push(vPlaylist);
@@ -135,10 +177,12 @@ exports.updPlaylist = (req, res) => {
             let sPlaylistId = pivotDb.escape(objPlaylist.playlistId).replace(/['']+/g, '');
             let sAction = pivotDb.escape(objPlaylist.action).replace(/['']+/g, '');
 
+            let sLevel = objPlaylist.playlistLevel[0].toUpperCase();
+
             if (sAction.toLowerCase() == 'add') {
                 qry = `INSERT INTO playlists (name, description, categoryId, instructorId, level, active) 
                             VALUES ("${objPlaylist.playlistName}", "${objPlaylist.playlistDescription}", ${objPlaylist.categoryId},
-                                     ${objPlaylist.instructorId}, "${objPlaylist.playlistLevel}", ${objPlaylist.active} ) `;
+                                     ${objPlaylist.instructorId}, "${sLevel}", ${objPlaylist.active} ) `;
             } else if (sAction.toLowerCase() == 'del') {
                 qry = `DELETE FROM playlistLessons WHERE playlistId = ${sPlaylistId} `;
             } else {
@@ -157,7 +201,7 @@ exports.updPlaylist = (req, res) => {
                         sSet = sSet + `description = "${objPlaylist.playlistDescription}", `;
                     }
                     if (objPlaylist.playlistLevel != undefined) {
-                        sSet = sSet + `level = "${objPlaylist.playlistLevel}", `;
+                        sSet = sSet + `level = "${sLevel}", `;
                     }
                     if (objPlaylist.active != undefined) {
                         sSet = sSet + `active = "${objPlaylist.active}", `;

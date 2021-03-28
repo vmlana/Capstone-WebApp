@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 
+import { colors } from '../StyleComponent/colors';
+
 const InputWithLabel = (props) => {
   return (
     <Label style={{ ...props.labelStyle }}>
@@ -21,17 +23,23 @@ const InputWithLabel = (props) => {
 const InputElement = styled.input`
   border: solid 1px #ccc;
   border-radius: 5px;
-  height: 30px;
+  height: 36px;
   font-size: 16px;
   width: 100%;
-  padding: 0.5rem;
+  padding: 0.75rem 0.5rem;
   box-sizing: border-box;
-  height: 36px;
+  height: 46px;
   margin-bottom: 0.5rem;
+  color: ${colors.darkGrey};
+  color: #333333;
+	padding: 20px;
 `;
 
 const Label = styled.label`
   margin: 0rem 0rem 0.25rem 0;
+  font-size: 18px;
+	line-height: 30px;
+	color: #707070;
 `;
 
 const LabelText = styled.p`
