@@ -15,7 +15,7 @@ exports.getUser = (req, res) => {
         }
 
         // set TODAY as String
-        let d = new Date();
+        let d  = new Date();
         let ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
         let mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d);
         let da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
@@ -165,11 +165,16 @@ exports.getDashboard = (req, res) => {
         da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
         let s7days = `${ye}-${mo}-${da}`;
 
+        let qryStreak = `SELECT MAX(logDate) as lastWorkout,
+                               DATEDIFF(CURDATE(), MAX(logDate)) as days
+                          FROM activityLog
+                         WHERE userId = ${sUserId}`;
 
         let qry = `select u.userId, lg.userLogin, lg.name as userName, lg.imageFile as imageFile, u.employeeId,
                           c.companyId, lc.name as companyName, w.name AS department, e.employeeId,
                           log2.selected_date, log2.total_work, log2.log_work, log2.percent,
-                          IFNULL(lw.qtd,0) AS weekWorkout
+                          IFNULL(lw.qtd,0) AS weekWorkout,
+                          DATEDIFF(CURDATE(), u.streakStartDate) as streakDay
                      FROM login lg
                           INNER JOIN users u ON (lg.loginId = u.userId)
                           INNER JOIN employees e ON (u.companyId = e.companyId AND u.employeeId = e.employeeId)
@@ -202,8 +207,22 @@ exports.getDashboard = (req, res) => {
                  WHERE lg.loginId = ${sUserId}  
                  ORDER BY selected_date `;
 
+        let updStreak = ``;                    
         pivotPoolDb.then(pool => {
-            pool.query(qry)
+            pool.query(qryStreak)
+                .then(results => {
+                   if (results[0].days > 1) {
+                       updStreak = `UPDATE users SET streakStartDate = CURDATE() WHERE userId = ${sUserId}`;
+                   }
+                   if (updStreak != ``) {
+                      return pool.query(updStreak);
+                   } else {
+                      return results;
+                   }
+                })
+                .then(results => {
+                   return pool.query(qry);
+                })
                 .then(results => {
                     if (results.length == 0) {
                         res.status(404).send("No Record Found");
@@ -231,7 +250,7 @@ exports.getDashboard = (req, res) => {
                             companyName: results[0].companyName,
                             department: results[0].department,
                             workInDay: workInDay,
-                            streakDay: 20,
+                            streakDay: results[0].streakDay,
                             weekWorkout: results[0].weekWorkout,
                             daysResult: vWeekDays
                         }
