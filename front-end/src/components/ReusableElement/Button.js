@@ -64,14 +64,14 @@ const ButtonElement = styled.button`
   @media ${device.laptop} {
     width: ${({ type }) => (type === "modal" ? "250" : "220")}px;
     height: ${({ type }) => (type === "modal" ? "40" : "50")}px;
-    font-size: 16px;
+    font-size: ${({ type }) => (type === "modal" ? "16" : "20")}px;;
     padding: ${({ type }) => (type === "modal" ? "0" : "1rem 3rem")};
     background-color: ${({ purpose }) =>
-      purpose === "delete" ? "white" : "#7662a5"};
+    purpose === "delete" ? "white" : "#7662a5"};
     color: ${({ purpose }) => (purpose === "delete" ? "black" : "white")};
 
     border: ${({ purpose }) =>
-      purpose === "delete" ? "2px solid orange" : "none"};
+    purpose === "delete" ? "2px solid orange" : "none"};
   }
 
   &:focus {

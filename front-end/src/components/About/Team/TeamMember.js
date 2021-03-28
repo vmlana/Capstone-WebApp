@@ -42,7 +42,7 @@ const TeamMemberInfo = styled.div`
 
         .member-info {
             .member-name {
-                font-family: 'Gotham';
+                font-family: 'GothamRoundedMedium';
                 font-weight: 600;
                 font-size: 20px;
                 line-height: 25px;
@@ -55,24 +55,23 @@ const TeamMemberInfo = styled.div`
                 width: 220px;
                 margin: 0 auto;
                 margin-top: 0.25rem;
-                margin-bottom: 1.25rem;
+                margin-bottom: 0.75rem;
             }
 
             .member-additional-role {
-                font-family: 'Gotham';
-                font-weight: bold;
+                font-family: 'GothamRoundedNormal';
                 margin-bottom: 0;
                 font-size: 16px;
                 line-height: 20px;
+                margin-top: 0;
             }
 
             .member-role {
-                font-family: 'Gotham';
-                font-weight: bold;
+                font-family: 'GothamRoundedNormal';
                 margin-top: 5px;
                 font-size: 16px;
                 line-height: 20px;
-                margin-bottom: 0.5rem;
+                margin-bottom: 0.75rem;
             }
 
             .member-profile {

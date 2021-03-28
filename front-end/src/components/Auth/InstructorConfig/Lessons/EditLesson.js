@@ -450,6 +450,18 @@ const ButtonGroup = styled.div`
 		grid-template-columns: 1fr 1fr;
 	}
 
+    button {
+		width: 250px;
+		height: 50px;
+		margin: 0 auto;
+
+		@media ${device.tablet} {
+			margin: unset;
+			width: 300px;
+			height: 70px;
+		}
+	}
+
     .deleteBtn {
         color: #707070;
         font-size: 24px;
