@@ -62,7 +62,7 @@ const ButtonElement = styled.button`
     height: 70px;
   }
   @media ${device.laptop} {
-    width: ${({ type }) => (type === "modal" ? "250" : "220")}px;
+    width: ${({ type }) => (type === "modal" ? "auto" : "220")}px;
     height: ${({ type }) => (type === "modal" ? "40" : "50")}px;
     font-size: 16px;
     padding: ${({ type }) => (type === "modal" ? "0" : "1rem 3rem")};
@@ -72,6 +72,7 @@ const ButtonElement = styled.button`
 
     border: ${({ purpose }) =>
       purpose === "delete" ? "2px solid orange" : "none"};
+    align-self: center;
   }
 
   &:focus {

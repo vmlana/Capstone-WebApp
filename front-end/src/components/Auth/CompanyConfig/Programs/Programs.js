@@ -15,7 +15,7 @@ const Programs = () => {
 
   let viewData = {
     userType: "Company",
-    companyId: "1",
+    companyId: authId,
     pageName: "Program",
     header: "Programs",
     subHeader: "Click to see details or edit",
@@ -24,7 +24,7 @@ const Programs = () => {
 
   const [programs, setPrograms] = useState([]);
   useEffect(() => {
-    getProgramsByCompanyId(1).then((programList) => {
+    getProgramsByCompanyId(authId).then((programList) => {
       setPrograms(programList);
     });
   }, []);
