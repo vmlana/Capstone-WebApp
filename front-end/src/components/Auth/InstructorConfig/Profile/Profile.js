@@ -354,6 +354,10 @@ const TextArea = styled.textarea`
 	color: #333333;
 	padding: 20px;
 	box-sizing: border-box;
+
+	:focus {
+		outline: #7662a5 auto 1px;
+	}
 `;
 
 const ButtonContainer = styled.div`

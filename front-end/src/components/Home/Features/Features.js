@@ -85,7 +85,7 @@ const FeatureText = styled.div`
     margin: 0 auto;
 
     @media ${device.tablet} { 
-        max-width: 315px;
+        max-width: 300px;
     }
 `;
 

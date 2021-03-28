@@ -24,7 +24,7 @@ const AboutPivot = () => {
                             related to the specific work environment of the company, such as yoga, meditation, and company-wide stretch breaks.
                         </Para>
                     </PivotCareDescription>
-                    <Button onClick={() => history.push("/about")}>Read More</Button>
+                    <div className='btnContainer'><Button onClick={() => history.push("/about")}>Read More</Button></div>
                 </AboutPivotCare>
             </PivotCare>
             {/* <img src="./media/images/Intro-MockupsPile.png" alt="about-pivot-care" /> */}
@@ -65,6 +65,14 @@ const PivotCare = styled.div`
 
 const AboutPivotCare = styled.div`
     max-width: 800px;
+
+    .btnContainer {
+        text-align: center;
+
+        @media ${device.tablet} { 
+            text-align: left;
+        }
+    }
 `;
 
 const H2 = styled.h2`
