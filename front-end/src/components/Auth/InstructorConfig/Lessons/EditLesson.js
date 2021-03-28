@@ -417,6 +417,10 @@ const TextArea = styled.textarea`
 	color: #333333;
 	padding: 20px;
 	box-sizing: border-box;
+
+    :focus {
+        outline: #7662a5 auto 1px;
+    }
 `;
 
 const SelectOption = styled.select`
@@ -430,6 +434,10 @@ const SelectOption = styled.select`
     height: 46px;
     margin-bottom: 0.5rem;
     color: #333333;
+
+    :focus {
+        outline: #7662a5 auto 1px;
+    }
 `;
 
 const ButtonGroup = styled.div`

@@ -109,7 +109,7 @@ const H2 = styled.h2`
         content: "";
         position: absolute;
         border-top: 3px solid white;
-        top: 7px;
+        top: 11px;
         width: 100%;
         left: 100%;
         margin-left: 2rem;

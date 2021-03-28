@@ -33,6 +33,10 @@ const InputElement = styled.input`
   color: ${colors.darkGrey};
   color: #333333;
 	padding: 20px;
+
+  :focus {
+    outline: #7662a5 auto 1px;
+  }
 `;
 
 const Label = styled.label`

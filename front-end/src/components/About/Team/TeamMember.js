@@ -32,8 +32,12 @@ const TeamMemberInfo = styled.div`
         text-align: center;
 
         img {
-            max-width: 310px;
+            max-width: 250px;
             border-radius: 20px 20px 0px 0px;
+
+            @media ${device.mobileM} {
+                max-width: 310px;
+            }
         }
 
         .member-info {

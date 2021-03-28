@@ -56,13 +56,20 @@ const PivotFeatures = () => {
 };
 
 const PivotFeatureSection = styled.div`
-    background-image: url('./media/images/Gradient.png');
+    /* background-image: url('./media/images/Gradient.png'); */
     /* background-size: cover; */
     background-repeat: no-repeat;
     background-position: center;
-    padding: 5rem 3rem;
+    padding: 2rem 2rem;
+    padding-bottom: 4rem;
 
     @media ${device.tablet} { 
+        padding: 12rem 2rem;
+    }
+
+    @media ${device.laptop} { 
+        background-image: url('./media/images/Gradient.png');
+        background-position: center;
         padding: 12rem 2rem;
     }
 
@@ -78,8 +85,12 @@ const PivotFeatureSection = styled.div`
 
         .feature {
             display: grid;
-            grid-gap: 3rem;
+            grid-gap: 2rem;
             align-items: center;
+
+            @media ${device.tablet} {
+                grid-gap: 3rem;
+            }
 
             &.feature-odd {
                 @media ${device.tablet} { 
@@ -114,28 +125,58 @@ const PivotFeatureSection = styled.div`
                 h2 {
                     margin: 0;
                     color: #707070;
-                    font-size: 30px;
-                    line-height: 36px;
+                    font-size: 20px;
+                    line-height: 30px;
                     max-width: 450px;
                     display: inline-block;
+
+                    @media ${device.tablet} { 
+                        font-size: 25px;
+                        line-height: 33px;
+                    }
+
+                    @media ${device.laptop} { 
+                        font-size: 30px;
+                        line-height: 36px;
+                    }
                 }
 
                 p {
-                    font-size: 18px;
-                    line-height: 30px;
+                    font-size: 14px;
+                    line-height: 22px;
                     color: #333333;
+                    margin-bottom: 0;
+
+                    @media ${device.tablet} { 
+                        font-size: 16px;
+                        line-height: 26px;
+                    }
+
+                    @media ${device.laptop} { 
+                        font-size: 18px;
+                        line-height: 30px;
+                    }
                 }
             }
 
             .feature-image {
-                max-width: 370px;
+                max-width: 250px;
                 margin: 0 auto;
                 object-fit: cover;
                 border-radius: 2rem;
                 order: 1;
 
+                @media ${device.mobileM} {
+                    max-width: 300px;
+                }
+
                 @media ${device.tablet} { 
                     order: unset;
+                    max-width: 255px;
+                }
+
+                @media ${device.laptop} {
+                    max-width: 370px;
                 }
             }
         }
