@@ -33,10 +33,14 @@ const SignUpContainer = styled.div`
 `;
 
 const SignUpContent = styled.div`
-    padding: 7rem 1rem;
+    padding: 3.5rem 2rem;
     max-width: 1500px;
     margin: 0 auto;
     color: #FFFFFF;
+
+    @media ${device.tablet} { 
+        padding: 7rem 2rem;
+    }
 
     .signup-text {
         display: flex;
@@ -49,9 +53,14 @@ const SignUpContent = styled.div`
         }
 
         .signup-para {
-            font-size: 26px;
-            line-height: 36px;
+            font-size: 14px;
+            line-height: 22px;
             margin-bottom: 4rem;
+
+            @media ${device.tablet} { 
+                font-size: 26px;
+                line-height: 36px;
+            }
 
             @media ${device.laptop} { 
                 max-width: 650px;
@@ -65,34 +74,49 @@ const SignUpContent = styled.div`
         }
 
         .secondary-btn {
-            width: 300px;
-            height: 70px;
+            width: 250px;
+            height: 60px;
             background-color: #FFFFFF;
             color: #707070;
             line-height: 24px;
             font-size: 20px;
             border-radius: 5px;   
             border: 4px solid #FBA76E;
+
+            @media ${device.tablet} { 
+                width: 300px;
+                height: 70px;
+            }
         }
     }
 `;
 
 const H2 = styled.h2`
-    font-size: 30px;
-    line-height: 24px;
-    font-weight: bold;
+    font-size: 20px;
+    line-height: 30px;
+    font-weight: 500;
     text-transform: uppercase;
     display: inline-block;
     position: relative;
+
+    @media ${device.tablet} { 
+        font-weight: bold;
+        font-size: 30px;
+        line-height: 30px;
+    }
 
     :after {
         content: "";
         position: absolute;
         border-top: 3px solid white;
-        top: 0;
-        width: 100px;
+        top: 11px;
+        width: 100%;
         left: 100%;
         margin-left: 2rem;
+
+        @media ${device.tablet} { 
+            width: 100px;
+        }
     }
 `;
 

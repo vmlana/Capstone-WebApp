@@ -11,9 +11,9 @@ export const lessons = [
 ];
 
 export const levels = [
-  { levelId: "B", level: "Beginner" },
-  { levelId: "I", level: "Intermediate" },
-  { levelId: "A", level: "Advanced" },
+  { levelId: "B", name: "Beginner" },
+  { levelId: "I", name: "Intermediate" },
+  { levelId: "A", name: "Advanced" },
 ];
 
 export const categories = [

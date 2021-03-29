@@ -22,7 +22,7 @@ const CompanyConfigHeader = (props) => {
     const [scroll, setScroll] = useState(false);
 
     const logoutHandler = () => {
-        (async()=>{
+        (async () => {
             await logout();
             dispatch(userLogout());
             props.history.replace(`/auth`);
@@ -56,6 +56,7 @@ const CompanyConfigHeader = (props) => {
                 <nav className='nav-menu'>
                     <div className='site-logo'>
                         <Link to="/"><img src='../media/images/pivotcare-logo.svg' /></Link>
+                        <h1>Pivot Care</h1>
                     </div>
                     <ul className='nav-menu-items'>
                         <li className="nav-item">
@@ -86,6 +87,7 @@ const CompanyConfigHeader = (props) => {
 
                             <div className='site-logo'>
                                 <Link to="/"><img src='../media/images/pivotcare-logo.svg' /></Link>
+                                <h1>Pivot Care</h1>
                             </div>
                             <Link to="#" className='hamburger-menu'>
                                 <FAIcons.FaBars onClick={showSidebar} />

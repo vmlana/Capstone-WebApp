@@ -11,7 +11,6 @@ const EditPlaylist = (props) => {
 
   return (
     <div style={styles.container}>
-      {/* Edit Playlist: {playlistData.playlistName} */}
       <CreateContentList
         type={"edit"}
         contentsType={"playlist"}
@@ -23,8 +22,8 @@ const EditPlaylist = (props) => {
 
 const styles = {
   container: {
-    width: "80%",
-    margin: "0 auto",
+    // width: "100%",
+    margin: "0 4rem",
   },
 };
 

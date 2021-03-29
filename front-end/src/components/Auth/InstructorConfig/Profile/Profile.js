@@ -13,6 +13,8 @@ import { device } from '../../../StyleComponent/responsiveDevice';
 
 import { apiUrl } from '../../../../services/apiUrl';
 
+import { customFetch } from '../../../../services/tokenApi';
+
 const Profile = () => {
 	const dispatch = useDispatch();
 	const [instructorInfo, setInstructorInfo] = useState({
@@ -89,8 +91,9 @@ const Profile = () => {
 	useEffect(async () => {
 
 		try {
-			const instructorData = await fetch(`${apiUrl}/instructor?instructorId=${authId}`).then(results => {
-				return results.json();
+			const instructorData = await customFetch(`${apiUrl}/instructor?instructorId=${authId}`).then(results => {
+				return results.body;
+				// return results.json();
 			}).catch(err => {
 				throw err;
 			})
@@ -354,6 +357,10 @@ const TextArea = styled.textarea`
 	color: #333333;
 	padding: 20px;
 	box-sizing: border-box;
+
+	:focus {
+		outline: #7662a5 auto 1px;
+	}
 `;
 
 const ButtonContainer = styled.div`
@@ -363,6 +370,18 @@ const ButtonContainer = styled.div`
 
 	@media ${device.laptop} {
 		text-align: left;
+	}
+
+	button {
+		width: 250px;
+		height: 50px;
+		margin: 0 auto;
+
+		@media ${device.tablet} {
+			margin: unset;
+			width: 300px;
+			height: 70px;
+		}
 	}
 `;
 
