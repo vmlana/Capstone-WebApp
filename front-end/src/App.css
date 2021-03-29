@@ -39,59 +39,85 @@
 } */
 
 @font-face {
-  font-family: 'Gotham';
-  src: local('Gotham'), url(./fonts/Gotham-Light.otf) format('opentype');
+  font-family: "Gotham";
+  src: local("Gotham"), url(./fonts/Gotham-Light.otf) format("opentype");
 }
 
 @font-face {
-  font-family: 'Gotham';
+  font-family: "Gotham";
   font-weight: 900;
-  src: local('Gotham'), url(./fonts/Gotham-Bold.otf) format('opentype');
+  src: local("Gotham"), url(./fonts/Gotham-Bold.otf) format("opentype");
 }
 
 @font-face {
-  font-family: 'Gotham';
+  font-family: "Gotham";
   font-weight: 900;
-  src: local('Gotham'), url(./fonts/Gotham-Black.otf) format('opentype');
+  src: local("Gotham"), url(./fonts/Gotham-Black.otf) format("opentype");
 }
 
 @font-face {
-  font-family: 'Gotham';
+  font-family: "Gotham";
   font-weight: 700;
-  src: local('Gotham'), url(./fonts/GothamMedium.ttf) format('truetype');
+  src: local("Gotham"), url(./fonts/GothamMedium.ttf) format("truetype");
 }
 
 @font-face {
-  font-family: 'Gotham';
+  font-family: "Gotham";
   font-weight: 600;
-  src: local('Gotham'), url(./fonts/GothamMedium_1.ttf) format('truetype');
+  src: local("Gotham"), url(./fonts/GothamMedium_1.ttf) format("truetype");
 }
 
 @font-face {
-  font-family: 'GothamRoundedBold';
-  src: local('GothamRoundedBold'), url(./fonts/GothamRoundedBold_21016.ttf) format('truetype');
+  font-family: "GothamRoundedBold";
+  src: local("GothamRoundedBold"),
+    url(./fonts/GothamRoundedBold_21016.ttf) format("truetype");
 }
 
 @font-face {
-  font-family: 'GothamRoundedMedium';
-  src: local('GothamRoundedMedium'), url(./fonts/GothamRoundedMedium_21022.ttf) format('truetype');
+  font-family: "GothamRoundedMedium";
+  src: local("GothamRoundedMedium"),
+    url(./fonts/GothamRoundedMedium_21022.ttf) format("truetype");
 }
 
 @font-face {
-  font-family: 'GothamRoundedNormal';
-  src: local('GothamRoundedNormal'), url(./fonts/GothamRoundedBook_21018.ttf) format('truetype');
+  font-family: "GothamRoundedNormal";
+  src: local("GothamRoundedNormal"),
+    url(./fonts/GothamRoundedBook_21018.ttf) format("truetype");
 }
 
 @font-face {
-  font-family: 'GothamRoundedLight';
-  src: local('GothamRoundedLight'), url(./fonts/GothamRoundedLight_21020.ttf) format('truetype');
+  font-family: "GothamRoundedLight";
+  src: local("GothamRoundedLight"),
+    url(./fonts/GothamRoundedLight_21020.ttf) format("truetype");
 }
 
 html {
-  font-family: 'Gotham';
+  font-family: "Gotham";
   line-height: 1.2;
 }
 
 li {
   line-height: initial;
 }
+
+h1,
+h2,
+h3,
+h4 {
+
+   font-family: 'GothamRoundedMedium';
+}
+
+/* Material UI Style Customizing */
+.MuiOutlinedInput-input {
+  padding: 10px 7px !important;
+}
+
+
+
+textarea:focus,
+input:focus,
+select:focus {
+  outline: #7662a5 auto 1px !important;
+}
+

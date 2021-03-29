@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Modal, Backdrop, Slide, makeStyles } from "@material-ui/core";
 import InputWithLabel from "../ReusableElement/InputWithLabel";
-import * as FAIcons from "react-icons/fa";
+import { ImCancelCircle } from "react-icons/im";
 
 import { lessons } from "../../demoData";
 
@@ -40,15 +40,15 @@ const ContentListModal = ({
 
     type === "playlist"
       ? checkedList.map((lesson) =>
-        lesson.lessonId == e.target.alt
-          ? (lesson.isChecked = checked)
-          : lesson
-      )
+          lesson.lessonId == e.target.alt
+            ? (lesson.isChecked = checked)
+            : lesson
+        )
       : checkedList.map((playlist) =>
-        playlist.playlistId == e.target.alt
-          ? (playlist.isChecked = checked)
-          : playlist
-      );
+          playlist.playlistId == e.target.alt
+            ? (playlist.isChecked = checked)
+            : playlist
+        );
 
     if (checked === false) {
       renewData(checkedList, e.target.alt);
@@ -111,40 +111,44 @@ const ContentListModal = ({
         <Slide in={open}>
           <ModalContent>
             <ReactIcon>
-              <FAIcons.FaTimesCircle
+              <ImCancelCircle
                 onClick={close}
                 style={{ cursor: "pointer" }}
-                size={40}
+                size={20}
               />
             </ReactIcon>
 
-            {type === "playlist" ? <h1>VIDEOS</h1> : <h1>PLAYLISTS</h1>}
+            {type === "playlist" ? (
+              <h1>AVAILABLE VIDEOS</h1>
+            ) : (
+              <h1>AVAILABLE PLAYLISTS</h1>
+            )}
 
             <ContentList>
               {newLessonArr
                 ? type === "playlist"
                   ? newLessonArr.map((video, index) => (
-                    <ContentImageTitle
-                      img={video.imageFile}
-                      title={video.lessonName}
-                      id={video.lessonId}
-                      onClick={handleCheckedElement}
-                      checked={video.isChecked}
-                      key={index}
-                      index={index}
-                    />
-                  ))
+                      <ContentImageTitle
+                        img={video.imageFile}
+                        title={video.lessonName}
+                        id={video.lessonId}
+                        onClick={handleCheckedElement}
+                        checked={video.isChecked}
+                        key={index}
+                        index={index}
+                      />
+                    ))
                   : newLessonArr.map((playlist, index) => (
-                    <ContentImageTitle
-                      img={playlist.imageFile}
-                      title={playlist.playlistName}
-                      id={playlist.playlistId}
-                      onClick={handleCheckedElement}
-                      checked={playlist.isChecked}
-                      key={index}
-                      index={index}
-                    />
-                  ))
+                      <ContentImageTitle
+                        img={playlist.imageFile}
+                        title={playlist.playlistName}
+                        id={playlist.playlistId}
+                        onClick={handleCheckedElement}
+                        checked={playlist.isChecked}
+                        key={index}
+                        index={index}
+                      />
+                    ))
                 : null}
             </ContentList>
           </ModalContent>

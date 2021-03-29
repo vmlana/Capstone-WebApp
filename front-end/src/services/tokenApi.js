@@ -21,7 +21,7 @@ const fetchJSONWithToken = async (url, options = {}) => {
   if (!storedTokens) {
       return;
   }
-  const { accessToken, refreshToken, refreshExpiresIn } = JSON.parse(storedTokens);  
+  const { accessToken, accessExpiresIn, refreshToken, refreshExpiresIn } = JSON.parse(storedTokens);  
 
   let optionsWithToken = options;
   if (accessToken != null) {
@@ -31,6 +31,7 @@ const fetchJSONWithToken = async (url, options = {}) => {
         // "refresh-token": "no", // Test code
         "access-token": `${accessToken}`,
         "refresh-token": `${refreshToken}`,
+        "access-expiration-date": `${accessExpiresIn}`,
         "refresh-expiration-date": `${refreshExpiresIn}`  
       }
     })

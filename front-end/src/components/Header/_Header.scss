@@ -12,6 +12,22 @@
 // }
 
 header {
+    .site-logo {
+        display: grid;
+        grid-template-columns: 60px 1fr;
+        grid-gap: 0.5rem;
+
+        h1 {
+            font-size: 1.2rem;
+            font-family: 'GothamRoundedNormal';
+            font-weight: normal;
+            line-height: 0;
+            margin: 0;
+            padding: 0;
+            align-self: center;
+        }
+    }
+
     .site-logo a {
         img {
             max-width: 60px;
@@ -27,7 +43,7 @@ header {
         .navbar {
             background-color: $white;
             display: grid;
-            grid-template-columns: 60px auto;
+            grid-template-columns: 200px auto;
             justify-content: space-between;
             align-items: center;
             padding: 1rem 1.5rem;
@@ -132,7 +148,7 @@ header {
 
             @include mq-medium {
                 display: grid;
-                grid-template-columns: 100px auto;
+                grid-template-columns: 200px auto;
                 align-items: center;
             }
 

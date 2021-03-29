@@ -21,7 +21,7 @@ const InstructorConfigHeader = (props) => {
     const updateWindowWidth = () => setWindowWidth(window.innerWidth);
 
     const logoutHandler = () => {
-        (async()=>{
+        (async () => {
             await logout();
             dispatch(userLogout());
             props.history.replace(`/auth`);
@@ -56,6 +56,7 @@ const InstructorConfigHeader = (props) => {
                 <nav className='nav-menu'>
                     <div className='site-logo'>
                         <Link to="/"><img src={`${BASE_URL}/media/images/pivotcare-logo.svg`} /></Link>
+                        <h1>Pivot Care</h1>
                     </div>
                     <ul className='nav-menu-items'>
                         <li className="nav-item">
@@ -90,6 +91,7 @@ const InstructorConfigHeader = (props) => {
 
                             <div className='site-logo'>
                                 <Link to="/"><img src={`${BASE_URL}/media/images/pivotcare-logo.svg`} /></Link>
+                                <h1>Pivot Care</h1>
                             </div>
                             <Link to="#" className='hamburger-menu'>
                                 <FAIcons.FaBars onClick={showSidebar} />
