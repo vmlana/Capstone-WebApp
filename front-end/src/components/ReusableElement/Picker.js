@@ -43,8 +43,6 @@ const Picker = ({ label, option, onChange, exValue, purpose, type }) => {
     }
   }, []);
 
-  console.log("dept options", option);
-
   return (
     <FormControl className={classes.formControl}>
       <InputLabel shrink id="demo-simple-select-placeholder-label-label">
@@ -62,8 +60,8 @@ const Picker = ({ label, option, onChange, exValue, purpose, type }) => {
         >
           {option
             ? option.map((item, key) => (
-                <MenuItem key={key} value={item.level}>
-                  {item.level}
+                <MenuItem key={key} value={item.name}>
+                  {item.name}
                 </MenuItem>
               ))
             : null}
@@ -85,6 +83,23 @@ const Picker = ({ label, option, onChange, exValue, purpose, type }) => {
             : null}
         </Select>
       ) : label === "" ? (
+        <Select
+          labelId="demo-simple-select-placeholder-label-label"
+          id="demo-simple-select-placeholder-label"
+          value={value}
+          onChange={handleChange}
+          displayEmpty
+          className={classes.selectEmpty}
+        >
+          {option
+            ? option.map((item, key) => (
+                <MenuItem key={key} value={item.name}>
+                  {item.name}
+                </MenuItem>
+              ))
+            : null}
+        </Select>
+      ) : type === "level" ? (
         <Select
           labelId="demo-simple-select-placeholder-label-label"
           id="demo-simple-select-placeholder-label"

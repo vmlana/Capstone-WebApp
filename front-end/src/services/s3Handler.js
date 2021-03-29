@@ -1,4 +1,5 @@
 import { apiUrl } from './apiUrl';
+import { customFetch } from './tokenApi';
 
 export const s3UploadHandler = async (file, token) => {
 
@@ -16,7 +17,7 @@ export const s3UploadHandler = async (file, token) => {
 
 	// console.log(fileType);
 
-	await fetch(`${apiUrl}/s3storage`,
+	await customFetch(`${apiUrl}/s3storage`,
 		{
 			method: "POST",
 			mode: 'cors',
@@ -26,7 +27,8 @@ export const s3UploadHandler = async (file, token) => {
 			body: JSON.stringify({ fileName: fileName, fileType: fileType }),
 		}
 	).then(response => {
-		return response.json();
+		return response.body;
+		// return response.json();
 	}).then(response => {
 		returnData = response.data.returnData;
 		signedRequest = returnData.signedRequest;
@@ -73,7 +75,7 @@ export const s3UploadHandlerListeningProgress = async (file, token, progressCall
 	// console.log(fileType);
 
 	try {
-		await fetch(`${apiUrl}/s3storage`,
+		await customFetch(`${apiUrl}/s3storage`,
 			{
 				method: "POST",
 				mode: 'cors',
@@ -83,7 +85,8 @@ export const s3UploadHandlerListeningProgress = async (file, token, progressCall
 				body: JSON.stringify({ fileName: fileName, fileType: fileType }),
 			}
 		).then(response => {
-			return response.json();
+			return response.body;
+			// return response.json();
 		}).then(response => {
 			returnData = response.data.returnData;
 			signedRequest = returnData.signedRequest;
@@ -127,7 +130,7 @@ export const s3UploadHandlerListeningProgress = async (file, token, progressCall
 
 export const s3DeleteHandler = async (filePath, token) => {
 
-	const result = await fetch(`${apiUrl}/s3storage`,
+	const result = await customFetch(`${apiUrl}/s3storage`,
 		{
 			method: "DELETE",
 			headers: {
@@ -136,7 +139,8 @@ export const s3DeleteHandler = async (filePath, token) => {
 			body: JSON.stringify({ filePath }),
 		})
 		.then(response => {
-			return response.json();
+			return response.body;
+			// return response.json();
 		})
 		.catch(error => {
 			alert(JSON.stringify(error));

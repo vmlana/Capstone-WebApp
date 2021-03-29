@@ -199,6 +199,8 @@ const CreateContentList = ({ contentsType, type, data }) => {
       ? deptArr.filter((item, index) => deptArr.indexOf(item) === index)
       : null;
 
+  console.log(selectedData);
+
   return (
     <ContentListContainer>
       {contentType === "playlist" ? (
@@ -255,7 +257,7 @@ const CreateContentList = ({ contentsType, type, data }) => {
           )}
           <div>
             <p>Filter</p>
-            <div style={styles.picker}>
+            <FilterContainer>
               {catLists.length > 0 ? (
                 <Picker
                   label={"Category"}
@@ -285,7 +287,7 @@ const CreateContentList = ({ contentsType, type, data }) => {
                   onClick={handleOpen}
                 />
               )}
-            </div>
+            </FilterContainer>
           </div>
 
           {searchResults !== undefined ? (
@@ -309,19 +311,71 @@ const CreateContentList = ({ contentsType, type, data }) => {
                 : contentType === "playlist"
                 ? selectedData.map((data) => (
                     <div style={styles.addedContentList}>
-                      <div>
-                        <img src={data.imageFile} alt={data.lessonName} />
-                      </div>
+                      <ImageWrapper>
+                        <img
+                          src={data.imageFile}
+                          alt={data.lessonName}
+                          style={{
+                            borderRadius: "3px",
+                          }}
+                        />
+                      </ImageWrapper>
                       <span>{data.lessonName}</span>
                     </div>
                   ))
                 : selectedData.map((data) => (
                     <div style={styles.addedContentList}>
                       {/* {console.log('Latest: ', data)} */}
-                      <div>
-                        <img src={data.imageFile} alt={data.playlistName} />
+                      <ImageWrapper>
+                        <img
+                          src={data.imageFile}
+                          alt={data.playlistName}
+                          style={{
+                            borderRadius: "3px",
+                          }}
+                        />
+                      </ImageWrapper>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <span
+                          style={{
+                            fontWeight: "bold",
+                            fontSize: 12,
+                            color: "black",
+                          }}
+                        >
+                          {data.playlistName}
+                        </span>
+                        <span
+                          style={{
+                            fontSize: 12,
+                          }}
+                        >
+                          {data.lessons.length}
+                        </span>
                       </div>
-                      <span>{data.playlistName}</span>
+                      <span
+                        style={{
+                          display: "block",
+                          fontSize: 12,
+                          fontStyle: "italic",
+                          margin: "3px 0 3px",
+                        }}
+                      >
+                        {data.instructorName}
+                      </span>
+                      <span
+                        style={{
+                          display: "block",
+                          fontSize: 12,
+                        }}
+                      >
+                        {data.playlistLevel}
+                      </span>
                     </div>
                   ))}
             </div>
@@ -385,7 +439,7 @@ const CreateContentList = ({ contentsType, type, data }) => {
                 label={"Period Availble from"}
               />
               <DatePicker id={"avialable-to"} label={"to"} />
-              <div>
+              <div style={{ alignSelf: "end" }}>
                 <TextField
                   style={styles.freq}
                   label="Frequency"
@@ -405,10 +459,26 @@ const CreateContentList = ({ contentsType, type, data }) => {
             </div>
             <p>Target Departments</p>
             <Picker label={""} option={depts} onChange={addDeptData} />
-            <div>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-start",
+              }}
+            >
               {filteredDeptArr !== null
                 ? filteredDeptArr.map((dept, index) => (
-                    <div key={index}>
+                    <div
+                      key={index}
+                      style={{
+                        backgroundColor: "rgba(118, 98, 165, .8)",
+                        borderRadius: 30,
+                        padding: "5px 10px",
+                        width: "auto",
+                        marginBottom: "10px",
+                        color: "white",
+                      }}
+                    >
                       <span style={{ marginRight: "1rem" }}>{dept}</span>
                       <span
                         style={{ cursor: "pointer" }}
@@ -431,14 +501,16 @@ const styles = {
   biggerContainer: {
     display: "grid",
     gridTemplateColumns: "1fr 1fr",
+    gridColumnGap: "10rem",
   },
   contentList: {
     display: "grid",
     gridTemplateColumns: "repeat(3, 1fr)",
-    gap: "1rem",
+    gridColumnGap: "3rem",
+    gridRowGap: "3rem",
     border: ".5px solid gray",
     minHeight: "300px",
-    padding: "1rem",
+    padding: "1.5rem",
     overFlow: "hidden",
   },
   addedContentList: {
@@ -449,9 +521,11 @@ const styles = {
     borderRadius: "6px",
   },
   picker: {
-    display: "flex",
-    justifyContent: "flex-start",
-    alignItems: "center",
+    // display: "flex",
+    // justifyContent: "flex-start",
+    // alignItems: "center",
+    display: "grid",
+    gridTemplateColumns: "1fr .7fr 1fr",
   },
   descContainer: {
     justifySelf: "center",
@@ -461,6 +535,10 @@ const styles = {
     gridTemplateColumns: "repeat(3, 1fr)",
     alignItems: "center",
     gridGap: "1rem",
+
+    // display: "flex",
+    // justifyContent: "space-between",
+    // aligneItems: "center",
   },
   actionBtns: {
     display: "flex",
@@ -509,6 +587,15 @@ const ContentListContainer = styled.div`
     padding: 0;
     padding-top: 16px;
   }
+`;
+
+const FilterContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 0.7fr 1fr;
+`;
+
+const ImageWrapper = styled.div`
+  border-radius: 3px;
 `;
 
 export default CreateContentList;

@@ -25,8 +25,7 @@ const EditProgram = (props) => {
 
 const styles = {
   container: {
-    width: "80%",
-    margin: "0 auto",
+    margin: "0 4rem",
   },
 };
 

@@ -25,8 +25,13 @@ const styles = {
   },
   icon: {
     position: "absolute",
-    top: 1,
-    right: 1,
+    top: 5,
+    right: 10,
+  },
+  checkbox: {
+    width: "20px",
+    height: "20px",
+    border: "1px solid gray",
   },
 };
 
@@ -39,7 +44,6 @@ const days = [
   { day: "Friday", selected: false },
   { day: "Saturday", selected: false },
 ];
-// const daysArr2 = ["Thursday", "Friday", "Saturday"];
 
 const DateList = () => {
   const classes = useStyles();
@@ -74,9 +78,10 @@ const DateList = () => {
                 style={{ borderRight: "1px solid gray" }}
               >
                 {item.selected ? (
-                  <Icon.AiOutlineCheck size={40} style={styles.icon} />
+                  <Icon.AiOutlineCheck size={30} style={styles.icon} />
                 ) : null}
                 <ListItemText primary={item.day} />
+                <div style={styles.checkbox}></div>
               </ListItem>
             </div>
           ) : (
@@ -88,9 +93,10 @@ const DateList = () => {
                 style={{ borderRight: "1px solid gray" }}
               >
                 {item.selected ? (
-                  <Icon.AiOutlineCheck size={40} style={styles.icon} />
+                  <Icon.AiOutlineCheck size={30} style={styles.icon} />
                 ) : null}
                 <ListItemText primary={item.day} />
+                <div style={styles.checkbox}></div>
               </ListItem>
             </div>
           )
@@ -98,9 +104,10 @@ const DateList = () => {
           <div>
             <ListItem divider key={index} onClick={() => dateClicked(item.day)}>
               {item.selected ? (
-                <Icon.AiOutlineCheck size={40} style={styles.icon} />
+                <Icon.AiOutlineCheck size={30} style={styles.icon} />
               ) : null}
               <ListItemText primary={item.day} />
+              <div style={styles.checkbox}></div>
             </ListItem>
           </div>
         )
