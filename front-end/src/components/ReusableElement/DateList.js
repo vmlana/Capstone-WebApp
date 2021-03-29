@@ -44,7 +44,6 @@ const days = [
   { day: "Friday", selected: false },
   { day: "Saturday", selected: false },
 ];
-// const daysArr2 = ["Thursday", "Friday", "Saturday"];
 
 const DateList = () => {
   const classes = useStyles();
