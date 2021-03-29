@@ -85,7 +85,7 @@ const FeatureText = styled.div`
     margin: 0 auto;
 
     @media ${device.tablet} { 
-        max-width: 315px;
+        max-width: 300px;
     }
 `;
 
@@ -113,6 +113,7 @@ const H4 = styled.h4`
     color: #707070;
     font-size: 14px;
     line-height: 16px;
+    font-family: 'GothamRoundedLight';
 
     @media ${device.tablet} {
         font-weight: 300;

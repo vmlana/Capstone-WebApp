@@ -20,22 +20,28 @@ import { colors } from '../StyleComponent/colors';
 
 
 const buttonStyle = {
-  width: "100%",
-  height: "auto",
-  fontFamily: 'GothamRoundedLight'
+  width: "250px",
+  height: "50px",
+  fontFamily: 'GothamRoundedLight',
+  fontSize: "20px",
+  lineHeight: "24px"
 }
 
 const buttonStyleLaptop = {
-  width: "50%",
-  height: "auto",
+  width: "270px",
+  height: "55px",
   padding: "1rem",
-  fontFamily: 'GothamRoundedMedium'
+  fontFamily: 'GothamRoundedLight',
+  fontSize: "20px",
+  lineHeight: "24px"
 }
 
 const buttonBackToHome = {
   width: "220px",
   height: "auto",
-  fontSize: "18px",
+  fontFamily: 'GothamRoundedLight',
+  fontSize: "20px",
+  lineHeight: "24px",
   padding: ".75rem"
 }
 
@@ -122,25 +128,25 @@ const Contact = () => {
     window.addEventListener("resize", displaySizeListener);
 
     return () => {
-        window.removeEventListener("resize", displaySizeListener);
+      window.removeEventListener("resize", displaySizeListener);
     };
   }, []);
 
   return (
     <BackImageWrapperDiv>
-    <ContactPageContainer>
-      <ImageWrapperDiv>
-        <Image src={contactImage} alt={"contact"} style={{ display: "flex" }} />
-      </ImageWrapperDiv>
+      <ContactPageContainer>
+        <ImageWrapperDiv>
+          <Image src={contactImage} alt={"contact"} style={{ display: "flex" }} />
+        </ImageWrapperDiv>
         {
           !status.info.error && !status.info.msg ?
-          <FormDiv>
-            <ContactHeader>
-              We'd love to hear from you.
+            <FormDiv>
+              <ContactHeader>
+                We'd love to hear from you.
             </ContactHeader>
-            <ContactP>Our team is ready to answer all your questions.</ContactP>
-            <Form onSubmit={handleOnSubmit}>
-              {/* <label htmlFor="name" style={{ textAlign: "left" }}>
+              <ContactP>Our team is ready to answer all your questions.</ContactP>
+              <Form onSubmit={handleOnSubmit}>
+                {/* <label htmlFor="name" style={{ textAlign: "left" }}>
                 Name
               </label>
               <Input
@@ -151,25 +157,25 @@ const Contact = () => {
                 required
                 value={inputs.name}
               /> */}
-              <InputWithLabel
+                <InputWithLabel
                   label="Name *"
                   type="text"
                   name="name"
                   value={inputs.name}
                   required
                   onChange={handleOnChange}
-                  labelTextStyle={{margin: 0}}
-              />
-              <InputWithLabel
+                  labelTextStyle={{ margin: 0 }}
+                />
+                <InputWithLabel
                   label="Email *"
                   type="email"
                   name="_replyto"
                   value={inputs.email}
                   required
                   onChange={handleOnChange}
-                  labelTextStyle={{margin: 0}}
-              />
-              {/* <label htmlFor="email" style={{ textAlign: "left" }}>
+                  labelTextStyle={{ margin: 0 }}
+                />
+                {/* <label htmlFor="email" style={{ textAlign: "left" }}>
                 Email
               </label>
               <Input
@@ -180,72 +186,79 @@ const Contact = () => {
                 required
                 value={inputs.email}
               /> */}
-              <MessageLabel>
-                <LabelText>Message *</LabelText>
-                <TextArea
-                  name="message"
-                  onChange={handleOnChange}
-                  required
-                  value={inputs.message}
-                  rows="5"
-                />
-              </MessageLabel>
-              <Button
-                type="submit"
-                disabled={status.submitting}
-                text={"Submit"}
-                style={
-                  windowWidth < 1024 ? buttonStyle : buttonStyleLaptop}
-                onClick={()=>{}}
-              >
-                {!status.submitting
-                  ? !status.submitted
-                    ? "Submit"
-                    : "Submitted"
-                  : "Submitting..."}
-              </Button>
-            </Form>
-          </FormDiv>
-          :null
+                <MessageLabel>
+                  <LabelText>Message *</LabelText>
+                  <TextArea
+                    name="message"
+                    onChange={handleOnChange}
+                    required
+                    value={inputs.message}
+                    rows="5"
+                  />
+                </MessageLabel>
+                <div className="btnContainer">
+                  <Button
+                    type="submit"
+                    disabled={status.submitting}
+                    text={"Submit"}
+                    style={
+                      windowWidth < 1024 ? buttonStyle : buttonStyleLaptop}
+                    onClick={() => { }}
+                  >
+                    {!status.submitting
+                      ? !status.submitted
+                        ? "Submit"
+                        : "Submitted"
+                      : "Submitting..."}
+                  </Button>
+                </div>
+              </Form>
+            </FormDiv>
+            : null
         }
         {status.info.error && (
           <div className="error">Error: {status.info.msg}</div>
         )}
         {!status.info.error && status.info.msg ?
-        (
-          <ThankYouMessageDiv>
-            <ContactHeader style={{textTransform: "uppercase"}}>Thank you</ContactHeader>
-            <ThankYouMessageP>{status.info.msg}</ThankYouMessageP>
-            <Link to="/">
-              <Button
+          (
+            <ThankYouMessageDiv>
+              <ContactHeader style={{ textTransform: "uppercase" }}>Thank you</ContactHeader>
+              <ThankYouMessageP>{status.info.msg}</ThankYouMessageP>
+              <Link to="/">
+                <Button
                   text={"Back To Home"}
                   style={buttonBackToHome}
-                  onClick={()=>{}}
+                  onClick={() => { }}
                 >
-              </Button>
-            </Link>
-          </ThankYouMessageDiv>
-        )
-        : null
+                </Button>
+              </Link>
+            </ThankYouMessageDiv>
+          )
+          : null
         }
-    </ContactPageContainer>
+      </ContactPageContainer>
     </BackImageWrapperDiv>
   );
 };
 
 const BackImageWrapperDiv = styled.div`
+
+  min-height: 85vh;
+
   @media ${device.laptop} {
     background-image: url(${backImage});
     background-repeat: no-repeat;
     background-size: 100%;
     background-position: center bottom;
+    padding: 4rem 0 10rem;
+    min-height: unset
   }
 `;
 
 const ContactPageContainer = styled.div`
   height: 100%;
   margin: 3rem auto;
-  padding: 0 3rem;
+  padding: 0 2rem;
   /* @media ${device.mobileM} {
     padding: 0 2rem;
   } */
@@ -253,9 +266,9 @@ const ContactPageContainer = styled.div`
     padding: 0 3rem;
   } */
   @media ${device.laptop} {
-    margin: 7rem 0 10rem;
-    padding: 0 5rem;
-    max-width: 1500px;
+    /* margin: 7rem 0 10rem;
+    padding: 0 5rem; */
+    max-width: 1300px;
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-gap: 5rem;
@@ -270,15 +283,20 @@ const ContactPageContainer = styled.div`
 const ContactHeader = styled.h3`
   font-family: 'GothamRoundedLight', sans-serif;
   text-align: center;
-  font-size: 1.5rem;
+  font-size: 30px;
+  line-height: 37px;
   padding: 0 1rem;
   color: ${colors.darkGrey};
   text-transform: capitalize;
+
   @media ${device.laptop} {
     font-family: 'GothamRoundedMedium', sans-serif;
     text-align: left;
     padding: 0;
     margin: 0;
+    text-transform: uppercase;
+    font-size: 30px;
+    line-height: 42px;
   }
 `;
 
@@ -287,7 +305,9 @@ const ContactP = styled.p`
   color: ${colors.darkGrey};
   text-align: center;
   margin: 2rem 0;
-  line-height: 1.5;
+  font-size: 19px;
+  line-height: 25px;
+
   @media ${device.laptop} {
     text-align: left;
     margin-top: 0;
@@ -312,10 +332,21 @@ const FormDiv = styled.div`
 const Form = styled.form`
   display: flex;
   flex-flow: column;
+
+  button {
+    margin: 0 auto;
+    font-family: 'GothamRoundedLight';
+    font-size: "20px";
+    line-height: "24px";
+
+    @media ${device.tablet} {
+      margin: unset
+    }
+  }
 `;
 
 const Input = styled.input`
-  bordr: none;
+  border: none;
   border: solid 1px #ccc;
   border-radius: 5px;
   margin: 0.3rem 0 2rem;
@@ -347,14 +378,24 @@ const TextArea = styled.textarea`
 `;
 
 const ThankYouMessageDiv = styled.div`
-  margin: 5rem;
+  margin: 5rem 3rem;
   text-align: center;
   @media ${device.laptop} {
     text-align: left;
     margin: 0;
-    margin-left: 5rem;
     align-self: center;
-    justify-self: flex-end;
+    justify-self: center;
+  }
+
+  button {
+    margin: 0 auto;
+    font-family: 'GothamRoundedLight';
+    font-size: "20px";
+    line-height: "24px";
+
+    @media ${device.laptop} {
+      margin: unset;
+    }
   }
 `
 

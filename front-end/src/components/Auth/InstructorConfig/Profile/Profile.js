@@ -354,6 +354,10 @@ const TextArea = styled.textarea`
 	color: #333333;
 	padding: 20px;
 	box-sizing: border-box;
+
+	:focus {
+		outline: #7662a5 auto 1px;
+	}
 `;
 
 const ButtonContainer = styled.div`
@@ -363,6 +367,18 @@ const ButtonContainer = styled.div`
 
 	@media ${device.laptop} {
 		text-align: left;
+	}
+
+	button {
+		width: 250px;
+		height: 50px;
+		margin: 0 auto;
+
+		@media ${device.tablet} {
+			margin: unset;
+			width: 300px;
+			height: 70px;
+		}
 	}
 `;
 

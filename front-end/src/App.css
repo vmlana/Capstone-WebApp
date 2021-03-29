@@ -104,10 +104,20 @@ h1,
 h2,
 h3,
 h4 {
-  font-family: "Gotham Rounded";
+
+   font-family: 'GothamRoundedMedium';
 }
 
 /* Material UI Style Customizing */
 .MuiOutlinedInput-input {
   padding: 10px 7px !important;
 }
+
+
+
+textarea:focus,
+input:focus,
+select:focus {
+  outline: #7662a5 auto 1px !important;
+}
+
