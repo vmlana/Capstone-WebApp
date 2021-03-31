@@ -14,7 +14,7 @@ const Team = () => {
             </div>
 
             <div className="team-member-section">
-                <div class="team-info team-info-one">
+                <div className="team-info team-info-one">
                     <TeamMember memberImage="./media/images/Vini.jpg" memberName="Vinicius Meyer Lana" memberAdditionalRole="Project Manager" memberRole="Backend Developer" linkedIn="https://www.linkedin.com/in/vmlana" gitHub="https://github.com/vmlana" behance="" borderColor="#624A99" />
                     <TeamMember memberImage="./media/images/Hardik.jpg" memberName="Hardikkumar Vasoya" memberAdditionalRole="Dev Lead" memberRole="Full Stack Developer" linkedIn="https://www.linkedin.com/in/hjvasoya/" gitHub="https://github.com/hjvasoya009" behance="" borderColor="#4F99CE" />
                     <TeamMember memberImage="./media/images/Hiteshri.jpg" memberName="Hiteshri Nanda" memberAdditionalRole="Design Lead" memberRole="UI/UX Designer" linkedIn="https://www.linkedin.com/in/hiteshri-nanda/" gitHub="" behance=" https://www.behance.net/hiteshri" borderColor="#FF9D5A" />
