@@ -13,7 +13,7 @@ import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 
-import { levels, categories, depts } from "../../demoData";
+import { levels, categories, depts, surveys } from "../../demoData";
 import {
   getCategories,
   getPlaylistsByCategoryId,
@@ -41,12 +41,13 @@ const CreateContentList = ({ contentsType, type, data }) => {
   const [filteredData, setFilteredData] = useState([]);
   const [finalData, setFinalData] = useState([]);
   const [contentType, setContentType] = useState("");
+  const [survey, setSurvey] = useState("Program 1 Survey - Program Evaluation");
 
   const history = useHistory();
   const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.user.userInfo);
   const { authId } = userInfo;
-  console.log("instructorId", authId);
+  //   console.log("instructorId", authId);
 
   // console.log(deptArr);
 
@@ -121,6 +122,10 @@ const CreateContentList = ({ contentsType, type, data }) => {
     setLevelSet(val);
   };
 
+  const onSurveyChange = (val) => {
+    setSurvey(val);
+  };
+
   const sendDataToServer = () => {
     const dataToSend = {
       ...data,
@@ -133,11 +138,6 @@ const CreateContentList = ({ contentsType, type, data }) => {
       active: 1,
     };
 
-    // if (contentType === "edit") {
-    //   createPlaylist(dataToSend);
-    //   console.log("datatisend", dataToSend);
-    // }
-    // console.log("called");
     createPlaylist(dataToSend);
   };
 
@@ -490,6 +490,13 @@ const CreateContentList = ({ contentsType, type, data }) => {
                   ))
                 : null}
             </div>
+            <p style={{ marginTop: "2rem" }}>Survey</p>
+            <Picker
+              label={"Survey Name - Survey Type"}
+              option={surveys}
+              type={"survey"}
+              onChange={onSurveyChange}
+            />
           </div>
         )}
       </div>
