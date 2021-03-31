@@ -138,11 +138,6 @@ const CreateContentList = ({ contentsType, type, data }) => {
       active: 1,
     };
 
-    // if (contentType === "edit") {
-    //   createPlaylist(dataToSend);
-    //   console.log("datatisend", dataToSend);
-    // }
-    // console.log("called");
     createPlaylist(dataToSend);
   };
 
