@@ -27,3 +27,7 @@ export const depts = [
   { deptId: 2, name: "Adm(Desk)" },
   { deptId: 3, name: "IT(Typing)" },
 ];
+
+export const surveys = [
+  { surveyId: 1, name: "Program 1 Survey - Program Evaluation" },
+];

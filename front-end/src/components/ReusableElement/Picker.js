@@ -31,7 +31,6 @@ const Picker = ({ label, option, onChange, exValue, purpose, type }) => {
       setValue(event.target.value);
     }
 
-    console.log("dept", event.target.value);
     onChange(event.target.value);
   };
 
@@ -107,6 +106,22 @@ const Picker = ({ label, option, onChange, exValue, purpose, type }) => {
           onChange={handleChange}
           displayEmpty
           className={classes.selectEmpty}
+        >
+          {option
+            ? option.map((item, key) => (
+                <MenuItem key={key} value={item.name}>
+                  {item.name}
+                </MenuItem>
+              ))
+            : null}
+        </Select>
+      ) : type === "survey" ? (
+        <Select
+          labelId="demo-simple-select-placeholder-label-label"
+          id="demo-simple-select-placeholder-label"
+          value={"Program 1 Survey - Program Evaluation"}
+          className={classes.selectEmpty}
+          onChange={handleChange}
         >
           {option
             ? option.map((item, key) => (
