@@ -157,9 +157,11 @@ const Signup = (props) => {
                 </ButtonDiv>
                 <LinkToSignupText>
                     Already have an account?&nbsp;
-                        <Link to="/auth">
-                        <UnderlineSpan>Sign in</UnderlineSpan>
-                    </Link>
+                        <div style={{ display: "inline-block" }} onClick={() => {
+                            history.push("/auth")
+                        }}>
+                            <UnderlineSpan>Sign in</UnderlineSpan>
+                        </div>
                     &nbsp;here
                 </LinkToSignupText>
             </Form>
@@ -256,11 +258,13 @@ const RadioButton = styled.input`
     }
 
     :checked:after {
-        width: 15px;
-        height: 15px;
-        border-radius: 15px;
-        top: -2px;
-        left: -1px;
+        width: 16.5px;
+        height: 16.5px;
+        border-radius: 16.5px;
+        /* top: -2px;
+        left: -1px; */
+        top: 0px;
+        left: -2px;
         position: relative;
         background-color: ${colors.UIViolet};
         
