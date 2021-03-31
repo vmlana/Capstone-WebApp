@@ -18,8 +18,6 @@ const VideoTrailer = () => {
 
     const isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || (typeof safari !== 'undefined' && window['safari'].pushNotification));
 
-    console.log(isSafari);
-
     const playVideo = () => {
 
         if (isAutoPlay) {
@@ -60,7 +58,7 @@ const VideoTrailer = () => {
                 {isSafari ?
                     <video id="responsive-video" controls controlsList="nodownload" muted autoPlay playsInline loop className="responsive-video" src="https://pivotcare-s3.s3-us-west-2.amazonaws.com/videos/promotion_video_low.mp4" type="video/mp4" poster='' />
                     :
-                    <video id="responsive-video" controlsList="nodownload" muted autoPlay playsInline className="responsive-video" src="./media/videos/Script2-Final-v1.mp4" type="video/mp4" poster='' />
+                    <video id="responsive-video" controlsList="nodownload" muted autoPlay playsInline className="responsive-video" src="https://pivotcare-s3.s3-us-west-2.amazonaws.com/videos/promotion_video_low.mp4" type="video/mp4" poster='' />
                 }
             </div>
         </div>
