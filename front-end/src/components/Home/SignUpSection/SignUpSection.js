@@ -17,7 +17,7 @@ const SignUpSection = () => {
                     <button onClick={() => history.push("/auth")} className="secondary-btn">Sign Up</button>
                 </div>
             </SignUpContent>
-        </SignUpContainer >
+        </SignUpContainer>
     );
 };
 

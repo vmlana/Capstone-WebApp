@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { userSigninSignup } from '../../../../redux/user/user.actions';
 import { login } from '../../../../services/tokenApi';
 import { apiUrl } from '../../../../services/apiUrl';
@@ -15,6 +15,7 @@ import Button from "../../../ReusableElement/Button";
 import InputWithLabel from "../../../ReusableElement/InputWithLabel";
 
 const Signin = (props) => {
+    const history = useHistory();
     const dispatch = useDispatch();
     const [userInput, setUserInput] = useState({
         userType: "company",
@@ -155,9 +156,11 @@ const Signin = (props) => {
                 </ButtonDiv>
                 <LinkToSignupText>
                     Don’t have an account?&nbsp;
-                        <Link to="auth/signup">
+                    <div style={{display: "inline-block"}} onClick={() => {
+                        history.push("/auth/signup")
+                    }}>
                         <UnderlineSpan>Sign up</UnderlineSpan>
-                    </Link>
+                    </div>
                     &nbsp;here
                 </LinkToSignupText>
             </Form>
@@ -237,6 +240,7 @@ const RadioLabel = styled.label`
 
 const RadioButton = styled.input`
     margin: 1rem;
+    /* visibility: hidden; */
 
     :after {
         width: 15px;
@@ -249,15 +253,18 @@ const RadioButton = styled.input`
         content: '';
         /* display: "inline-block"; */
         visibility: visible;
+        /* border: 0px solid white; */
         border: 0px solid white;
     }
 
     :checked:after {
-        width: 15px;
-        height: 15px;
-        border-radius: 15px;
-        top: -2px;
-        left: -1px;
+        width: 16.5px;
+        height: 16.5px;
+        border-radius: 16.5px;
+        /* top: -2px;
+        left: -1px; */
+        top: 0px;
+        left: -2px;
         position: relative;
         background-color: ${colors.UIViolet};
 
