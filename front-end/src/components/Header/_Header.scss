@@ -25,6 +25,7 @@ header {
             margin: 0;
             padding: 0;
             align-self: center;
+            color: #707070;
         }
     }
 
@@ -119,7 +120,8 @@ header {
                         &.active {
                             background-color: rgba(255, 255, 255, 0.8);
                             color: $primary-color;
-                            font-weight: 600;
+                            // In safari, text disappears when we set "font-weight: 600;" below. So it was commented out.
+                            // font-weight: 600;
                         }
                     }
                 }
