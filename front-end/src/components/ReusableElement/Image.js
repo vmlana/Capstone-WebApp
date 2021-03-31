@@ -1,10 +1,14 @@
-import React from "react";
+import React, {useState} from "react";
 import styled from "styled-components";
 
 const Image = ({ src, alt }) => {
+  const [didLoad, setLoad] = useState(false);
+
+  const style = didLoad ? {} : { visibility: 'hidden' };
+
   return (
     <div>
-      <ImageElement src={src} alt={alt} />
+      <ImageElement src={src} alt={alt} onLoad={() => setLoad(true)} style={style} />
     </div>
   );
 };

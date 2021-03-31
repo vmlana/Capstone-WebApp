@@ -62,7 +62,13 @@ const Auth = (props) => {
         // console.log(now < accessExpiresIn)
         // console.log(accessExpiresIn)
         setTokenIsValid(now < accessExpiresIn)
-        if(now > accessExpiresIn) {
+        if (now > accessExpiresIn) {
+
+            // if (userType === "guest") {
+            //     props.history.push("/auth/signup");
+            //     return;
+            // }
+
             props.history.push("/auth");
             if(accessExpiresIn < now && now < refreshExpiresIn) {
               refreshToken().then(response=>{

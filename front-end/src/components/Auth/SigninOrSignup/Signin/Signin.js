@@ -156,7 +156,8 @@ const Signin = (props) => {
                 </ButtonDiv>
                 <LinkToSignupText>
                     Don’t have an account?&nbsp;
-                    <div style={{display: "inline-block"}} onClick={() => {
+                    <div style={{
+                        display: "inline-block", cursor: "pointer"}} onClick={() => {
                         history.push("/auth/signup")
                     }}>
                         <UnderlineSpan>Sign up</UnderlineSpan>
@@ -283,7 +284,7 @@ const Form = styled.form`
     width: 100%;
 
     @media ${device.tablet} {
-        max-width: 768px;
+        max-width: 600px;
         margin: 2rem auto;
     }
 
@@ -336,7 +337,7 @@ const ButtonDiv = styled.div`
     }
 `;
 
-const LinkToSignupText = styled.p`
+const LinkToSignupText = styled.div`
     margin-top: 1rem;
     font-size: .9rem;
     text-align: center;
