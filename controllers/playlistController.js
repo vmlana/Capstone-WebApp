@@ -66,8 +66,14 @@ exports.getPlaylists = (req, res) => {
                 ${sWhere}                           
                 ${sQryOrderBy} `;
 
+            // Setting the timezone here so prevent restarting the database server on presentation day                        
+            let qrySetTimezone = `SET time_zone = "-07:00"`;
+
     pivotPoolDb.then(pool => {
-        pool.query(qry)
+            pool.query(qrySetTimezone)
+            .then(results => {
+                return pool.query(qry);
+            })
             .then(results => {
                 if (results.length == 0) {
                     res.status(404).send("No Record Found");

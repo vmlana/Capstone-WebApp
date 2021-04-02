@@ -25,7 +25,12 @@ const Programs = () => {
   const [programs, setPrograms] = useState([]);
   useEffect(() => {
     getProgramsByCompanyId(authId).then((programList) => {
-      setPrograms(programList);
+      if (programList !== undefined) {
+        setPrograms(programList);
+      } else {
+        setPrograms([])
+      }
+
     });
   }, []);
 

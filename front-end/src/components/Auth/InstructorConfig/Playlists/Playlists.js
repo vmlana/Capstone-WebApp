@@ -25,7 +25,11 @@ const Playlists = () => {
   const [playlists, setPlaylists] = useState([]);
   useEffect(() => {
     getPlaylistsByInstructorId(authId).then((playlistArr) => {
-      setPlaylists(playlistArr);
+      if (playlistArr !== undefined) {
+        setPlaylists(playlistArr);
+      } else {
+        setPlaylists([])
+      }
     });
   }, []);
 
