@@ -55,11 +55,16 @@ const VideoTrailer = () => {
     return (
         <div className="widthContainer">
             <div className="container" onClick={playVideo}>
-                {isSafari ?
+                {/* {isSafari ?
                     <video id="responsive-video" controls controlsList="nodownload" muted autoPlay playsInline loop className="responsive-video" src="https://pivotcare-s3.s3-us-west-2.amazonaws.com/videos/promotion_video_low.mp4" type="video/mp4" poster='' />
                     :
                     <video id="responsive-video" controlsList="nodownload" muted autoPlay playsInline className="responsive-video" src="https://pivotcare-s3.s3-us-west-2.amazonaws.com/videos/promotion_video_low.mp4" type="video/mp4" poster='' />
-                }
+                } */}
+                {isSafari ?
+                    <video id="responsive-video" controls controlsList="nodownload" muted autoPlay playsInline loop className="responsive-video" src="https://pivotcare-s3.s3-us-west-2.amazonaws.com/videos/PIVOTCARE-forWebsite.mp4" type="video/mp4" poster='' />
+                    :
+                    <video id="responsive-video" controlsList="nodownload" muted autoPlay playsInline className="responsive-video" src="https://pivotcare-s3.s3-us-west-2.amazonaws.com/videos/PIVOTCARE-forWebsite.mp4" type="video/mp4" poster='' />
+            }
             </div>
         </div>
     );

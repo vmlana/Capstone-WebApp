@@ -13,7 +13,8 @@ const VideoContainer = styled.div`
     position: relative;
     overflow: hidden;
     width: 100%;
-    padding-top: 56.25%;
+    /* padding-top: 56.25%; */
+    padding-top: 41.66%;
     border-radius: 1rem;
     /* 16:9 Aspect Ratio (divide 9 by 16 = 0.5625) */
 `;
