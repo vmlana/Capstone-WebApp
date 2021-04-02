@@ -889,7 +889,7 @@ const DownloadCSVLink = styled.a`
     display: inline-block;
     font-weight: lighter;
     font-size: .8rem;
-    
+    color: ${colors.primaryViolet}
 `;
 
 const UploadCSVDiv = styled.div`
