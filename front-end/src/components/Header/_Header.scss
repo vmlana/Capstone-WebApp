@@ -36,7 +36,7 @@ header {
     }
 
     @media screen and (max-width: 875px) {
-        border-bottom: 0.5px solid #E6E6E6;
+        border-bottom: 0.5px solid rgba(255, 255, 255, 0.7);
     }
 
     // Mobile Menu CSS
@@ -104,7 +104,8 @@ header {
                     list-style: none;
                     height: 60px;
                     padding: 0;
-                    border-bottom: 1px solid $primary-color;
+                    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+                    ;
 
                     a {
                         text-decoration: none;
