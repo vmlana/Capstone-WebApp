@@ -23,7 +23,12 @@ const Blogs = () => {
     useEffect(() => {
         getBlogsByInstructorId(authId).then(
             blogList => {
-                setBlogs(blogList)
+                if (blogList !== undefined) {
+                    setBlogs(blogList)
+                } else {
+                    setBlogs([])
+                }
+
             }
         )
     }, [])
