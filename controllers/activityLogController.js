@@ -51,7 +51,7 @@ exports.activityLog = (req, res) => {
                         currentdate.getSeconds();
 
             // Setting the timezone here so prevent restarting the database server on presentation day                        
-            let qrySetTimezone = `SET @@session.time_zone = "-07:00"`;
+            let qrySetTimezone = `SET time_zone = "-07:00"`;
 
             if (sMessageInfo == '') {
                 qry = `INSERT INTO activityLog (userId, groupBaseId, playlistId, lessonId, logDate) 
