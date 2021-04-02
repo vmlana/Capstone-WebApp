@@ -23,7 +23,11 @@ const Lessons = () => {
     useEffect(() => {
         getLessonsByInstructorId(authId).then(
             lessonList => {
-                setLessons(lessonList)
+                if (lessonList !== undefined) {
+                    setLessons(lessonList)
+                } else {
+                    setLessons([])
+                }
             }
         )
     }, [])
