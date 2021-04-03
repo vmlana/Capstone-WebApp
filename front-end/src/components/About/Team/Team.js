@@ -16,9 +16,9 @@ const Team = () => {
             <div className="team-member-section">
                 <div className="team-info team-info-one">
                     <TeamMember memberImage="./media/images/Vini.jpg" memberName="Vinicius Meyer Lana" memberAdditionalRole="Project Manager" memberRole="Backend Developer" linkedIn="https://www.linkedin.com/in/vmlana" gitHub="https://github.com/vmlana" behance="" borderColor="#624A99" />
-                    <TeamMember memberImage="./media/images/Hardik.jpg" memberName="Hardikkumar Vasoya" memberAdditionalRole="Dev Lead" memberRole="Full Stack Developer" linkedIn="https://www.linkedin.com/in/hjvasoya/" gitHub="https://github.com/hjvasoya009" behance="" borderColor="#4F99CE" />
-                    <TeamMember memberImage="./media/images/Hiteshri.jpg" memberName="Hiteshri Nanda" memberAdditionalRole="Design Lead" memberRole="UI/UX Designer" linkedIn="https://www.linkedin.com/in/hiteshri-nanda/" gitHub="" behance=" https://www.behance.net/hiteshri" borderColor="#FF9D5A" />
-                    <TeamMember memberImage="./media/images/Ken.jpg" memberName="Ken Tauchi" memberRole="Full Stack Developer" linkedIn="https://www.linkedin.com/in/kentauchi/" gitHub="https://github.com/KenTauchi/" behance="" borderColor="#4F99CE" />
+                    <TeamMember memberImage="./media/images/Hardik.jpg" memberName="Hardikkumar Vasoya" memberAdditionalRole="Lead Developer" memberRole="Full Stack Developer" linkedIn="https://www.linkedin.com/in/hjvasoya/" gitHub="https://github.com/hjvasoya009" behance="" borderColor="#4F99CE" />
+                    <TeamMember memberImage="./media/images/Hiteshri.jpg" memberName="Hiteshri Nanda" memberAdditionalRole="Lead Designer" memberRole="UI/UX Designer" linkedIn="https://www.linkedin.com/in/hiteshri-nanda/" gitHub="" behance=" https://www.behance.net/hiteshri" borderColor="#FF9D5A" />
+                    <TeamMember memberImage="./media/images/Ken.jpg" memberName="Ken Tauchi" memberAdditionalRole="Quality Assurance" memberRole="Full Stack Developer" linkedIn="https://www.linkedin.com/in/kentauchi/" gitHub="https://github.com/KenTauchi/" behance="" borderColor="#4F99CE" />
                     <TeamMember memberImage="./media/images/Roj.jpg" memberName="Roujyar Darvish" memberRole="UI/UX Designer" linkedIn="https://www.linkedin.com/in/roujyard/" gitHub="" behance="https://www.behance.net/roujyard" borderColor="#FF9D5A" />
                     <TeamMember memberImage="./media/images/Tomo.jpg" memberName="Tomohiro Yoshida" memberRole="Full Stack Developer" linkedIn="https://www.linkedin.com/in/tomohiro/" gitHub="https://github.com/TOMO-YOSHI" behance="" borderColor="#624A99" />
                     <TeamMember memberImage="./media/images/Jaque.jpg" memberName="Jaqueline Santos" memberRole="UI/UX Designer" linkedIn="https://www.linkedin.com/in/jaquelinesant0s" gitHub="" behance="https://www.behance.net/jaquelinesant0s" borderColor="#4F99CE" />
@@ -77,7 +77,7 @@ const TeamSection = styled.div`
             .team-member-box:nth-of-type(1),
             .team-member-box:nth-of-type(2),
             .team-member-box:nth-of-type(3) {
-                flex-basis: 20.80%;
+                /* flex-basis: 20.80%; */
             }
         }
         

@@ -36,7 +36,7 @@ const TeamMemberInfo = styled.div`
             border-radius: 20px 20px 0px 0px;
 
             @media ${device.mobileM} {
-                max-width: 310px;
+                /* max-width: 310px; */
             }
         }
 
