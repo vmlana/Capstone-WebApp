@@ -13,6 +13,8 @@ exports.getBlogs = (req, res) => {
 
     // sets the number of days to consider when searching the blogs for a user
     const numDays = 30;
+    let orderBy = 'orderedDate desc, blogTitle, blogId, tagName, tagId, relatedBlogTitle, relatedBlogId';
+
 
     // Set filters
     let sWhere = " WHERE 1 = 1 ";
@@ -32,8 +34,8 @@ exports.getBlogs = (req, res) => {
                                                   WHERE l.userId = ${sUserId} 
                                                     AND DATEDIFF(CURDATE(), logDate) < ${numDays} 
                                                   GROUP BY p.categoryId )   `;
+        orderBy = 'blogTitle, blogId, tagName, tagId, relatedBlogTitle, relatedBlogId';                                                  
     }
-
 
     let qry = `SELECT b.blogId AS blogId, b.title AS blogTitle, content AS blogContent, b.postDate AS orderedDate,
                       DATE_FORMAT(b.postDate, "%b %d %Y") as blogPostDate, b.imageFileBlog as blogImageFile, b.imageFileThumb as blogThumbImageFile,   
@@ -50,7 +52,7 @@ exports.getBlogs = (req, res) => {
                                          INNER JOIN blogTags bt2 ON (b2.blogId = bt2.blogId)              
                                  ) rb ON (bt.tagId = rb.tagId AND b.blogId <> rb.blogId)                      
              ${sWhere}        
-             ORDER BY  orderedDate desc, blogTitle, blogId, tagName, tagId, relatedBlogTitle, relatedBlogId   `;
+             ORDER BY ${orderBy}  `;
 
     pivotPoolDb.then(pool => {
         pool.query(qry)
