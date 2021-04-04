@@ -117,7 +117,7 @@ const H4 = styled.h4`
 
     @media ${device.tablet} {
         font-weight: 300;
-        font-size: 26px;
+        font-size: 21px;
         line-height: 30px;
     }
 `;
