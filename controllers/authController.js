@@ -164,6 +164,9 @@ exports.login = (req, res) => {
         idAttribute = "companyId"
     }
 
+    // Setting the timezone here so prevent restarting the database server on presentation day                        
+    let qrySetTimezone = `SET time_zone = "-07:00"`;
+
     try {
         pivotPoolDb
             .then((pool) => {
@@ -234,6 +237,9 @@ exports.login = (req, res) => {
                         }
                         // res.send(results);
                     })
+                    .then(results => {
+                        return pool.query(qrySetTimezone);
+                    })  
                     .catch((error) => {
                         throw error;
                     });

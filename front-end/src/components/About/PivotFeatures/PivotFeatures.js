@@ -131,12 +131,12 @@ const PivotFeatureSection = styled.div`
                     display: inline-block;
 
                     @media ${device.tablet} { 
-                        font-size: 25px;
+                        font-size: 22px;
                         line-height: 33px;
                     }
 
                     @media ${device.laptop} { 
-                        font-size: 30px;
+                        font-size: 25px;
                         line-height: 36px;
                     }
                 }
@@ -176,7 +176,7 @@ const PivotFeatureSection = styled.div`
                 }
 
                 @media ${device.laptop} {
-                    max-width: 370px;
+                    max-width: 300px;
                 }
             }
         }

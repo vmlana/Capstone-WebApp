@@ -11,7 +11,7 @@ const About = () => {
         <div className="main-content">
             <ABoutTopImage>
                 <div className="topImgContainer">
-                    {/* <Image src="./media/images/topimage-pexels-tranmautritam-901675.jpg" alt="About Pivot Care" /> */}
+                    {/* <Image src="./media/images/pexels-tranmautritam-901675-roj.jpg" alt="About Pivot Care" /> */}
                     {/* <Image src="./media/images/timage.jpeg" alt="About Pivot Care" /> */}
                 </div>
             </ABoutTopImage>
@@ -30,14 +30,15 @@ const ABoutTopImage = styled.div`
 
   
   .topImgContainer {
-    background-image: url('./media/images/topimage-pexels-tranmautritam-901675.jpg');
+    /* background-image: url('./media/images/topimage-pexels-tranmautritam-901675.jpg'); */
+    background-image: url('./media/images/pexels-tranmautritam-901675-roj.jpg');
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
-    height: 92vh;
-      /* img {
+    height: 52vh;
+      img {
           display: block;
-      } */
+      }
   }
 
 `;

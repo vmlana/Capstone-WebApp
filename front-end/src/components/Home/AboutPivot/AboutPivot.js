@@ -26,7 +26,9 @@ const AboutPivot = () => {
                     </PivotCareDescription>
                     <div className='btnContainer'><Button onClick={() => history.push("/about")}>Read More</Button></div>
                 </AboutPivotCare>
+                {/* <BGImage></BGImage> */}
             </PivotCare>
+            <BGImage></BGImage>
             {/* <img src="./media/images/Intro-MockupsPile.png" alt="about-pivot-care" /> */}
         </AboutSection>
     );
@@ -34,42 +36,56 @@ const AboutPivot = () => {
 
 const AboutSection = styled.div`
     padding: 0 2rem;
+    position: relative;
+
+    @media ${device.laptop} {
+        padding-right: 0;
+    }
+`;
+
+const BGImage = styled.div`
     background-image: url('./media/images/Intro-MockupsPile.png');
 
     @media ${device.laptop} {
         background-size: cover;
         background-repeat: no-repeat;
-        background-position: 500px;
+        position: absolute;
+        right: 0%;
+        left: 54%;
+        top: 0;
+        bottom: 0;
     }
 
-    @media ${device.desktopM} { 
-        background-position: 500px;
-    }
-
-    @media ${device.desktopL} { 
-        background-position: 500px;
-    }
 `;
 
 const PivotCare = styled.div`
     max-width: 1500px;
     margin: 0 auto;
-    padding-top: 2.5rem;
-    padding-bottom: 3rem;
+    display: grid;
+    position: relative;
 
-    @media ${device.tablet} { 
-        padding-top: 8rem;
-        padding-bottom: 7rem;
+    @media ${device.laptop} { 
+        grid-template-columns: 1fr 1fr;
     }
 `;
 
 const AboutPivotCare = styled.div`
-    max-width: 800px;
+    /* max-width: 670px;
+    margin: 0 auto; */
+    padding-top: 2.5rem;
+    padding-bottom: 2.65rem;
+
+    @media ${device.laptop} { 
+        padding-top: 5rem;
+        padding-bottom: 5rem;
+    }
 
     .btnContainer {
         text-align: center;
 
         @media ${device.tablet} { 
+            /* padding-top: 8rem;
+            padding-bottom: 7rem; */
             text-align: left;
         }
     }
