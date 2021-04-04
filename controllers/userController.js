@@ -174,6 +174,7 @@ exports.getDashboard = (req, res) => {
                           c.companyId, lc.name as companyName, w.name AS department, e.employeeId,
                           log2.selected_date, log2.total_work, log2.log_work, log2.percent,
                           IFNULL(lw.qtd,0) AS weekWorkout,
+                          IFNULL(ld.qtd,0) AS dayWorkout,                              
                           DATEDIFF(CURDATE(), u.streakStartDate) as streakDay
                      FROM login lg
                           INNER JOIN users u ON (lg.loginId = u.userId)
@@ -185,7 +186,12 @@ exports.getDashboard = (req, res) => {
                                         FROM activityLog l
                                        WHERE userId = ${sUserId}
                                          AND DATE_FORMAT(l.logdate, '%Y-%m-%d') BETWEEN "${s7days}" AND "${sToday}"
-                                       GROUP BY userId ) lw ON (u.userId = lw.userId)                   
+                                       GROUP BY userId ) lw ON (u.userId = lw.userId)   
+                          LEFT JOIN ( SELECT userId, count(*) as qtd
+                                       FROM activityLog l
+                                      WHERE userId = 3
+                                        AND DATE_FORMAT(l.logdate, '%Y-%m-%d') = DATE_FORMAT(CURDATE(), '%Y-%m-%d')
+                                      GROUP BY userId ) ld ON (u.userId = lw.userId)                                                          
                           LEFT JOIN ( SELECT selected_date,
                                              ${totalWork} AS total_work,
                                              log.qtd AS log_work,
@@ -249,7 +255,7 @@ exports.getDashboard = (req, res) => {
                             companyId: results[0].companyId,
                             companyName: results[0].companyName,
                             department: results[0].department,
-                            workInDay: workInDay,
+                            workInDay: results[0].dayWorkout,
                             streakDay: results[0].streakDay,
                             weekWorkout: results[0].weekWorkout,
                             daysResult: vWeekDays
